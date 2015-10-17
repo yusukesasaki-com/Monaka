@@ -13,5 +13,28 @@
 </head>
 <body>
     
+<div class="container">
+    
+    <h1><span>メールフォーム</span></h1>
+    
+    <div class="mailform">
+        <form action="./mailform/confirmation.php">
+            <dl>
+                <dt>お名前</dt>
+                <dd><input type="text"></dd>
+                
+                <dt>メールアドレス</dt>
+                <dd><input type="text"></dd>
+                
+                <dt>お問い合わせ内容</dt>
+                <dd><textarea></textarea></dd>
+            </dl>
+            
+            <input type="submit" value="送信">
+        </form>
+    </div>
+    
+</div>
+    
 </body>
 </html>
