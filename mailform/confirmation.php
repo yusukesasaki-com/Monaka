@@ -40,7 +40,7 @@ $submit_content = $_POST;
                 <dt>お問い合わせ内容:</dt>
                 <dd>
                     <p>
-                    <?php echo h($submit_content["message"]); ?>
+                    <?php echo nl2br(h($submit_content["message"])); ?>
                     </p>
                 </dd>
             </dl>
