@@ -1,0 +1,65 @@
+.container{
+    width: 500px;
+    margin: 20px auto;
+    padding: 30px;
+}
+
+h1 {
+    margin-bottom: 30px;
+    font-size: 20px;
+    font-weight: normal;
+	position: relative;
+	text-align: center;
+}
+h1 span {
+	position: relative;
+	z-index: 2;
+	display: inline-block;
+	margin: 0 4em;
+	padding: 0 1em;
+	background-color: #fff;
+	text-align: left;
+}
+h1::before {
+	position: absolute;
+	top: 50%;
+	z-index: 1;
+	content: '';
+	display: block;
+	width: 100%;
+	height: 1px;
+	background: #ccc;
+	background: -webkit-linear-gradient(-45deg, transparent, #ccc 10%, #ccc 90%, transparent);
+	background: linear-gradient(-45deg, transparent, #ccc 10%, #ccc 90%, transparent);
+}
+
+dt{
+    margin-bottom: 8px;
+}
+
+dd{
+    margin-bottom: 14px;
+}
+
+dd input[type="text"], dd textarea{
+    font-family: inherit;
+    padding: 6px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+
+dd textarea{
+    width: 500px;
+    height: 120px;
+    box-sizing: border-box;
+}
+
+input[type="submit"][value="送信"]{
+    padding: 10px 20px;
+    background: none;
+    border-radius: 6px;
+    border: none;
+    background: #5d3fff;
+    color: #fff;
+}
