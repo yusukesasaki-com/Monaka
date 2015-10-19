@@ -2,6 +2,7 @@
     width: 500px;
     margin: 20px auto;
     padding: 30px;
+    overflow: hidden;
 }
 
 h1 {
@@ -33,15 +34,19 @@ h1::before {
 	background: linear-gradient(-45deg, transparent, #ccc 10%, #ccc 90%, transparent);
 }
 
-dt{
+.mailform dl{
+    margin-bottom: 30px;
+}
+
+.mailform dt{
     margin-bottom: 8px;
 }
 
-dd{
+.mailform dd{
     margin-bottom: 14px;
 }
 
-dd input[type="text"], dd textarea{
+.mailform dd input[type="text"], dd textarea{
     font-family: inherit;
     padding: 6px;
     font-size: 14px;
@@ -49,17 +54,68 @@ dd input[type="text"], dd textarea{
     border: 1px solid #ddd;
 }
 
-dd textarea{
+.mailform dd textarea{
     width: 500px;
     height: 120px;
     box-sizing: border-box;
 }
 
+.submit_area{
+    
+}
+
+.submit_area{
+    text-align: center;
+}
+
+input[type="submit"][value="確認"],
 input[type="submit"][value="送信"]{
-    padding: 10px 20px;
+    font-family: inherit;
+    padding: 15px 25px;
+    font-size: 16px;
     background: none;
-    border-radius: 6px;
+    border-radius: 8px;
     border: none;
     background: #5d3fff;
     color: #fff;
+}
+
+input[type="button"][value="戻る"]{
+    font-family: inherit;
+    margin-left: 15px;
+    padding: 15px 25px;
+    font-size: 16px;
+    background: none;
+    border-radius: 8px;
+    border: 1px solid #5d3fff;
+    color: #5d3fff;
+    display: inline-block;
+}
+
+.confirmation{
+    margin-bottom: 40px;
+}
+
+
+.submit_content dl{
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.submit_content dt{
+    width: 140px;
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    float: left;
+    text-align: right;
+    clear: both;
+}
+
+.submit_content dd{
+    width: 340px;
+    float: right;
+    float: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid  #ccc;
 }

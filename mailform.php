@@ -30,7 +30,9 @@
                 <dd><textarea></textarea></dd>
             </dl>
             
-            <input type="submit" value="送信">
+            <div class="submit_area">
+                <input type="submit" value="確認">
+            </div>
         </form>
     </div>
     
