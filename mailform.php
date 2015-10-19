@@ -18,16 +18,16 @@
     <h1><span>メールフォーム</span></h1>
     
     <div class="mailform">
-        <form action="./mailform/confirmation.php">
+        <form action="./mailform/confirmation.php" method="post">
             <dl>
                 <dt>お名前</dt>
-                <dd><input type="text"></dd>
+                <dd><input type="text" name="name"></dd>
                 
                 <dt>メールアドレス</dt>
-                <dd><input type="text"></dd>
+                <dd><input type="text" name="mailaddress"></dd>
                 
                 <dt>お問い合わせ内容</dt>
-                <dd><textarea></textarea></dd>
+                <dd><textarea name="message"></textarea></dd>
             </dl>
             
             <div class="submit_area">

@@ -3,6 +3,9 @@
 require_once('config.php');
 require_once('functions.php');
 
+$submit_content = array();
+$submit_content = $_POST;
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -29,15 +32,15 @@ require_once('functions.php');
         <form action="send.php" method="post">
             <dl>
                 <dt>お名前:</dt>
-                <dd><p>&nbsp;</p></dd>
+                <dd><p><?php echo h($submit_content["name"]); ?>&nbsp;</p></dd>
 
                 <dt>メールアドレス:</dt>
-                <dd><p>&nbsp;</p></dd>
+                <dd><p><?php echo h($submit_content["mailaddress"]); ?>&nbsp;</p></dd>
 
                 <dt>お問い合わせ内容:</dt>
                 <dd>
                     <p>
-                    &nbsp;
+                    <?php echo h($submit_content["message"]); ?>
                     </p>
                 </dd>
             </dl>
