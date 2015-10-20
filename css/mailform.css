@@ -5,6 +5,12 @@
     overflow: hidden;
 }
 
+.container span,
+.container p,
+.container div{
+    line-height: 1.6;
+}
+
 h1 {
     margin-bottom: 30px;
     font-size: 20px;
