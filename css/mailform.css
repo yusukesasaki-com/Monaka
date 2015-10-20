@@ -125,3 +125,7 @@ input[type="button"][value="戻る"]{
     padding-bottom: 12px;
     border-bottom: 1px solid  #ccc;
 }
+
+.err{
+    color: red;
+}

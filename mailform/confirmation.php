@@ -6,6 +6,38 @@ require_once('functions.php');
 $submit_content = array();
 $submit_content = $_POST;
 
+
+// ----------エラーチェック開始---------- //
+$err = array();
+
+// お名前の必須チェック
+if(empty($submit_content['name'])){
+    $err["name"] = "必須項目です。";
+}
+
+// メールアドレスの必須チェック
+if(empty($submit_content['mailaddress'])){
+    $err["mailaddress"] = "必須項目です。";
+}
+
+// メールアドレスの形式チェック
+if(empty($err["mailaddress"]) && !mail_check($submit_content['mailaddress'])){
+    $err["mailaddress"] = "メールアドレスの形式が正しくありません。";
+}
+/* filter_varを使用する場合は下記
+if(!filter_var($submit_content["mailaddress"], FILTER_VALIDATE_EMAIL)){
+    $err['mailaddress'] = "メールアドレスの形式が正しくありません";
+}
+*/
+
+// お問い合わせ内容の必須チェック
+if(empty($submit_content["message"])){
+    $err["message"] = "必須項目です。";
+}
+
+// ----------エラーチェック終了---------- //
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -32,21 +64,26 @@ $submit_content = $_POST;
         <form action="send.php" method="post">
             <dl>
                 <dt>お名前:</dt>
-                <dd><p><?php echo h($submit_content["name"]); ?>&nbsp;</p></dd>
+                <dd>
+                    <p><?php echo empty($err["name"]) ? h($submit_content["name"]) : "<span class=\"err\">{$err["name"]}</span>"; ?></p>
+                    <input type="hidden" name="name" value="<?php echo h($submit_content["name"]); ?>">
+                </dd>
 
                 <dt>メールアドレス:</dt>
-                <dd><p><?php echo h($submit_content["mailaddress"]); ?>&nbsp;</p></dd>
+                <dd>
+                    <p><?php echo empty($err["mailaddress"]) ? h($submit_content["mailaddress"]) : "<span class=\"err\">{$err["mailaddress"]}</span>"; ?></p>
+                    <input type="hidden" name="mailaddress" value="<?php echo h($submit_content["mailaddress"]); ?>">
+                </dd>
 
                 <dt>お問い合わせ内容:</dt>
                 <dd>
-                    <p>
-                    <?php echo nl2br(h($submit_content["message"])); ?>
-                    </p>
+                    <p><?php echo empty($err["message"]) ? nl2br(h($submit_content["message"])) : "<span class=\"err\">{$err["message"]}</span>"; ?></p>
+                    <input type="hidden" name="message" value="<?php echo h($submit_content["message"]); ?>">
                 </dd>
             </dl>
 
             <div class="submit_area">
-                <input type="submit" value="送信">
+                <?php if(empty($err)){ echo "<input type=\"submit\" value=\"送信\">";} ?>
                 <input type="button" value="戻る">
             </div>
         </form>
