@@ -3,6 +3,15 @@
 require_once('config.php');
 require_once('functions.php');
 
+session_start();
+
+// ----------CSRF対策開始---------- //
+
+setToken();
+
+// ----------CSRF対策終了---------- //
+
+
 $submit_content = array();
 $submit_content = $_POST;
 
@@ -83,8 +92,9 @@ if(empty($submit_content["message"])){
             </dl>
 
             <div class="submit_area">
+                <input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>">
                 <?php if(empty($err)){ echo "<input type=\"submit\" value=\"送信\">";} ?>
-                <input type="button" value="戻る">
+                <input type="button" value="戻る" onclick="history.back();">
             </div>
         </form>
     </div>

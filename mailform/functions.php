@@ -11,3 +11,14 @@ function mail_check($email) {
         return false;
     }
 }
+
+function setToken(){
+    $_SESSION['token'] = sha1(uniqid(mt_rand(), true));
+}
+
+function checkToken(){
+    if(empty($_POST['token']) || ($_SESSION['token'] != $_POST['token'])){
+        echo "不正な送信です。";
+        exit;
+    }
+}
