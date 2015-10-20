@@ -67,10 +67,6 @@ h1::before {
 }
 
 .submit_area{
-    
-}
-
-.submit_area{
     text-align: center;
 }
 
@@ -96,6 +92,10 @@ input[type="button"][value="戻る"]{
     border: 1px solid #5d3fff;
     color: #5d3fff;
     display: inline-block;
+}
+
+input[type="button"][value="戻る"].single{
+    margin-left: 0;
 }
 
 .confirmation{
@@ -128,4 +128,9 @@ input[type="button"][value="戻る"]{
 
 .err{
     color: red;
+}
+
+.completion{
+    margin-bottom: 50px;
+    text-align: center;
 }
