@@ -12,35 +12,35 @@ setToken();
 // ----------CSRF対策終了---------- //
 
 
-$submit_content = array();
-$submit_content = $_POST;
+$submitContent = array();
+$submitContent = $_POST;
 
 
 // ----------エラーチェック開始---------- //
 $err = array();
 
 // お名前の必須チェック
-if(empty($submit_content['name'])){
+if(empty($submitContent['name'])){
     $err["name"] = "必須項目です。";
 }
 
 // メールアドレスの必須チェック
-if(empty($submit_content['mailaddress'])){
+if(empty($submitContent['mailaddress'])){
     $err["mailaddress"] = "必須項目です。";
 }
 
 // メールアドレスの形式チェック
-if(empty($err["mailaddress"]) && !mail_check($submit_content['mailaddress'])){
+if(empty($err["mailaddress"]) && !mailCheck($submitContent['mailaddress'])){
     $err["mailaddress"] = "メールアドレスの形式が正しくありません。";
 }
 /* filter_varを使用する場合は下記
-if(!filter_var($submit_content["mailaddress"], FILTER_VALIDATE_EMAIL)){
+if(!filter_var($submitContent["mailaddress"], FILTER_VALIDATE_EMAIL)){
     $err['mailaddress'] = "メールアドレスの形式が正しくありません";
 }
 */
 
 // お問い合わせ内容の必須チェック
-if(empty($submit_content["message"])){
+if(empty($submitContent["message"])){
     $err["message"] = "必須項目です。";
 }
 
@@ -74,20 +74,20 @@ if(empty($submit_content["message"])){
             <dl>
                 <dt>お名前:</dt>
                 <dd>
-                    <p><?php echo empty($err["name"]) ? h($submit_content["name"]) : "<span class=\"err\">{$err["name"]}</span>"; ?></p>
-                    <input type="hidden" name="name" value="<?php echo h($submit_content["name"]); ?>">
+                    <p><?php echo empty($err["name"]) ? h($submitContent["name"]) : "<span class=\"err\">{$err["name"]}</span>"; ?></p>
+                    <input type="hidden" name="name" value="<?php echo h($submitContent["name"]); ?>">
                 </dd>
 
                 <dt>メールアドレス:</dt>
                 <dd>
-                    <p><?php echo empty($err["mailaddress"]) ? h($submit_content["mailaddress"]) : "<span class=\"err\">{$err["mailaddress"]}</span>"; ?></p>
-                    <input type="hidden" name="mailaddress" value="<?php echo h($submit_content["mailaddress"]); ?>">
+                    <p><?php echo empty($err["mailaddress"]) ? h($submitContent["mailaddress"]) : "<span class=\"err\">{$err["mailaddress"]}</span>"; ?></p>
+                    <input type="hidden" name="mailaddress" value="<?php echo h($submitContent["mailaddress"]); ?>">
                 </dd>
 
                 <dt>お問い合わせ内容:</dt>
                 <dd>
-                    <p><?php echo empty($err["message"]) ? nl2br(h($submit_content["message"])) : "<span class=\"err\">{$err["message"]}</span>"; ?></p>
-                    <input type="hidden" name="message" value="<?php echo h($submit_content["message"]); ?>">
+                    <p><?php echo empty($err["message"]) ? nl2br(h($submitContent["message"])) : "<span class=\"err\">{$err["message"]}</span>"; ?></p>
+                    <input type="hidden" name="message" value="<?php echo h($submitContent["message"]); ?>">
                 </dd>
             </dl>
 
