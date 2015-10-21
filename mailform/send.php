@@ -28,13 +28,13 @@ mb_encode_mimeheader($send_title, "ISO-2022-JP");
 $send_message = "{$submitContent["name"]}様より、下記内容でお問い合わせが届いています。\n";
 $send_message .= "\n";
 $send_message .= "■メールアドレス\n";
-$send_message .= "{$submitContent["mail"]}\n\n";
+$send_message .= "{$submitContent["mailaddress"]}\n\n";
 $send_message .= "■お問い合わせ内容\n";
-$send_message .= "{$submitContent["comment"]}";
+$send_message .= "{$submitContent["message"]}";
 $send_message = mb_convert_encoding($send_message, "ISO-2022-JP","UTF-8");
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mb_send_mail(ADMIN_MAIL, $send_title, $send_message, "From:{$submitContent["mail"]}");
+@mb_send_mail(ADMIN_MAIL, $send_title, $send_message, "From:{$submitContent["mailaddress"]}");
 
 ?>
 <!DOCTYPE html>
