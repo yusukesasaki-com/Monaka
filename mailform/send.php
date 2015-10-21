@@ -17,7 +17,7 @@ $submitContent = $_POST;
 
 
 
-// ----------ADMIN_MAILへの送信開始---------- //
+// ----------$adminMailへの送信開始---------- //
 
 // メールの言語・文字コードの設定
 mb_language("Japanese");
@@ -37,11 +37,44 @@ $sendMessage .= "{$submitContent["message"]}";
 $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP","UTF-8");
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mb_send_mail(ADMIN_MAIL, $sendTitle, $sendMessage, "From:{$submitContent["mailaddress"]}");
+@mb_send_mail($adminMail, $sendTitle, $sendMessage, "From:{$submitContent["mailaddress"]}");
 
 
-// ----------ADMIN_MAILへの送信完了---------- //
+// ----------$adminMailへの送信完了---------- //
 
+
+
+// ----------リターンメール送信開始---------- //
+
+// タイトルの設定
+$returnTitle = "【{$adminName}】 お問い合わせを受け付けました";
+mb_encode_mimeheader($returnTitle, "ISO-2022-JP");
+
+// メッセージの設定
+$returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+$returnMessage .= "【{$adminName}】 お問い合わせを受け付けました\n";
+$returnMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+$returnMessage .= "\n";
+$returnMessage .= "\n";
+$returnMessage .= $returnMailHeader;
+$returnMessage .= "\n";
+$returnMessage .= "----------------------------------------------------------------------\n";
+$returnMessage .= "\n";
+$returnMessage .= "■メールアドレス\n";
+$returnMessage .= "{$submitContent["mailaddress"]}\n\n";
+$returnMessage .= "■お問い合わせ内容\n";
+$returnMessage .= "{$submitContent["message"]}\n\n";
+$returnMessage .= "----------------------------------------------------------------------\n";
+$returnMessage .= "\n";
+$returnMessage .= "\n";
+$returnMessage .= $returnMailFooter;
+$returnMessage .= "\n";
+$returnMessage = mb_convert_encoding($returnMessage, "ISO-2022-JP","UTF-8");
+
+// メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
+@mb_send_mail($submitContent["mailaddress"], $returnTitle, $returnMessage, "From:{$adminMail}");
+
+// ----------リターンメール送信完了---------- //
 
 ?>
 <!DOCTYPE html>
@@ -68,7 +101,7 @@ $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP","UTF-8");
     </p>
     
     <div class="submit_area">
-        <input class="single" type="button" value="戻る" onclick="window.location='<?php echo RE_URL; ?>';">
+        <input class="single" type="button" value="戻る" onclick="window.location='<?php echo $returnUrl; ?>';">
     </div>
     
 </div>
