@@ -16,25 +16,32 @@ $submitContent = array();
 $submitContent = $_POST;
 
 
+
+// ----------ADMIN_MAILへの送信開始---------- //
+
 // メールの言語・文字コードの設定
 mb_language("Japanese");
 mb_internal_encoding("UTF-8");
 
 // タイトルの設定
-$send_title = "{$submitContent["name"]}様よりお問い合わせ";
-mb_encode_mimeheader($send_title, "ISO-2022-JP");
+$sendTitle = "{$submitContent["name"]}様よりお問い合わせ";
+mb_encode_mimeheader($sendTitle, "ISO-2022-JP");
 
 // メッセージの設定
-$send_message = "{$submitContent["name"]}様より、下記内容でお問い合わせが届いています。\n";
-$send_message .= "\n";
-$send_message .= "■メールアドレス\n";
-$send_message .= "{$submitContent["mailaddress"]}\n\n";
-$send_message .= "■お問い合わせ内容\n";
-$send_message .= "{$submitContent["message"]}";
-$send_message = mb_convert_encoding($send_message, "ISO-2022-JP","UTF-8");
+$sendMessage = "{$submitContent["name"]}様より、下記内容でお問い合わせが届いています。\n";
+$sendMessage .= "\n";
+$sendMessage .= "■メールアドレス\n";
+$sendMessage .= "{$submitContent["mailaddress"]}\n\n";
+$sendMessage .= "■お問い合わせ内容\n";
+$sendMessage .= "{$submitContent["message"]}";
+$sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP","UTF-8");
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mb_send_mail(ADMIN_MAIL, $send_title, $send_message, "From:{$submitContent["mailaddress"]}");
+@mb_send_mail(ADMIN_MAIL, $sendTitle, $sendMessage, "From:{$submitContent["mailaddress"]}");
+
+
+// ----------ADMIN_MAILへの送信完了---------- //
+
 
 ?>
 <!DOCTYPE html>
