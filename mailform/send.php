@@ -16,7 +16,6 @@ $submitContent = array();
 $submitContent = $_POST;
 
 
-
 // ----------$adminMailへの送信開始---------- //
 
 // メールの言語・文字コードの設定
@@ -59,7 +58,8 @@ $returnMessage .= "\n";
 $returnMessage .= $returnMailHeader;
 $returnMessage .= "\n";
 $returnMessage .= "----------------------------------------------------------------------\n";
-$returnMessage .= "\n";
+$returnMessage .= "■お名前\n";
+$returnMessage .= "{$submitContent["name"]}\n\n";
 $returnMessage .= "■メールアドレス\n";
 $returnMessage .= "{$submitContent["mailaddress"]}\n\n";
 $returnMessage .= "■お問い合わせ内容\n";
