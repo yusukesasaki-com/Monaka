@@ -24,7 +24,8 @@ mb_internal_encoding("UTF-8");
 
 // タイトルの設定
 $sendTitle = "{$submitContent["name"]}様よりお問い合わせ";
-$sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP");
+mb_encode_mimeheader($sendTitle, "ISO-2022-JP");
+$sendTitle = mb_convert_encoding($sendTitle, "ISO-2022-JP-MS","UTF-8");
 
 // メッセージの設定
 $sendMessage = "{$submitContent["name"]}様より、下記内容でお問い合わせが届いています。\n";
@@ -38,7 +39,7 @@ $sendMessage .= "{$submitContent["message"]}";
 $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mail($adminMail, $sendTitle, $sendMessage, "From:{$submitContent["mailaddress"]}");
+@mb_send_mail($adminMail, $sendTitle, $sendMessage, "From:{$submitContent["mailaddress"]}");
 
 
 // ----------$adminMailへの送信完了---------- //
@@ -49,7 +50,8 @@ $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
 // タイトルの設定
 $returnTitle = "【{$adminName}】 お問い合わせを受け付けました";
-$returnTitle = mb_encode_mimeheader($returnTitle, "ISO-2022-JP");
+mb_encode_mimeheader($returnTitle, "ISO-2022-JP");
+$returnTitle = mb_convert_encoding($returnTitle, "ISO-2022-JP-MS","UTF-8");
 
 // メッセージの設定
 $returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
@@ -74,7 +76,7 @@ $returnMessage .= "\n";
 $returnMessage = mb_convert_encoding($returnMessage, "ISO-2022-JP-MS","UTF-8");
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mail($submitContent["mailaddress"], $returnTitle, $returnMessage, "From:{$adminMail}");
+@mb_send_mail($submitContent["mailaddress"], $returnTitle, $returnMessage, "From:{$adminMail}");
 
 // ----------リターンメール送信完了---------- //
 
