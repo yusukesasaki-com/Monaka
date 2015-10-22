@@ -29,6 +29,8 @@ mb_encode_mimeheader($sendTitle, "ISO-2022-JP");
 // メッセージの設定
 $sendMessage = "{$submitContent["name"]}様より、下記内容でお問い合わせが届いています。\n";
 $sendMessage .= "\n";
+$sendMessage .= "■お名前\n";
+$sendMessage .= "{$submitContent["name"]}\n\n";
 $sendMessage .= "■メールアドレス\n";
 $sendMessage .= "{$submitContent["mailaddress"]}\n\n";
 $sendMessage .= "■お問い合わせ内容\n";
