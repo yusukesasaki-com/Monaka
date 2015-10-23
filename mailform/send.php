@@ -24,8 +24,7 @@ mb_internal_encoding("UTF-8");
 
 // タイトルの設定
 $sendTitle = "{$submitContent["name"]}様よりお問い合わせ";
-mb_encode_mimeheader($sendTitle, "ISO-2022-JP");
-$sendTitle = mb_convert_encoding($sendTitle, "ISO-2022-JP-MS","UTF-8");
+$sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
 
 // メッセージの設定
 $sendMessage = "{$submitContent["name"]}様より、下記内容でお問い合わせが届いています。\n";
@@ -38,8 +37,12 @@ $sendMessage .= "■お問い合わせ内容\n";
 $sendMessage .= "{$submitContent["message"]}";
 $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
+$sendHeaders = "MIME-Version: 1.0\r\n";
+$sendHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\r\n";
+$sendHeaders .= "From: ".mb_encode_mimeheader($submitContent["mailaddress"], "ISO-2022-JP-MS","UTF-8") ."\r\n";
+
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mb_send_mail($adminMail, $sendTitle, $sendMessage, "From:{$submitContent["mailaddress"]}");
+@mail($adminMail, $sendTitle, $sendMessage, $sendHeaders);
 
 
 // ----------$adminMailへの送信完了---------- //
@@ -50,8 +53,7 @@ $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
 // タイトルの設定
 $returnTitle = "【{$adminName}】 お問い合わせを受け付けました";
-mb_encode_mimeheader($returnTitle, "ISO-2022-JP");
-$returnTitle = mb_convert_encoding($returnTitle, "ISO-2022-JP-MS","UTF-8");
+$returnTitle = mb_encode_mimeheader($returnTitle, "ISO-2022-JP-MS","UTF-8");
 
 // メッセージの設定
 $returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
@@ -75,8 +77,12 @@ $returnMessage .= $returnMailFooter;
 $returnMessage .= "\n";
 $returnMessage = mb_convert_encoding($returnMessage, "ISO-2022-JP-MS","UTF-8");
 
+$returnHeaders = "MIME-Version: 1.0\r\n";
+$returnHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\r\n";
+$returnHeaders .= "From: ".mb_encode_mimeheader($adminMail, "ISO-2022-JP-MS","UTF-8") ."\r\n";
+
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mb_send_mail($submitContent["mailaddress"], $returnTitle, $returnMessage, "From:{$adminMail}");
+@mail($submitContent["mailaddress"], $returnTitle, $returnMessage, $returnHeaders);
 
 // ----------リターンメール送信完了---------- //
 
