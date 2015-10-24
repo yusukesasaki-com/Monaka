@@ -21,13 +21,27 @@
         <form action="./mailform/confirmation.php" method="post">
             <dl>
                 <dt>お名前</dt>
-                <dd><input type="text" name="name"></dd>
+                <dd>
+                    <input type="text" name="お名前[value]">
+                    <input type="hidden" name="お名前[params]" value="名前">
+                </dd>
                 
                 <dt>メールアドレス</dt>
-                <dd><input type="text" name="mailaddress"></dd>
+                <dd>
+                    <input type="text" name="メールアドレス[value]">
+                    <input type="hidden" name="メールアドレス[params]" value="メール">
+                </dd>
+                
+                <dt>年齢</dt>
+                <dd>
+                    <input type="text" name="年齢[value]">
+                </dd>
                 
                 <dt>お問い合わせ内容</dt>
-                <dd><textarea name="message"></textarea></dd>
+                <dd>
+                    <textarea name="お問い合わせ内容[value]"></textarea>
+                    <input type="hidden" name="お問い合わせ内容[params]" value="必須">
+                </dd>
             </dl>
             
             <div class="submit_area">

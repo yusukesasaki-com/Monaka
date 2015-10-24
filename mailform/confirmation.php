@@ -13,38 +13,74 @@ setToken();
 
 
 $submitContent = array();
-$submitContent = $_POST;
 
 
-// ----------エラーチェック開始---------- //
+// ----------パラメータチェック・エラーチェック開始---------- //
+
 $err = array();
+$nameCheck = false;
+$mailCheck = false;
 
-// お名前の必須チェック
-if(empty($submitContent['name'])){
-    $err["name"] = "必須項目です。";
+foreach($_POST as $key => $values){
+    
+    // $params = explode(",", $values["params"]); /* 今後in_arrayと組み合わせて使うかも?*/
+    
+    // 名前チェック
+    if(strpos($values["params"], "名前") !== false){
+        $nameCheck = true;
+        if(empty($values["value"])){
+            $err[$key] = "必須項目です。";
+        }else{
+            $submitContent[$key] = $values["value"];
+            $submitContent["name"] = $values["value"];
+        }
+        continue;
+    }
+    
+    // メールチェック
+    if(strpos($values["params"], "メール") !== false){
+        $mailCheck = true;
+        if(empty($values["value"])){
+            $err[$key] = "必須項目です。";
+        }else{
+            
+            // メールアドレスの形式チェック
+            if(!mailCheck($values["value"])){
+                $err[$key] = "メールアドレスの形式が正しくありません。";
+            }
+            /* filter_varを使用する場合は下記
+            if(!filter_var($submitContent["mailaddress"], FILTER_VALIDATE_EMAIL)){
+                $err['mailaddress'] = "メールアドレスの形式が正しくありません";
+            }
+            */else{
+                $submitContent[$key] = $values["value"];
+                $submitContent["mailaddress"] = $values["value"];
+            }
+        }
+        continue;
+    }
+    
+    // 必須チェック
+    if(strpos($values["params"], "必須") !== false){
+        if(empty($values["value"])){
+            $err[$key] = "必須項目です。";
+        }else{
+            $submitContent[$key] = $values["value"];
+        }
+        continue;
+    }
+    
+    $submitContent[$key] = $values["value"];
+    
 }
 
-// メールアドレスの必須チェック
-if(empty($submitContent['mailaddress'])){
-    $err["mailaddress"] = "必須項目です。";
+if(!$nameCheck || !$mailCheck){
+    echo "メールフォームの構造が正しくありません。<br>\n";
+    echo "管理者【{$adminMail}】にお問い合わせください。";
+    exit;
 }
 
-// メールアドレスの形式チェック
-if(empty($err["mailaddress"]) && !mailCheck($submitContent['mailaddress'])){
-    $err["mailaddress"] = "メールアドレスの形式が正しくありません。";
-}
-/* filter_varを使用する場合は下記
-if(!filter_var($submitContent["mailaddress"], FILTER_VALIDATE_EMAIL)){
-    $err['mailaddress'] = "メールアドレスの形式が正しくありません";
-}
-*/
-
-// お問い合わせ内容の必須チェック
-if(empty($submitContent["message"])){
-    $err["message"] = "必須項目です。";
-}
-
-// ----------エラーチェック終了---------- //
+// ----------パラメータチェック・エラーチェック終了---------- //
 
 
 ?>
