@@ -73,9 +73,9 @@ foreach($_POST as $key => $values){
 }
 
 if(!$nameCheck || !$mailCheck){
-    echo "メールフォームの構造が正しくありません。<br>\n";
-    echo "管理者【{$adminMail}】にお問い合わせください。";
-    exit;
+    $seriousError = "エラーが発生しました。<br>\n";
+    $seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
+    $seriousError .= "管理者【{$adminMail}】にお知らせください。";
 }
 
 // ----------パラメータチェック・エラーチェック終了---------- //
@@ -101,10 +101,14 @@ if(!$nameCheck || !$mailCheck){
     
     <h1><span>確認画面</span></h1>
     
+    <?php if(!empty($seriousError)): ?>
+    <p class="confirmation"><?php echo $seriousError; ?></p>
+    <?php else: ?>
     <p class="confirmation">下記内容で送信してよろしいですか？</p>
+    <?php endif; ?>
     
     <div class="submit_content">
-        <?php if(!empty($submitContent)): ?>
+        <?php if(!empty($submitContent) && empty($seriousError)): ?>
         <form action="send.php" method="post">
             <dl>
                 <?php foreach($submitContent as $key => $value): ?>
@@ -113,7 +117,11 @@ if(!$nameCheck || !$mailCheck){
                     <p>
                         <?php
                             if(empty($err[$key])){
-                                echo empty($value) ? "&nbsp;\n" : h($value);
+                                if(strpos($value, "\n") !== false){
+                                    echo nl2br(h($value));
+                                }else{
+                                    echo empty($value) ? "&nbsp;\n" : h($value);
+                                }
                             }else{
                                 echo "<span class=\"err\">{$err[$key]}</span>";
                             }
@@ -128,7 +136,7 @@ if(!$nameCheck || !$mailCheck){
                 <input type="hidden" name="requiredItem[name]" value="<?php echo h($requiredItem["name"]); ?>">
                 <input type="hidden" name="requiredItem[mailaddress]" value="<?php echo h($requiredItem["mailaddress"]); ?>">
                 <input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>">
-                <?php if(empty($err)){ echo "<input type=\"submit\" value=\"送信\">";} ?>
+                <?php if(empty($err) && empty($seriousError)){ echo "<input type=\"submit\" value=\"送信\">";} ?>
                 <input type="button" value="戻る" onclick="history.back();">
             </div>
         </form>
