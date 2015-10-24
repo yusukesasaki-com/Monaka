@@ -5,6 +5,12 @@
     overflow: hidden;
 }
 
+.container span,
+.container p,
+.container div{
+    line-height: 1.6;
+}
+
 h1 {
     margin-bottom: 30px;
     font-size: 20px;
@@ -61,10 +67,6 @@ h1::before {
 }
 
 .submit_area{
-    
-}
-
-.submit_area{
     text-align: center;
 }
 
@@ -90,6 +92,10 @@ input[type="button"][value="戻る"]{
     border: 1px solid #5d3fff;
     color: #5d3fff;
     display: inline-block;
+}
+
+input[type="button"][value="戻る"].single{
+    margin-left: 0;
 }
 
 .confirmation{
@@ -118,4 +124,13 @@ input[type="button"][value="戻る"]{
     margin-bottom: 25px;
     padding-bottom: 12px;
     border-bottom: 1px solid  #ccc;
+}
+
+.err{
+    color: red;
+}
+
+.completion{
+    margin-bottom: 50px;
+    text-align: center;
 }
