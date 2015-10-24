@@ -12,6 +12,7 @@ setToken();
 // ----------CSRF対策終了---------- //
 
 
+$requiredItem = array();
 $submitContent = array();
 
 
@@ -30,10 +31,9 @@ foreach($_POST as $key => $values){
         $nameCheck = true;
         if(empty($values["value"])){
             $err[$key] = "必須項目です。";
-        }else{
-            $submitContent[$key] = $values["value"];
-            $submitContent["name"] = $values["value"];
         }
+        $submitContent[$key] = $values["value"];
+        $requiredItem["name"] = $values["value"];
         continue;
     }
     
@@ -52,11 +52,10 @@ foreach($_POST as $key => $values){
             if(!filter_var($submitContent["mailaddress"], FILTER_VALIDATE_EMAIL)){
                 $err['mailaddress'] = "メールアドレスの形式が正しくありません";
             }
-            */else{
-                $submitContent[$key] = $values["value"];
-                $submitContent["mailaddress"] = $values["value"];
-            }
+            */
         }
+        $submitContent[$key] = $values["value"];
+        $requiredItem["mailaddress"] = $values["value"];
         continue;
     }
     
@@ -64,9 +63,8 @@ foreach($_POST as $key => $values){
     if(strpos($values["params"], "必須") !== false){
         if(empty($values["value"])){
             $err[$key] = "必須項目です。";
-        }else{
-            $submitContent[$key] = $values["value"];
         }
+        $submitContent[$key] = $values["value"];
         continue;
     }
     
@@ -106,33 +104,35 @@ if(!$nameCheck || !$mailCheck){
     <p class="confirmation">下記内容で送信してよろしいですか？</p>
     
     <div class="submit_content">
+        <?php if(!empty($submitContent)): ?>
         <form action="send.php" method="post">
             <dl>
-                <dt>お名前:</dt>
+                <?php foreach($submitContent as $key => $value): ?>
+                <dt><?php echo h($key); ?>:</dt>
                 <dd>
-                    <p><?php echo empty($err["name"]) ? h($submitContent["name"]) : "<span class=\"err\">{$err["name"]}</span>"; ?></p>
-                    <input type="hidden" name="name" value="<?php echo h($submitContent["name"]); ?>">
+                    <p>
+                        <?php
+                            if(empty($err[$key])){
+                                echo empty($value) ? "&nbsp;\n" : h($value);
+                            }else{
+                                echo "<span class=\"err\">{$err[$key]}</span>";
+                            }
+                        ?>
+                    </p>
+                    <input type="hidden" name="<?php echo h($key); ?>" value="<?php echo h($value); ?>">
                 </dd>
-
-                <dt>メールアドレス:</dt>
-                <dd>
-                    <p><?php echo empty($err["mailaddress"]) ? h($submitContent["mailaddress"]) : "<span class=\"err\">{$err["mailaddress"]}</span>"; ?></p>
-                    <input type="hidden" name="mailaddress" value="<?php echo h($submitContent["mailaddress"]); ?>">
-                </dd>
-
-                <dt>お問い合わせ内容:</dt>
-                <dd>
-                    <p><?php echo empty($err["message"]) ? nl2br(h($submitContent["message"])) : "<span class=\"err\">{$err["message"]}</span>"; ?></p>
-                    <input type="hidden" name="message" value="<?php echo h($submitContent["message"]); ?>">
-                </dd>
+                <?php endforeach; ?>
             </dl>
 
             <div class="submit_area">
+                <input type="hidden" name="requiredItem[name]" value="<?php echo h($requiredItem["name"]); ?>">
+                <input type="hidden" name="requiredItem[mailaddress]" value="<?php echo h($requiredItem["mailaddress"]); ?>">
                 <input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>">
                 <?php if(empty($err)){ echo "<input type=\"submit\" value=\"送信\">";} ?>
                 <input type="button" value="戻る" onclick="history.back();">
             </div>
         </form>
+        <?php endif; ?>
     </div>
     
 </div>
