@@ -127,7 +127,7 @@ if(!$nameCheck || !$mailCheck){
                             }
                         ?>
                     </p>
-                    <input type="hidden" name="<?php echo h($key); ?>" value="<?php echo h($value); ?>">
+                    <input type="hidden" name="submitContent[<?php echo h($key); ?>]" value="<?php echo h($value); ?>">
                 </dd>
                 <?php endforeach; ?>
             </dl>

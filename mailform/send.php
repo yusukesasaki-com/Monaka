@@ -12,13 +12,19 @@ checkToken();
 // ----------CSRF対策終了---------- //
 
 
+$requiredItem = array();
 $submitContent = array();
-$submitContent = $_POST;
+$requiredItem = $_POST["requiredItem"];
+$submitContent = $_POST["submitContent"];
 
 
 // ----------特殊文字の置換開始---------- //
 
 foreach($submitContent as $key => $value){
+    $submitContent[$key] = replaceText($value);
+}
+
+foreach($requiredItem as $key => $value){
     $submitContent[$key] = replaceText($value);
 }
 
@@ -35,18 +41,17 @@ mb_internal_encoding("UTF-8");
 $sendMail = mb_encode_mimeheader($adminName, "ISO-2022-JP-MS","UTF-8") ." <{$adminMail}>";
 
 // タイトルの設定
-$sendTitle = "{$submitContent["name"]}様よりお問い合わせ";
+$sendTitle = "{$requiredItem["name"]}様よりお問い合わせ";
 $sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
 
 // メッセージの設定
-$sendMessage = "{$submitContent["name"]}様より、下記内容でお問い合わせが届いています。\n";
+$sendMessage = "{$requiredItem["name"]}様より、下記内容でお問い合わせが届いています。\n";
 $sendMessage .= "\n";
-$sendMessage .= "■お名前\n";
-$sendMessage .= "{$submitContent["name"]}\n\n";
-$sendMessage .= "■メールアドレス\n";
-$sendMessage .= "{$submitContent["mailaddress"]}\n\n";
-$sendMessage .= "■お問い合わせ内容\n";
-$sendMessage .= "{$submitContent["message"]}";
+
+foreach($submitContent as $key => $value){
+    $sendMessage .= "■{$key}\n";
+    $sendMessage .= "{$value}\n\n";
+}
 $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
 //ヘッダーの設定
