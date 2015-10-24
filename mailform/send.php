@@ -16,6 +16,15 @@ $submitContent = array();
 $submitContent = $_POST;
 
 
+// ----------特殊文字の置換開始---------- //
+
+foreach($submitContent as $key => $value){
+    $submitContent[$key] = replaceText($value);
+}
+
+// ----------特殊文字の置換終了---------- //
+
+
 // ----------$adminMailへの送信開始---------- //
 
 // メールの言語・文字コードの設定
