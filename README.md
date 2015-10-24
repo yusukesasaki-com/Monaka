@@ -1,8 +1,8 @@
 # PHP-OriginalMailForm
 カスタマイズ性の高いメールフォームを作成していきます。
 
-    basic
-    名前、アドレス、内容のみのカスタマイズ性0のフォーム
+    basic_v2
+    mailform.phpで項目を増やせるように改変
 
 
 ## 環境
