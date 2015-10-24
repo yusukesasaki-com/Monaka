@@ -22,6 +22,9 @@ $submitContent = $_POST;
 mb_language("Japanese");
 mb_internal_encoding("UTF-8");
 
+// 送信先の設定
+$sendMail = mb_encode_mimeheader($adminName, "ISO-2022-JP-MS","UTF-8") ." <{$adminMail}>";
+
 // タイトルの設定
 $sendTitle = "{$submitContent["name"]}様よりお問い合わせ";
 $sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
@@ -37,12 +40,13 @@ $sendMessage .= "■お問い合わせ内容\n";
 $sendMessage .= "{$submitContent["message"]}";
 $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
+//ヘッダーの設定
 $sendHeaders = "MIME-Version: 1.0\r\n";
 $sendHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\r\n";
-$sendHeaders .= "From: ".mb_encode_mimeheader($submitContent["mailaddress"], "ISO-2022-JP-MS","UTF-8") ."\r\n";
+$sendHeaders .= "From: ".mb_encode_mimeheader($submitContent["name"], "ISO-2022-JP-MS","UTF-8") ." <{$submitContent["mailaddress"]}> \r\n";
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mail($adminMail, $sendTitle, $sendMessage, $sendHeaders);
+@mail($sendMail, $sendTitle, $sendMessage, $sendHeaders);
 
 
 // ----------$adminMailへの送信完了---------- //
@@ -50,6 +54,9 @@ $sendHeaders .= "From: ".mb_encode_mimeheader($submitContent["mailaddress"], "IS
 
 
 // ----------リターンメール送信開始---------- //
+
+// 送信先の設定
+$returnMail = mb_encode_mimeheader($submitContent["name"], "ISO-2022-JP-MS","UTF-8") ." <{$submitContent["mailaddress"]}>";
 
 // タイトルの設定
 $returnTitle = "【{$adminName}】 お問い合わせを受け付けました";
@@ -77,12 +84,13 @@ $returnMessage .= $returnMailFooter;
 $returnMessage .= "\n";
 $returnMessage = mb_convert_encoding($returnMessage, "ISO-2022-JP-MS","UTF-8");
 
+//ヘッダーの設定
 $returnHeaders = "MIME-Version: 1.0\r\n";
 $returnHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\r\n";
-$returnHeaders .= "From: ".mb_encode_mimeheader($adminMail, "ISO-2022-JP-MS","UTF-8") ."\r\n";
+$returnHeaders .= "From: ".mb_encode_mimeheader($adminName, "ISO-2022-JP-MS","UTF-8") ." <{$adminMail}> \r\n";
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-@mail($submitContent["mailaddress"], $returnTitle, $returnMessage, $returnHeaders);
+@mail($returnMail, $returnTitle, $returnMessage, $returnHeaders);
 
 // ----------リターンメール送信完了---------- //
 
