@@ -140,6 +140,10 @@ if(!$nameCheck || !$mailCheck){
                 <input type="button" value="戻る" onclick="history.back();">
             </div>
         </form>
+        <?php else: ?>
+        <div class="submit_area">
+            <input type="button" value="戻る" onclick="history.back();">
+        </div>
         <?php endif; ?>
     </div>
     
