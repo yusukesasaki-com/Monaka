@@ -52,7 +52,9 @@ h1::before {
     margin-bottom: 14px;
 }
 
-.mailform dd input[type="text"], dd textarea{
+.mailform dd input[type="text"],
+.mailform dd select,
+dd textarea{
     font-family: inherit;
     padding: 6px;
     font-size: 14px;

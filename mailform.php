@@ -34,7 +34,14 @@
                 
                 <dt>年齢</dt>
                 <dd>
-                    <input type="text" name="年齢[value]">
+                    <select name="年齢[value]" >
+                        <option value="～20">～20</option>
+                        <option value="20代">20代</option>
+                        <option value="30代">30代</option>
+                        <option value="40代">40代</option>
+                        <option value="50代">50代</option>
+                        <option value="60～">60～</option>
+                    </select>
                 </dd>
                 
                 <dt>お問い合わせ内容</dt>
