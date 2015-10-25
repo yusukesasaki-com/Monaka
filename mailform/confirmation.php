@@ -11,10 +11,8 @@ setToken();
 
 // ----------CSRF対策終了---------- //
 
-
 $requiredItem = array();
 $submitContent = array();
-
 
 // ----------パラメータチェック・エラーチェック開始---------- //
 
@@ -25,6 +23,11 @@ $mailCheck = false;
 foreach($_POST as $key => $values){
     
     // $params = explode(",", $values["params"]); /* 今後in_arrayと組み合わせて使うかも?*/
+    
+    // 配列(checkbox)を変数に変換
+    if(is_array($values["value"])){
+        $values["value"] = implode("、", $values["value"]);
+    }
     
     // 名前チェック
     if(strpos($values["params"], "名前") !== false){
@@ -112,7 +115,7 @@ if(!$nameCheck || !$mailCheck){
         <form action="send.php" method="post">
             <dl>
                 <?php foreach($submitContent as $key => $value): ?>
-                <dt><?php echo h($key); ?>:</dt>
+                <dt>■<?php echo h($key); ?></dt>
                 <dd>
                     <p>
                         <?php
