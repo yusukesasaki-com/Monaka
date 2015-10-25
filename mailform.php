@@ -34,13 +34,11 @@
                 
                 <dt>年齢</dt>
                 <dd>
-                    <select name="年齢[value]" >
-                        <option value="～20">～20</option>
-                        <option value="20代">20代</option>
-                        <option value="30代">30代</option>
-                        <option value="40代">40代</option>
-                        <option value="50代">50代</option>
-                        <option value="60～">60～</option>
+                    <label><input type="radio" name="年齢[value]" value="～20" checked> ～20</label>　
+                    <label><input type="radio" name="年齢[value]" value="20代"> 20代</label>　
+                    <label><input type="radio" name="年齢[value]" value="30代"> 30代</label>　
+                    <label><input type="radio" name="年齢[value]" value="40代"> 40代</label>　
+                    <label><input type="radio" name="年齢[value]" value="50～"> 50～</label>
                     </select>
                 </dd>
                 
