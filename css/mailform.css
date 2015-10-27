@@ -49,15 +49,29 @@ h1::before {
 }
 
 .mailform dd{
-    margin-bottom: 14px;
+    margin-bottom: 25px;
 }
 
-.mailform dd input[type="text"], dd textarea{
+.mailform dd input[type="text"],
+.mailform dd select,
+dd textarea{
     font-family: inherit;
     padding: 6px;
     font-size: 14px;
     border-radius: 6px;
     border: 1px solid #ddd;
+}
+
+.mailform dd input[type="radio"],
+.mailform dd input[type="checkbox"]{
+    width: 16px;
+    height: 16px;
+    margin-bottom: 5px;
+}
+
+.mailform dd .nest{
+    padding-left: 45px;
+    margin: 10px 0;
 }
 
 .mailform dd textarea{
@@ -109,8 +123,7 @@ input[type="button"][value="戻る"].single{
 }
 
 .submit_content dt{
-    width: 140px;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
     padding-bottom: 12px;
     float: left;
     text-align: right;
@@ -120,8 +133,7 @@ input[type="button"][value="戻る"].single{
 .submit_content dd{
     width: 340px;
     float: right;
-    float: 15px;
-    margin-bottom: 25px;
+    margin: 0 0 25px 15px;
     padding-bottom: 12px;
     border-bottom: 1px solid  #ccc;
 }

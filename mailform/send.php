@@ -12,14 +12,20 @@ checkToken();
 // ----------CSRF対策終了---------- //
 
 
+$requiredItem = array();
 $submitContent = array();
-$submitContent = $_POST;
+$requiredItem = $_POST["requiredItem"];
+$submitContent = $_POST["submitContent"];
 
 
 // ----------特殊文字の置換開始---------- //
 
 foreach($submitContent as $key => $value){
     $submitContent[$key] = replaceText($value);
+}
+
+foreach($requiredItem as $key => $value){
+    $requiredItem[$key] = replaceText($value);
 }
 
 // ----------特殊文字の置換終了---------- //
@@ -35,24 +41,22 @@ mb_internal_encoding("UTF-8");
 $sendMail = mb_encode_mimeheader($adminName, "ISO-2022-JP-MS","UTF-8") ." <{$adminMail}>";
 
 // タイトルの設定
-$sendTitle = "{$submitContent["name"]}様よりお問い合わせ";
+$sendTitle = "{$requiredItem["name"]}様よりお問い合わせ";
 $sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
 
 // メッセージの設定
-$sendMessage = "{$submitContent["name"]}様より、下記内容でお問い合わせが届いています。\n";
+$sendMessage = "{$requiredItem["name"]}様より、下記内容でお問い合わせが届いています。\n";
 $sendMessage .= "\n";
-$sendMessage .= "■お名前\n";
-$sendMessage .= "{$submitContent["name"]}\n\n";
-$sendMessage .= "■メールアドレス\n";
-$sendMessage .= "{$submitContent["mailaddress"]}\n\n";
-$sendMessage .= "■お問い合わせ内容\n";
-$sendMessage .= "{$submitContent["message"]}";
+foreach($submitContent as $key => $value){
+    $sendMessage .= "■{$key}\n";
+    $sendMessage .= "{$value}\n\n";
+}
 $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
 //ヘッダーの設定
 $sendHeaders = "MIME-Version: 1.0\r\n";
 $sendHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\r\n";
-$sendHeaders .= "From: ".mb_encode_mimeheader($submitContent["name"], "ISO-2022-JP-MS","UTF-8") ." <{$submitContent["mailaddress"]}> \r\n";
+$sendHeaders .= "From: ".mb_encode_mimeheader($requiredItem["name"], "ISO-2022-JP-MS","UTF-8") ." <{$requiredItem["mailaddress"]}> \r\n";
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
 @mail($sendMail, $sendTitle, $sendMessage, $sendHeaders);
@@ -65,7 +69,7 @@ $sendHeaders .= "From: ".mb_encode_mimeheader($submitContent["name"], "ISO-2022-
 // ----------リターンメール送信開始---------- //
 
 // 送信先の設定
-$returnMail = mb_encode_mimeheader($submitContent["name"], "ISO-2022-JP-MS","UTF-8") ." <{$submitContent["mailaddress"]}>";
+$returnMail = mb_encode_mimeheader($requiredItem["name"], "ISO-2022-JP-MS","UTF-8") ." <{$requiredItem["mailaddress"]}>";
 
 // タイトルの設定
 $returnTitle = "【{$adminName}】 お問い合わせを受け付けました";
@@ -80,14 +84,11 @@ $returnMessage .= "\n";
 $returnMessage .= $returnMailHeader;
 $returnMessage .= "\n";
 $returnMessage .= "----------------------------------------------------------------------\n";
-$returnMessage .= "■お名前\n";
-$returnMessage .= "{$submitContent["name"]}\n\n";
-$returnMessage .= "■メールアドレス\n";
-$returnMessage .= "{$submitContent["mailaddress"]}\n\n";
-$returnMessage .= "■お問い合わせ内容\n";
-$returnMessage .= "{$submitContent["message"]}\n\n";
+foreach($submitContent as $key => $value){
+    $returnMessage .= "■{$key}\n";
+    $returnMessage .= "{$value}\n\n";
+}
 $returnMessage .= "----------------------------------------------------------------------\n";
-$returnMessage .= "\n";
 $returnMessage .= "\n";
 $returnMessage .= $returnMailFooter;
 $returnMessage .= "\n";
