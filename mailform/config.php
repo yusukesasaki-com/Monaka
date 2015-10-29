@@ -63,8 +63,9 @@ $ext_denied = 1;
 $ext_allow1 = "jpg";
 $ext_allow2 = "jpeg";
 $ext_allow3 = "gif";
+$ext_allow4 = "pdf";
 // 配列に格納しておく
-$EXT_ALLOWS = array($ext_allow1, $ext_allow2, $ext_allow3);
+$EXT_ALLOWS = array($ext_allow1, $ext_allow2, $ext_allow3, $ext_allow4);
 
 // アップロード容量制限（0=しない・1=する）
 $maxmemory = 1;
