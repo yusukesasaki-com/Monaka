@@ -106,6 +106,8 @@ if(!empty($_FILES)){
             fclose($fp);
             
             $submitFile[$key]["name"] = $fileData["name"];
+            $submitFile[$key]["tmp"] = $fileData["tmp"];
+            $submitFile[$key]["ext"] = $fileData["ext"];
             $submitFile[$key]["file"] = chunk_split(base64_encode($contents)); //エンコードして分割
 
         }
@@ -176,7 +178,11 @@ if(!$nameCheck || !$mailCheck){
                     <p>
                         <?php
                             if(empty($err[$key])){
-                                echo "{$value["name"]}<br>\n";
+                                if(strpos("jpg,jpeg,git", $value["ext"]) !== false){
+                                    $img = base64_encode(file_get_contents($value["tmp"]));
+                                    echo "<img src=\"data:image/{$value["ext"]};base64,{$img}\" width=\"150\" ><br>\n";
+                                }
+                                echo "{$value["name"]}\n";
                                 echo "<input type=\"hidden\" name=\"submitFile[{$key}][{$value["name"]}]\" value=\"{$value["file"]}\" >";
                             }else{
                                 echo "<span class=\"err\">{$err[$key]}</span>";
