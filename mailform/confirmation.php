@@ -176,8 +176,8 @@ if(!$nameCheck || !$mailCheck){
                     <p>
                         <?php
                             if(empty($err[$key])){
-                                echo "{$value["name"]}";
-                                echo "<input type=\"hidden\" name=\"submitFile[{$key}][{$value["name"]}]\" value=\"{$value["file"]}\" ";
+                                echo "{$value["name"]}<br>\n";
+                                echo "<input type=\"hidden\" name=\"submitFile[{$key}][{$value["name"]}]\" value=\"{$value["file"]}\" >";
                             }else{
                                 echo "<span class=\"err\">{$err[$key]}</span>";
                             }
