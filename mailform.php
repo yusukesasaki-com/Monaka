@@ -34,9 +34,9 @@
                 
                 <dt>■添付ファイル</dt>
                 <dd>
-                    <input type="file" name="upfile1"><br>
-                    <input type="file" name="upfile2"><br>
-                    <input type="file" name="upfile3">
+                    <input type="file" name="添付ファイル1"><br>
+                    <input type="file" name="添付ファイル2"><br>
+                    <input type="file" name="添付ファイル3">
                 </dd>
         
                 <dt>■お問い合わせ内容</dt>

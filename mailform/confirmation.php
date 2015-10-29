@@ -20,6 +20,7 @@ $err = array();
 $nameCheck = false;
 $mailCheck = false;
 
+// $_POSTのチェック
 foreach($_POST as $key => $values){
     
     // $params = explode(",", $values["params"]); /* 今後in_arrayと組み合わせて使うかも?*/
@@ -75,6 +76,42 @@ foreach($_POST as $key => $values){
     
 }
 
+// $_FILEのチェック
+
+if(!empty($_FILES)){
+    $fileData = array();
+    $submitFile = array();
+    foreach($_FILES as $key => $value){
+        if(!empty($value["tmp_name"])){
+            $fileData["tmp"] = $value["tmp_name"];
+            $fileData["name"] = $value["name"];
+            $fileData["size"] = $value["size"];
+            $fileData["array"] = explode(".", $fileData["name"]);
+            $fileData["nr"] = count($fileData["array"]);
+            $fileData["ext"] = $fileData["array"][$fileData["nr"] - 1];
+            
+            if($ext_denied == 1 && !@in_array($fileData["ext"], $EXT_ALLOWS)){
+                $err[$key]  = "添付できないファイルです<br>\n";
+                $err[$key] .= "添付可能なファイルの種類（拡張子）は[".implode("・", $EXT_ALLOWS)."]です\n";
+                continue;
+            }
+            
+            if($maxmemory == 1 && ($fileData["size"] / 1000) > $max){
+                $err[$key]  = "ファイルの容量が大きすぎます<br>\n";
+                continue;
+            }
+            
+            $fp = fopen($fileData["tmp"], "r");
+            $contents = fread($fp, filesize($fileData["tmp"]));
+            fclose($fp);
+            
+            $submitFile[$key]["name"] = $fileData["name"];
+            $submitFile[$key]["file"] = chunk_split(base64_encode($contents)); //エンコードして分割
+
+        }
+    }
+}
+
 if(!$nameCheck || !$mailCheck){
     $seriousError = "エラーが発生しました。<br>\n";
     $seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
@@ -112,7 +149,7 @@ if(!$nameCheck || !$mailCheck){
     
     <div class="submit_content">
         <?php if(!empty($submitContent) && empty($seriousError)): ?>
-        <form action="send.php" method="post">
+        <form action="send.php" method="post" enctype="multipart/form-data">
             <dl>
                 <?php foreach($submitContent as $key => $value): ?>
                 <dt>■<?php echo h($key); ?></dt>
@@ -131,6 +168,21 @@ if(!$nameCheck || !$mailCheck){
                         ?>
                     </p>
                     <input type="hidden" name="submitContent[<?php echo h($key); ?>]" value="<?php echo h($value); ?>">
+                </dd>
+                <?php endforeach; ?>
+                <?php foreach($submitFile as $key => $value): ?>
+                <dt>■<?php echo h($key); ?></dt>
+                <dd>
+                    <p>
+                        <?php
+                            if(empty($err[$key])){
+                                echo "{$value["name"]}";
+                                echo "<input type=\"hidden\" name=\"submitFile[{$key}][{$value["name"]}]\" value=\"{$value["file"]}\" ";
+                            }else{
+                                echo "<span class=\"err\">{$err[$key]}</span>";
+                            }
+                        ?>
+                    </p>
                 </dd>
                 <?php endforeach; ?>
             </dl>
