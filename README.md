@@ -1,8 +1,8 @@
 # PHP-OriginalMailForm
 カスタマイズ性の高いメールフォームを作成していきます。
 
-    basic_v3
-    ファイルを添付できるように改変
+    class
+    class化してmailform.phpを簡単に書けるように改変
     
     
 ## 使い方
