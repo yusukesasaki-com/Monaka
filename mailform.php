@@ -1,3 +1,11 @@
+<?php
+
+require_once(__DIR__ . '/mailform/config.php');
+require_once(__DIR__ . '/mailform/Form.php');
+
+$form = new Form();
+
+?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -18,39 +26,88 @@
     <h1><span>メールフォーム</span></h1>
     
     <div class="mailform">
-        <form action="./mailform/confirmation.php" method="post" enctype="multipart/form-data">
+        
+        <?php $form->create(); ?>
             <dl>
                 <dt>■お名前</dt>
                 <dd>
-                    <input type="text" name="お名前[value]">
-                    <input type="hidden" name="お名前[params]" value="名前">
+                    <?php $form->inputName("お名前"); ?>
                 </dd>
-                
+            
                 <dt>■メールアドレス</dt>
                 <dd>
-                    <input type="text" name="メールアドレス[value]">
-                    <input type="hidden" name="メールアドレス[params]" value="メール">
+                    <?php $form->inputMail("メールアドレス"); ?>
+                </dd>
+                
+                <dt>■電話番号</dt>
+                <dd>
+                    <?php $form->inputText("電話番号", "必須"); ?>
+                </dd>
+                
+                <dt>■折り返しの連絡方法</dt>
+                <dd>
+                    <?php
+                        $params = array(
+                            "選択してください" => "noValue",
+                            "メール",
+                            "電話",
+                        );
+                        $form->select("折り返しの連絡方法", $params, "必須");
+                    ?>
+                </dd>
+                
+                <dt>■年齢</dt>
+                <dd>
+                    <?php $form->inputText("年齢"); ?>
+                </dd>
+                
+                <dt>■性別</dt>
+                <dd>
+                    <?php
+                        $params = array(
+                            "男",
+                            "女",
+                            "その他" => "text",
+                        );
+                        $form->inputRadioBR("性別", $params);
+                    ?>
+                </dd>
+                
+                <dt>■当サイトを知ったきっかけ</dt>
+                <dd>
+                    <?php
+                        $params = array(
+                            "検索",
+                            "ブログ",
+                            "その他" => "text",
+                        );
+                        $form->inputCheckbox("当サイトを知ったきっかけ", $params);
+                    ?>
+                    <div class="nest">
+                        <p>＜検索サイト＞</p>
+                        <?php
+                            $params = array(
+                                "Yahoo",
+                                "Google",
+                                "その他" => "text",
+                            );
+                            $form->inputCheckboxBR("検索サイト", $params);
+                        ?>
+                    </div>
                 </dd>
                 
                 <dt>■添付ファイル</dt>
                 <dd>
-                    <input type="file" name="添付ファイル1"><br>
-                    <input type="file" name="添付ファイル2"><br>
-                    <input type="file" name="添付ファイル3">
-                </dd>
-        
-                <dt>■お問い合わせ内容</dt>
-                <dd>
-                    <textarea name="お問い合わせ内容[value]"></textarea>
-                    <input type="hidden" name="お問い合わせ内容[params]" value="必須">
+                    <?php $form->inputFile("添付ファイル1"); ?>
+                    <?php $form->inputFile("添付ファイル2"); ?>
+                    <?php $form->inputFile("添付ファイル3"); ?>
                 </dd>
                 
+                <dt>■お問い合わせ内容</dt>
+                <dd><?php $form->textarea("お問い合わせ内容", "必須"); ?></dd>
             </dl>
-            
-            <div class="submit_area">
-                <input type="submit" value="確認">
-            </div>
-        </form>
+        <?php $form->end(); ?>
+        
     </div>
     
 </div>
