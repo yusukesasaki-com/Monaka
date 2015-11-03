@@ -1,8 +1,8 @@
 # PHP-OriginalMailForm
 カスタマイズ性の高いメールフォームを作成していきます。
 
-    basic_v2
-    mailform.phpで項目を増やせるように改変
+    basic_v3
+    ファイルを添付できるように改変
     
     
 ## 使い方
@@ -44,6 +44,18 @@ input(selectやtextarea含む)はname= `項目名[value]` と name= `項目名[p
     (例)
     <input type="text" name="年齢[value]">
     <input type="hidden" name="年齢[params]">
+    
+***
+    
+ファイルを添付する場合は下記のように記述します。  
+nameは何でもよく、[value]や[params]は必要ありません。
+
+    (例)
+    <input type="file" name="添付ファイル1"><br>
+    <input type="file" name="添付ファイル2"><br>
+    <input type="file" name="添付ファイル3">
+
+
 
 
 ### config.php
@@ -120,4 +132,4 @@ input(selectやtextarea含む)はname= `項目名[value]` と name= `項目名[p
 PHP 5.6
 
 ## サンプルページ
-http://yusukesasaki.com/PHP-OriginalMailForm/basic_v2/mailform.php
+http://yusukesasaki.com/PHP-OriginalMailForm/basic_v3/mailform.php

@@ -1,5 +1,7 @@
 <?php
 
+// ----------基本設定開始---------- //
+
 // 送信先メールアドレス
 $adminMail = "";
 
@@ -45,3 +47,29 @@ $returnMailFooter = <<<EOD
 
 EOD
 ;
+
+// ----------基本設定終了---------- //
+
+
+
+
+// ----------添付ファイル設定開始---------- //
+
+//参照URL：http://www.k-sugi.sakura.ne.jp/php/2300/
+
+// 拡張子制限（0=しない・1=する）
+$ext_denied = 1;
+// 許可する拡張子リスト
+$ext_allow1 = "jpg";
+$ext_allow2 = "jpeg";
+$ext_allow3 = "gif";
+$ext_allow4 = "pdf";
+// 配列に格納しておく
+$EXT_ALLOWS = array($ext_allow1, $ext_allow2, $ext_allow3, $ext_allow4);
+
+// アップロード容量制限（0=しない・1=する）
+$maxmemory = 1;
+// 最大容量（KB）
+$max = 3000;
+
+// ----------添付ファイル設定終了---------- //

@@ -16,6 +16,7 @@ $requiredItem = array();
 $submitContent = array();
 $requiredItem = $_POST["requiredItem"];
 $submitContent = $_POST["submitContent"];
+$submitFile = $_POST["submitFile"];
 
 
 // ----------特殊文字の置換開始---------- //
@@ -37,6 +38,9 @@ foreach($requiredItem as $key => $value){
 mb_language("Japanese");
 mb_internal_encoding("UTF-8");
 
+// バウンダリー文字（パートの境界）
+$boundary = md5(uniqid(rand()));
+
 // 送信先の設定
 $sendMail = mb_encode_mimeheader($adminName, "ISO-2022-JP-MS","UTF-8") ." <{$adminMail}>";
 
@@ -54,9 +58,46 @@ foreach($submitContent as $key => $value){
 $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
 //ヘッダーの設定
+$sendHeaders = "X-Mailer: PHP5\r\n";
 $sendHeaders = "MIME-Version: 1.0\r\n";
-$sendHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\r\n";
 $sendHeaders .= "From: ".mb_encode_mimeheader($requiredItem["name"], "ISO-2022-JP-MS","UTF-8") ." <{$requiredItem["mailaddress"]}> \r\n";
+$sendHeaders .= "Content-Transfer-Encoding: 7bit\r\n";
+
+// 添付ファイルの設定
+if(!empty($submitFile)){
+    $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$boundary}\" \r\n";
+    
+    $tmpMessage = $sendMessage;
+    
+    $sendMessage = "--{$boundary}\n";
+    $sendMessage .= "Content-Type: text/plain; charset=\"ISO-2022-JP\"\n";
+    $sendMessage .= "Content-Transfer-Encoding: 7bit\n\n";
+    $sendMessage .= $tmpMessage."\n";
+    
+    foreach($submitFile as $key => $value){
+        foreach($value as $key2 => $value2){
+            $name = $key2;
+            $f_encoded = $value2;
+            
+            $sendMessage .= "\n";
+            $sendMessage .= "--{$boundary}\n";
+            $sendMessage .= "Content-Type: application/octet-stream; ";
+            $sendMessage .= "charset=\"ISO-2022-JP\" ";
+            $sendMessage .= "name=\"".mb_encode_mimeheader($name, "ISO-2022-JP-MS","UTF-8")."\"\n";
+            $sendMessage .= "Content-Transfer-Encoding: base64\n";
+            $sendMessage .= "Content-Disposition: attachment; ";
+            $sendMessage .= "filename=\"".mb_encode_mimeheader($name, "ISO-2022-JP-MS","UTF-8")."\"\n";
+            $sendMessage .= "\n";
+            $sendMessage .= "{$f_encoded}\n";
+        }
+    }
+    
+    $sendMessage .= "--{$boundary}--\n";
+    
+}else{
+    $sendHeaders .= "Content-type: text/plain; charset=\"ISO-2022-JP\" \r\n";
+}
+
 
 // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
 @mail($sendMail, $sendTitle, $sendMessage, $sendHeaders);

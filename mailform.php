@@ -18,7 +18,7 @@
     <h1><span>メールフォーム</span></h1>
     
     <div class="mailform">
-        <form action="./mailform/confirmation.php" method="post">
+        <form action="./mailform/confirmation.php" method="post" enctype="multipart/form-data">
             <dl>
                 <dt>■お名前</dt>
                 <dd>
@@ -32,38 +32,11 @@
                     <input type="hidden" name="メールアドレス[params]" value="メール">
                 </dd>
                 
-                <dt>■年齢</dt>
+                <dt>■添付ファイル</dt>
                 <dd>
-                    <label><input type="radio" name="年齢[value]" value="～20" checked> ～20</label>　
-                    <label><input type="radio" name="年齢[value]" value="20代"> 20代</label>　
-                    <label><input type="radio" name="年齢[value]" value="30代"> 30代</label>　
-                    <label><input type="radio" name="年齢[value]" value="40代"> 40代</label>　
-                    <label><input type="radio" name="年齢[value]" value="50～"> 50～</label>
-                    </select>
-                    <input type="hidden" name="年齢[params]" value="">
-                </dd>
-                
-                <dt>■当サイトを知ったきっかけ</dt>
-                <dd>
-                    <label><input type="checkbox" name="当サイトを知ったきっかけ[value][]" value="検索"> 検索</label><br>
-                    <label><input type="checkbox" name="当サイトを知ったきっかけ[value][]" value="ブログ"> ブログ</label><br>
-                    <label><input type="checkbox" name="当サイトを知ったきっかけ[value][]" value="その他"> その他</label>　
-                    <input type="hidden" name="当サイトを知ったきっかけ[params]" value="">
-                    
-                    <input type="text" name="当サイトを知ったきっかけ-その他[value]">
-                    <input type="hidden" name="当サイトを知ったきっかけ-その他[params]" value="">
-                    
-                    <div class="nest">
-                        <p>&lt;検索サイト&gt;</p>
-                        <label><input type="checkbox" name="検索サイト[value][]" value="Yahoo"> Yahoo</label>
-                        <label><input type="checkbox" name="検索サイト[value][]" value="Google"> Google</label><br>
-                        <label><input type="checkbox" name="検索サイト[value][]" value="その他"> その他</label>　
-                        <input type="hidden" name="検索サイト[params]" value="">
-                        
-                        <input type="text" name="検索サイト-その他[value]">
-                        <input type="hidden" name="検索サイト-その他[params]" value="">
-                    </div>
-                    
+                    <input type="file" name="添付ファイル1"><br>
+                    <input type="file" name="添付ファイル2"><br>
+                    <input type="file" name="添付ファイル3">
                 </dd>
         
                 <dt>■お問い合わせ内容</dt>
