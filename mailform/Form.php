@@ -38,7 +38,7 @@ class Form{
             if($value !== "noValue"){
                 echo "<option value=\"{$value}\">{$value}</option>";
             }else{
-                echo "<option>{$key}</option>";
+                echo "<option value=\"\">{$key}</option>";
             }
         }
         echo "</select>";
