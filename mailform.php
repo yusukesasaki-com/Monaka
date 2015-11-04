@@ -39,6 +39,11 @@ $form = new Form();
                     <?php $form->inputMail("メールアドレス"); ?>
                 </dd>
                 
+                <dt>■メールアドレス確認</dt>
+                <dd>
+                    <?php $form->inputMailCheck("メールアドレス確認"); ?>
+                </dd>
+                
                 <dt>■電話番号</dt>
                 <dd>
                     <?php $form->inputText("電話番号", "必須"); ?>

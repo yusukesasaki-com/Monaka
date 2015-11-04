@@ -63,6 +63,15 @@ foreach($_POST as $key => $values){
         continue;
     }
     
+    // メール再入力チェック
+    if(strpos($values["params"], "再入力") !== false){
+        if($requiredItem["mailaddress"] !== $values["value"]){
+            $err[$key] = "メールアドレスが一致しません。";
+            $submitContent[$key] = $values["value"];
+        }
+        continue;
+    }
+    
     // 必須チェック
     if(strpos($values["params"], "必須") !== false){
         if(empty($values["value"])){
