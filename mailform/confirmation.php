@@ -72,6 +72,17 @@ foreach($_POST as $key => $values){
         continue;
     }
     
+    // 電話番号チェック
+    if(strpos($values["params"], "電話番号") !== false){
+        if(!empty($values["value"])){
+            if(!telCheck($values["value"])){
+                $err[$key] = "電話番号を正しく入力してください。";
+                $submitContent[$key] = $values["value"];
+            continue;
+            }
+        }
+    }
+    
     // 必須チェック
     if(strpos($values["params"], "必須") !== false){
         if(empty($values["value"])){

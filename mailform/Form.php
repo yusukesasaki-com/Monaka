@@ -32,6 +32,11 @@ class Form{
         echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"再入力\">\n";
     }
     
+    public function inputTel($name){
+        echo "<input type=\"text\" name=\"{$name}[value]\">\n";
+        echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"電話番号\">\n";
+    }
+    
     public function inputText($name, $params = null){
         echo "<input type=\"text\" name=\"{$name}[value]\">\n";
         echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params}\">\n";

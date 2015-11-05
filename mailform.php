@@ -46,7 +46,12 @@ $form = new Form();
                 
                 <dt>■電話番号</dt>
                 <dd>
-                    <?php $form->inputText("電話番号", "必須"); ?>
+                    <?php $form->inputTel("電話番号", "必須"); ?>
+                </dd>
+                
+                <dt>■住所</dt>
+                <dd>
+                    <?php $form->inputText("住所"); ?>
                 </dd>
                 
                 <dt>■折り返しの連絡方法</dt>
