@@ -29,6 +29,14 @@ function telCheck($tel){
     }
 }
 
+function zipCheck($zip){
+    if (preg_match("/(^\d{3}\-\d{4}$)|(^\d{7}$)/", $zip)) {
+        return true;
+    }else{
+        return false;
+    }
+}
+
 function setToken(){
     $_SESSION['token'] = sha1(uniqid(mt_rand(), true));
 }

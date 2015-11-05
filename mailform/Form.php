@@ -32,9 +32,16 @@ class Form{
         echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"再入力\">\n";
     }
     
-    public function inputTel($name){
+    public function inputTel($name, $params = null){
+        $params = $params !== null ? ",".$params : $params ;
         echo "<input type=\"text\" name=\"{$name}[value]\">\n";
-        echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"電話番号\">\n";
+        echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"電話番号{$params}\">\n";
+    }
+    
+    public function inputZip($name, $params = null){
+        $params = $params !== null ? ",".$params : $params ;
+        echo "<input type=\"text\" name=\"{$name}[value]\">\n";
+        echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"郵便番号{$params}\">\n";
     }
     
     public function inputText($name, $params = null){

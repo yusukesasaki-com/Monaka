@@ -49,6 +49,11 @@ $form = new Form();
                     <?php $form->inputTel("電話番号", "必須"); ?>
                 </dd>
                 
+                <dt>■郵便番号</dt>
+                <dd>
+                    <?php $form->inputZip("郵便番号"); ?>
+                </dd
+                
                 <dt>■住所</dt>
                 <dd>
                     <?php $form->inputText("住所"); ?>

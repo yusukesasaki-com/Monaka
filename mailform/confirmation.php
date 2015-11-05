@@ -83,6 +83,17 @@ foreach($_POST as $key => $values){
         }
     }
     
+    // 郵便番号チェック
+    if(strpos($values["params"], "郵便番号") !== false){
+        if(!empty($values["value"])){
+            if(!zipCheck($values["value"])){
+                $err[$key] = "郵便番号を正しく入力してください。";
+                $submitContent[$key] = $values["value"];
+            continue;
+            }
+        }
+    }
+    
     // 必須チェック
     if(strpos($values["params"], "必須") !== false){
         if(empty($values["value"])){
