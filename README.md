@@ -9,16 +9,20 @@
 
 ### mailform.php
 
-input(selectやtextarea含む)はname= `項目名[value]` と name= `項目名[params]` が必ずセットで必要です。
+input(selectやtextarea含む)はname= `項目名[value]` と name= `項目名[params]` が必ずセットで必要です。  
 [params]はhiddenにします。
 
     (例)
     <input type="text" name="項目名[value]">
     <input type="hidden" name="項目名[params]">
 
+　  
+
 ***
 
-[params] は `名前` と `メール` が必ず必要です。
+　  
+
+[params] は `名前` と `メール` が必ず必要です。  
 無い場合はエラーになります。
 
     (例)
@@ -28,16 +32,39 @@ input(selectやtextarea含む)はname= `項目名[value]` と name= `項目名[p
     <input type="text" name="メールアドレス[value]">
     <input type="hidden" name="メールアドレス[params]" value="メール">
 
+　  
+
 ***
 
-必須項目には[params]に `必須` を書きます。
+　  
+
+メールアドレスの再入力によるチェックは下記のように、  
+[params]に `再入力` を書きます。
+
+    <dt>■メールアドレス確認</dt>
+    <dd>
+        <input type="text" name="メールアドレス確認[value]">
+        <input type="hidden" name="メールアドレス確認[params]" value="再入力">
+    </dd>
+
+　  
+
+***
+
+　  
+
+必須項目には[params]に `必須` を書きます。  
 (`名前` と `メール` は自動で必須になるので、`必須` を書く必要はありません。 )
 
     (例)
     <textarea name="お問い合わせ内容[value]"></textarea>
     <input type="hidden" name="お問い合わせ内容[params]" value="必須">
 
+　  
+
 ***
+
+　  
 
 必須ではない項目も[params]を記述する必要があります。
 
@@ -45,8 +72,42 @@ input(selectやtextarea含む)はname= `項目名[value]` と name= `項目名[p
     <input type="text" name="年齢[value]">
     <input type="hidden" name="年齢[params]">
     
+　  
+
 ***
-    
+
+　  
+
+電話番号の形式チェックは下記のように、[params]に `電話番号` を書きます。  
+電話番号が必須の場合は `,` で区切って `必須` を書きます。
+
+    <dt>■電話番号</dt>
+    <dd>
+        <input type="text" name="電話番号[value]">
+        <input type="hidden" name="電話番号[params]" value="電話番号,必須">
+    </dd>
+
+　  
+  
+***
+
+　  
+
+郵便番号の形式チェックは下記のように、[params]に `郵便番号` を書きます。  
+電話番号が必須の場合は `,` で区切って `必須` を書きます。
+
+    <dt>■郵便番号</dt>
+    <dd>
+        <input type="text" name="郵便番号[value]">
+        <input type="hidden" name="郵便番号[params]" value="郵便番号,必須">
+    </dd>
+
+　  
+
+***
+
+　  
+
 ファイルを添付する場合は下記のように記述します。  
 nameは何でもよく、[value]や[params]は必要ありません。
 
@@ -55,7 +116,7 @@ nameは何でもよく、[value]や[params]は必要ありません。
     <input type="file" name="添付ファイル2"><br>
     <input type="file" name="添付ファイル3">
 
-
+　  
 
 
 ### config.php
@@ -66,8 +127,11 @@ nameは何でもよく、[value]や[params]は必要ありません。
     // 送信先メールアドレス
     $adminMail = "hoge@example.com";
 
+　  
 
 ***
+
+　  
 
 `$adminName` に管理者の名前を書きます。
 
@@ -75,16 +139,23 @@ nameは何でもよく、[value]や[params]は必要ありません。
     // 送信者名
     $adminName = "YusukeSasaki";
 
+　  
 
 ***
+
+　  
 
 `$returnUrl` に送信後の戻るボタンで移動するURLを書きます。
 
     (例)
     // 送信後に戻るURL
     $returnUrl = "http://yusukesasaki.com/PHP-OriginalMailForm/basic_v2/mailform.php";
-    
+
+　  
+
 ***
+
+　  
 
 `$completionMessage` に送信直後に表示されるメッセージを書きます。
 
@@ -95,7 +166,11 @@ nameは何でもよく、[value]や[params]は必要ありません。
     EOD
     ;
 
+　  
+
 ***
+
+　  
 
 `$returnMailHeader` に返信メール上部に表示されるメッセージを書きます。
 
@@ -111,8 +186,12 @@ nameは何でもよく、[value]や[params]は必要ありません。
     再度お問い合わせくださいますようお願いいたします。 
     EOD
     ;
-    
+
+　  
+
 ***
+
+　  
 
 `$returnMailFooter` に返信メール下部に表示されるメッセージを書きます。
     
@@ -122,7 +201,11 @@ nameは何でもよく、[value]や[params]は必要ありません。
     EOD
     ;
 
+　  
+
 ***
+
+　  
 
 以上、わかりづらい場合は下記のサンプルページからお問い合わせしてください！
 (私に届きます)
