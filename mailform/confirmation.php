@@ -63,6 +63,37 @@ foreach($_POST as $key => $values){
         continue;
     }
     
+    // メール再入力チェック
+    if(strpos($values["params"], "再入力") !== false){
+        if($requiredItem["mailaddress"] !== $values["value"]){
+            $err[$key] = "メールアドレスが一致しません。";
+            $submitContent[$key] = $values["value"];
+        }
+        continue;
+    }
+    
+    // 電話番号チェック
+    if(strpos($values["params"], "電話番号") !== false){
+        if(!empty($values["value"])){
+            if(!telCheck($values["value"])){
+                $err[$key] = "電話番号を正しく入力してください。";
+                $submitContent[$key] = $values["value"];
+            continue;
+            }
+        }
+    }
+    
+    // 郵便番号チェック
+    if(strpos($values["params"], "郵便番号") !== false){
+        if(!empty($values["value"])){
+            if(!zipCheck($values["value"])){
+                $err[$key] = "郵便番号を正しく入力してください。";
+                $submitContent[$key] = $values["value"];
+            continue;
+            }
+        }
+    }
+    
     // 必須チェック
     if(strpos($values["params"], "必須") !== false){
         if(empty($values["value"])){

@@ -55,6 +55,12 @@ foreach($submitContent as $key => $value){
     $sendMessage .= "■{$key}\n";
     $sendMessage .= "{$value}\n\n";
 }
+$sendMessage .= "\n\n";
+$sendMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+$sendMessage .= "[送信日時]".date("Y年m月d日(D) H時i分s秒")."\n";
+$sendMessage .= "[ホスト]{$_SERVER["REMOTE_ADDR"]}\n";
+$sendMessage .= "[USER_AGENT]{$_SERVER["HTTP_USER_AGENT"]}\n";
+$sendMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
 
 //ヘッダーの設定

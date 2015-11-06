@@ -32,6 +32,75 @@
                     <input type="hidden" name="メールアドレス[params]" value="メール">
                 </dd>
                 
+                <dt>■メールアドレス確認</dt>
+                <dd>
+                    <input type="text" name="メールアドレス確認[value]">
+                    <input type="hidden" name="メールアドレス確認[params]" value="再入力">
+                </dd>
+                
+                <dt>■電話番号</dt>
+                <dd>
+                    <input type="text" name="電話番号[value]">
+                    <input type="hidden" name="電話番号[params]" value="電話番号,必須">
+                </dd>
+                
+                <dt>■郵便番号</dt>
+                <dd>
+                    <input type="text" name="郵便番号[value]">
+                    <input type="hidden" name="郵便番号[params]" value="郵便番号">
+                </dd>
+
+                <dt>■住所</dt>
+                <dd>
+                    <input type="text" name="住所[value]">
+                    <input type="hidden" name="住所[params]" value="">
+                </dd>
+
+                <dt>■折り返しの連絡方法</dt>
+                <dd>
+                    <select name="折り返しの連絡方法[value]">
+                        <option value="">選択してください</option>
+                        <option value="メール">メール</option>
+                        <option value="電話">電話</option>
+                    </select>
+                    <input type="hidden" name="折り返しの連絡方法[params]" value="必須">
+                </dd>
+                
+                <dt>■年齢</dt>
+                <dd>
+                    <input type="text" name="年齢[value]">
+                    <input type="hidden" name="年齢[params]" value="">
+                </dd>
+                
+                <dt>■性別</dt>
+                <dd>
+                    <input type="hidden" name="性別[params]" value="">
+                    <label><input type="radio" name="性別[value]" value="男" checked> 男</label><br>
+                    <label><input type="radio" name="性別[value]" value="女" > 女</label><br>
+                    <label><input type="radio" name="性別[value]" value="その他" > その他</label>　
+                    <input type="text" name="性別-その他[value]">　
+                    <input type="hidden" name="性別-その他[params]">
+                </dd>
+                
+                <dt>■当サイトを知ったきっかけ</dt>
+                <dd>
+                    <input type="hidden" name="当サイトを知ったきっかけ[params]" value="">
+                    <label><input type="checkbox" name="当サイトを知ったきっかけ[value][]" value="検索"> 検索</label>
+                    <label><input type="checkbox" name="当サイトを知ったきっかけ[value][]" value="ブログ"> ブログ</label>
+                    <label><input type="checkbox" name="当サイトを知ったきっかけ[value][]" value="その他"> その他</label>
+                    <input type="text" name="当サイトを知ったきっかけ-その他[value]">
+                    <input type="hidden" name="当サイトを知ったきっかけ-その他[params]">
+                    <div class="nest">
+                        <p>＜検索サイト＞</p>
+                        <input type="hidden" name="検索サイト[params]" value="">
+                        <label><input type="checkbox" name="検索サイト[value][]" value="Yahoo"> Yahoo</label><br>
+                        <label><input type="checkbox" name="検索サイト[value][]" value="Google"> Google</label><br>
+                        <label><input type="checkbox" name="検索サイト[value][]" value="その他"> その他</label>
+                        <input type="text" name="検索サイト-その他[value]">
+                        <input type="hidden" name="検索サイト-その他[params]"><br>
+                    </div>
+                </dd>
+
                 <dt>■添付ファイル</dt>
                 <dd>
                     <input type="file" name="添付ファイル1"><br>
