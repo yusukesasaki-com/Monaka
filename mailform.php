@@ -1,7 +1,7 @@
 <?php
 
 require_once(__DIR__ . '/mailform/config.php');
-require_once(__DIR__ . '/mailform/Form.php');
+require_once(__DIR__ . '/mailform/class/Form.php');
 
 $form = new Form();
 
