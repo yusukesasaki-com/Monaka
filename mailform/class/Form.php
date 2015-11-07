@@ -2,7 +2,7 @@
 
 class Form{
     
-    public function __constract(){
+    public function __construct(){
         
     }
     
