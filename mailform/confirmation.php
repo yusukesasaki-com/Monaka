@@ -39,7 +39,7 @@ $confirmation->seriousErrorCheck();
     <title>メールフォーム</title>
     <link rel="stylesheet" href="../css/html5reset-1.6.1.css">
     <link rel="stylesheet" href="../css/ini.css">
-    <link rel="stylesheet" href="../css/mailform.css">
+    <link rel="stylesheet" href="./css/confirmation.css">
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
@@ -60,8 +60,8 @@ $confirmation->seriousErrorCheck();
     <div class="submit_content">
         <?php if(!empty($confirmation->submitContent) && empty($confirmation->seriousError)): ?>
         <form action="send.php" method="post" enctype="multipart/form-data">
-            <dl>
                 <?php foreach($confirmation->submitContent as $key => $value): ?>
+                <dl>
                 <dt>■<?php echo h($key); ?></dt>
                 <dd>
                     <p>
@@ -79,8 +79,10 @@ $confirmation->seriousErrorCheck();
                     </p>
                     <input type="hidden" name="submitContent[<?php echo h($key); ?>]" value="<?php echo h($value); ?>">
                 </dd>
+                </dl>
                 <?php endforeach; ?>
                 <?php foreach($confirmation->submitFile as $key => $value): ?>
+                <dl>
                 <dt>■<?php echo h($key); ?></dt>
                 <dd>
                     <p>
@@ -98,8 +100,8 @@ $confirmation->seriousErrorCheck();
                         ?>
                     </p>
                 </dd>
+                </dl>
                 <?php endforeach; ?>
-            </dl>
 
             <div class="submit_area">
                 <input type="hidden" name="requiredItem[name]" value="<?php echo h($confirmation->requiredItem["name"]); ?>">
