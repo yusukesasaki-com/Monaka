@@ -133,3 +133,8 @@ PHP 5.6
 
 ## サンプルページ
 http://yusukesasaki.com/PHP-OriginalMailForm/basic_v3/mailform.php
+
+## ライセンス
+MIT  
+This software is released under the MIT License, see LICENSE.txt.
+
