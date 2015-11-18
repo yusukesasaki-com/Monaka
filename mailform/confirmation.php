@@ -37,8 +37,8 @@ $confirmation->seriousErrorCheck();
 <head>
     <meta charset="UTF-8">
     <title>メールフォーム</title>
-    <link rel="stylesheet" href="../css/html5reset-1.6.1.css">
-    <link rel="stylesheet" href="../css/ini.css">
+    <link rel="stylesheet" href="./css/html5reset-1.6.1.css">
+    <link rel="stylesheet" href="./css/ini.css">
     <link rel="stylesheet" href="./css/confirmation.css">
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

@@ -29,43 +29,43 @@ $form = new Form();
         
         <?php $form->create(); ?>
             <dl>
-                <dt>■お名前</dt>
+                <dt>お名前</dt>
                 <dd>
                     <?php $form->inputName("お名前"); ?>
                 </dd>
             </dl>
             <dl>
-                <dt>■メールアドレス</dt>
+                <dt>メールアドレス</dt>
                 <dd>
                     <?php $form->inputMail("メールアドレス"); ?>
                 </dd>
             </dl>
             <dl>
-                <dt>■メールアドレス確認</dt>
+                <dt>メールアドレス確認</dt>
                 <dd>
                     <?php $form->inputMailCheck("メールアドレス確認"); ?>
                 </dd>
             </dl>
             <dl>
-                <dt>■電話番号</dt>
+                <dt>電話番号</dt>
                 <dd>
                     <?php $form->inputTel("電話番号", "必須"); ?>
                 </dd>
             </dl>
             <dl>
-                <dt>■郵便番号</dt>
+                <dt>郵便番号</dt>
                 <dd>
                     <?php $form->inputZip("郵便番号"); ?>
                 </dd>
             </dl>
             <dl>
-                <dt>■住所</dt>
+                <dt>住所</dt>
                 <dd>
                     <?php $form->inputText("住所"); ?>
                 </dd>
             </dl>
             <dl>
-                <dt>■折り返しの連絡方法</dt>
+                <dt>折り返しの連絡方法</dt>
                 <dd>
                     <?php
                         $params = array(
@@ -78,13 +78,13 @@ $form = new Form();
                 </dd>
             </dl>
             <dl>
-                <dt>■年齢</dt>
+                <dt>年齢</dt>
                 <dd>
                     <?php $form->inputText("年齢"); ?>
                 </dd>
             </dl>
             <dl>
-                <dt>■性別</dt>
+                <dt>性別</dt>
                 <dd>
                     <?php
                         $params = array(
@@ -97,7 +97,7 @@ $form = new Form();
                 </dd>
             </dl>
             <dl>
-                <dt>■当サイトを知ったきっかけ</dt>
+                <dt>当サイトを<br>知ったきっかけ</dt>
                 <dd>
                     <?php
                         $params = array(
@@ -121,7 +121,7 @@ $form = new Form();
                 </dd>
             </dl>
             <dl>
-                <dt>■添付ファイル</dt>
+                <dt>添付ファイル</dt>
                 <dd>
                     <?php $form->inputFile("添付ファイル1"); ?>
                     <?php $form->inputFile("添付ファイル2"); ?>
@@ -129,7 +129,7 @@ $form = new Form();
                 </dd>
             </dl>
             <dl>
-                <dt>■お問い合わせ内容</dt>
+                <dt>お問い合わせ内容</dt>
                 <dd><?php $form->textarea("お問い合わせ内容", "必須"); ?></dd>
             </dl>
         <?php $form->end(); ?>

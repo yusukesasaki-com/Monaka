@@ -1,0 +1,19 @@
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+    font-family: 游ゴシック体, 'Yu Gothic', YuGothic, メイリオ, 'Hiragino Kaku Gothic ProN', sans-serif;
+    color: #000;
+}
+
+a{
+    text-decoration: none;
+    color: inherit;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
