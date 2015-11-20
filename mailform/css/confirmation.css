@@ -1,115 +1,115 @@
-.container{
-    width: 600px;
-    margin: 20px auto;
-    padding: 30px;
-    overflow: hidden;
+.container {
+  width: 600px;
+  margin: 20px auto;
+  padding: 30px;
+  overflow: hidden;
 }
 
 .container span,
 .container p,
-.container div{
-    line-height: 1.6;
+.container div {
+  line-height: 1.6;
 }
 
 h1 {
-    margin-bottom: 30px;
-    font-size: 20px;
-    font-weight: normal;
-	position: relative;
-	text-align: center;
+  margin-bottom: 30px;
+  font-size: 20px;
+  font-weight: normal;
+  position: relative;
+  text-align: center;
 }
+
 h1 span {
-	position: relative;
-	z-index: 2;
-	display: inline-block;
-	margin: 0 4em;
-	padding: 0 1em;
-	background-color: #fff;
-	text-align: left;
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  margin: 0 4em;
+  padding: 0 1em;
+  background-color: #fff;
+  text-align: left;
 }
+
 h1::before {
-	position: absolute;
-	top: 50%;
-	z-index: 1;
-	content: '';
-	display: block;
-	width: 100%;
-	height: 1px;
-	background: #ccc;
-	background: -webkit-linear-gradient(-45deg, transparent, #ccc 10%, #ccc 90%, transparent);
-	background: linear-gradient(-45deg, transparent, #ccc 10%, #ccc 90%, transparent);
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  content: '';
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: #ccc;
+  background: -webkit-linear-gradient(-45deg, transparent, #ccc 10%, #ccc 90%, transparent);
+  background: linear-gradient(-45deg, transparent, #ccc 10%, #ccc 90%, transparent);
 }
 
-
-.submit_area{
-    margin-top: 45px;
-    text-align: center;
+.submit_area {
+  margin-top: 45px;
+  text-align: center;
 }
 
-input[type="submit"][value="送信"]{
-    font-family: inherit;
-    padding: 10px 30px;
-    font-size: 16px;
-    background: none;
-    border-radius: 8px;
-    border: none;
-    background: #5d3fff;
-    color: #fff;
+input[type="submit"][value="送信"] {
+  font-family: inherit;
+  padding: 10px 30px;
+  font-size: 16px;
+  background: none;
+  border-radius: 8px;
+  border: none;
+  background: #5d3fff;
+  color: #fff;
 }
 
-input[type="button"][value="戻る"]{
-    font-family: inherit;
-    margin-left: 15px;
-    padding: 10px 30px;
-    font-size: 16px;
-    background: none;
-    border-radius: 8px;
-    border: 1px solid #5d3fff;
-    color: #5d3fff;
-    display: inline-block;
+input[type="button"][value="戻る"] {
+  font-family: inherit;
+  margin-left: 15px;
+  padding: 10px 30px;
+  font-size: 16px;
+  background: none;
+  border-radius: 8px;
+  border: 1px solid #5d3fff;
+  color: #5d3fff;
+  display: inline-block;
 }
 
-input[type="button"][value="戻る"].single{
-    margin-left: 0;
+input[type="button"][value="戻る"].single {
+  margin-left: 0;
 }
 
-.confirmation{
-    margin-bottom: 40px;
+.confirmation {
+  margin-bottom: 40px;
 }
 
-
-.submit_content dl{
-    height: auto;
-    padding: 12px;
-    background: #f9f9f9;
-    margin-bottom: 4px;
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid #f4f4f4;
-    display: table;
+.submit_content dl {
+  height: auto;
+  padding: 12px;
+  background: #f9f9f9;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #f4f4f4;
+  display: table;
 }
 
-.submit_content dt{
-    width: 180px;
-    height: 100%;
-    display: table-cell;
-    vertical-align: middle;
+.submit_content dt {
+  width: 180px;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
 }
 
-.submit_content dd{
-    width: 380px;
-    height: 100%;
-    padding-left: 8px;
-    border-left: 2px dotted #ccc;
-    display: table-cell;
-    vertical-align: middle;
+.submit_content dd {
+  width: 380px;
+  height: 100%;
+  padding-left: 8px;
+  border-left: 2px dotted #ccc;
+  display: table-cell;
+  vertical-align: middle;
 }
 
-.err{
-    color: red;
+.err {
+  color: red;
 }
 
-.completion{
-    margin-bottom: 50px;
-    text-align: center;
+.completion {
+  margin-bottom: 50px;
+  text-align: center;
 }
