@@ -65,7 +65,7 @@ h1::before {
 .mailform dd input[type="text"],
 .mailform dd select,
 dd textarea {
-  width: 340px;
+  width: 315px;
   max-width: 100%;
   font-family: inherit;
   padding: 4px;
