@@ -53,30 +53,30 @@ $confirmation->seriousErrorCheck();
 
   <h1><span>確認画面</span></h1>
 
-  <?php if(!empty($confirmation->seriousError)): ?>
+  <?php if (!empty($confirmation->seriousError)) : ?>
   <p class="confirmation">
     <?php echo $confirmation->seriousError; ?>
   </p>
-  <?php else: ?>
+  <?php else : ?>
   <p class="confirmation">下記内容で送信してよろしいですか？</p>
   <?php endif; ?>
 
   <div class="submit_content">
-    <?php if(!empty($confirmation->submitContent) && empty($confirmation->seriousError)): ?>
+    <?php if (!empty($confirmation->submitContent) && empty($confirmation->seriousError)) : ?>
     <form action="send.php" method="post" enctype="multipart/form-data">
-      <?php foreach($confirmation->submitContent as $key => $value): ?>
+      <?php foreach ($confirmation->submitContent as $key => $value) : ?>
       <dl>
         <dt><?php echo h($key); ?></dt>
         <dd>
           <p>
           <?php
-            if(empty($confirmation->err[$key])) {
-              if(strpos($value, "\n") !== false) {
+            if (empty($confirmation->err[$key])) {
+              if (strpos($value, "\n") !== false) {
                 echo nl2br(h($value));
-              }else{
+              } else {
                 echo empty($value) ? "&nbsp;\n" : h($value);
               }
-            }else{
+            } else {
               echo "<span class=\"err\">{$confirmation->err[$key]}</span>";
             }
           ?>
@@ -85,20 +85,20 @@ $confirmation->seriousErrorCheck();
         </dd>
       </dl>
       <?php endforeach; ?>
-      <?php foreach($confirmation->submitFile as $key => $value): ?>
+      <?php foreach ($confirmation->submitFile as $key => $value) : ?>
       <dl>
         <dt><?php echo h($key); ?></dt>
         <dd>
           <p>
             <?php
-              if(empty($confirmation->err[$key])) {
-                if(strpos("jpg,jpeg,git", $value["ext"]) !== false) {
+              if (empty($confirmation->err[$key])) {
+                if (strpos("jpg,jpeg,git", $value["ext"]) !== false) {
                   $img = base64_encode(file_get_contents($value["tmp"]));
                   echo "<img src=\"data:image/{$value["ext"]};base64,{$img}\" width=\"150\" ><br>\n";
                 }
                 echo "{$value["name"]}\n";
                 echo "<input type=\"hidden\" name=\"submitFile[{$key}][{$value["name"]}]\" value=\"{$value["file"]}\" >";
-              }else{
+              } else {
                 echo "<span class=\"err\">{$confirmation->err[$key]}</span>";
               }
             ?>
@@ -111,11 +111,11 @@ $confirmation->seriousErrorCheck();
         <input type="hidden" name="requiredItem[name]" value="<?php echo h($confirmation->requiredItem[" name "]); ?>">
         <input type="hidden" name="requiredItem[mailaddress]" value="<?php echo h($confirmation->requiredItem[" mailaddress "]); ?>">
         <input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>">
-        <?php if(empty($confirmation->err) && empty($confirmation->seriousError)) { echo "<input type=\"submit\" value=\"送信\">"; } ?>
+        <?php if (empty($confirmation->err) && empty($confirmation->seriousError)) { echo "<input type=\"submit\" value=\"送信\">"; } ?>
         <input type="button" value="戻る" onclick="history.back();">
       </div>
     </form>
-    <?php else: ?>
+    <?php else : ?>
     <div class="submit_area">
       <input type="button" value="戻る" onclick="history.back();">
     </div>

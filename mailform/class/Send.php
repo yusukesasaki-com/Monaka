@@ -20,13 +20,13 @@ class Send {
   }
 
   public function substitutionRequiredItem($post) {
-    foreach($post as $key => $value) {
+    foreach ($post as $key => $value) {
       $this->requiredItem[$key] = replaceText($value);
     }
   }
 
   public function substitutionSubmitContent($post) {
-    foreach($post as $key => $value) {
+    foreach ($post as $key => $value) {
       $this->submitContent[$key] = replaceText($value);
     }
   }
@@ -51,7 +51,7 @@ class Send {
     // メッセージの設定
     $sendMessage = "{$this->requiredItem["name"]}様より、下記内容でお問い合わせが届いています。\n";
     $sendMessage .= "\n";
-    foreach($this->submitContent as $key => $value) {
+    foreach ($this->submitContent as $key => $value) {
       $sendMessage .= "■{$key}\n";
       $sendMessage .= "{$value}\n\n";
     }
@@ -71,7 +71,7 @@ class Send {
     $sendHeaders .= "Content-Transfer-Encoding: 7bit\r\n";
 
     // 添付ファイルの設定
-    if(!empty($this->submitFile)) {
+    if (!empty($this->submitFile)) {
       $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$this->boundary}\" \r\n";
 
       $tmpMessage = $sendMessage;
@@ -81,8 +81,8 @@ class Send {
       $sendMessage .= "Content-Transfer-Encoding: 7bit\n\n";
       $sendMessage .= $tmpMessage."\n";
 
-      foreach($this->submitFile as $key => $value) {
-        foreach($value as $key2 => $value2) {
+      foreach ($this->submitFile as $key => $value) {
+        foreach ($value as $key2 => $value2) {
           $name = $key2;
           $f_encoded = $value2;
 
@@ -101,7 +101,7 @@ class Send {
 
       $sendMessage .= "--{$this->boundary}--\n";
 
-    }else{
+    } else {
       $sendHeaders .= "Content-type: text/plain; charset=\"ISO-2022-JP\" \r\n";
     }
 
@@ -126,7 +126,7 @@ class Send {
     $returnMessage .= $this->returnMailHeader;
     $returnMessage .= "\n";
     $returnMessage .= "----------------------------------------------------------------------\n";
-    foreach($this->submitContent as $key => $value) {
+    foreach ($this->submitContent as $key => $value) {
       $returnMessage .= "■{$key}\n";
       $returnMessage .= "{$value}\n\n";
     }

@@ -47,10 +47,10 @@ class Form {
 
   public function select($name, $params1 = array(), $params2 = null) {
     echo "<select name=\"{$name}[value]\">";
-    foreach($params1 as $key => $value) {
-      if($value !== "noValue") {
+    foreach ($params1 as $key => $value) {
+      if ($value !== "noValue") {
         echo "<option value=\"{$value}\">{$value}</option>";
-      }else{
+      } else {
         echo "<option value=\"\">{$key}</option>";
       }
     }
@@ -61,12 +61,12 @@ class Form {
   public function inputRadio($name, $params1 = array(), $params2 = null) {
     $checked = "checked";
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params2}\">\n";
-    foreach($params1 as $key => $value) {
-      if($value === "text") {
+    foreach ($params1 as $key => $value) {
+      if ($value === "text") {
         echo "<label><input type=\"radio\" name=\"{$name}[value]\" value=\"{$key}\" {$checked}> {$key}</label>　\n";
         echo "<input type=\"text\" name=\"{$name}-{$key}[value]\">　\n";
         echo "<input type=\"hidden\" name=\"{$name}-{$key}[params]\">\n";
-      }else{
+      } else {
         echo "<label><input type=\"radio\" name=\"{$name}[value]\" value=\"{$value}\" {$checked}> {$value}</label>　\n";
       }
       $checked = "";
@@ -76,12 +76,12 @@ class Form {
   public function inputRadioBR($name, $params1 = array(), $params2 = null) {
     $checked = "checked";
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params2}\">\n";
-    foreach($params1 as $key => $value) {
-      if($value === "text") {
+    foreach ($params1 as $key => $value) {
+      if ($value === "text") {
         echo "<label><input type=\"radio\" name=\"{$name}[value]\" value=\"{$key}\" {$checked}> {$key}</label>　\n";
         echo "<input type=\"text\" name=\"{$name}-{$key}[value]\">　\n";
         echo "<input type=\"hidden\" name=\"{$name}-{$key}[params]\">\n";
-      }else{
+      } else {
         echo "<label><input type=\"radio\" name=\"{$name}[value]\" value=\"{$value}\" {$checked}> {$value}</label>　\n";
       }
       echo "<br>\n";
@@ -91,12 +91,12 @@ class Form {
 
   public function inputCheckbox($name, $params1 = array(), $params2 = null) {
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params2}\">\n";
-    foreach($params1 as $key => $value) {
-      if($value === "text") {
+    foreach ($params1 as $key => $value) {
+      if ($value === "text") {
         echo "<label><input type=\"checkbox\" name=\"{$name}[value][]\" value=\"{$key}\"> {$key}</label>　\n";
         echo "<input type=\"text\" name=\"{$name}-{$key}[value]\">\n";
         echo "<input type=\"hidden\" name=\"{$name}-{$key}[params]\">\n";
-      }else{
+      } else {
         echo "<label><input type=\"checkbox\" name=\"{$name}[value][]\" value=\"{$value}\"> {$value}</label>　\n";
       }
     }
@@ -104,12 +104,12 @@ class Form {
 
   public function inputCheckboxBR($name, $params1 = array(), $params2 = null) {
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params2}\">\n";
-    foreach($params1 as $key => $value) {
-      if($value === "text") {
+    foreach ($params1 as $key => $value) {
+      if ($value === "text") {
         echo "<label><input type=\"checkbox\" name=\"{$name}[value][]\" value=\"{$key}\"> {$key}</label>　\n";
         echo "<input type=\"text\" name=\"{$name}-{$key}[value]\">\n";
         echo "<input type=\"hidden\" name=\"{$name}-{$key}[params]\">\n";
-      }else{
+      } else {
         echo "<label><input type=\"checkbox\" name=\"{$name}[value][]\" value=\"{$value}\"> {$value}</label>　\n";
       }
       echo "<br>\n";
