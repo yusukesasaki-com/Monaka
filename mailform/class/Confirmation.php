@@ -62,6 +62,8 @@ class Confirmation {
       if (strpos($values["params"], "再入力") !== false) {
         if ($this->requiredItem["mailaddress"] !== $values["value"]) {
           $this->err[$key] = "メールアドレスが一致しません。";
+        } else {
+          continue;
         }
       }
 
