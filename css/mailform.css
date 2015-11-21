@@ -43,28 +43,21 @@ h1::before {
 }
 
 .mailform dl {
-  height: auto;
   padding: 12px;
-  background: #f9f9f9;
   margin-bottom: 4px;
   border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid #f4f4f4;
-  display: table;
+  border-bottom: 1px solid #f9f9f9;
 }
 
 .mailform dt {
-  width: 180px;
-  height: 100%;
+  width: 200px;
   display: table-cell;
   vertical-align: middle;
 }
 
 .mailform dd {
-  width: 380px;
-  height: 100%;
+  width: 368px;
   padding-left: 8px;
-  border-left: 2px dotted #ccc;
   display: table-cell;
   vertical-align: middle;
 }
@@ -72,13 +65,14 @@ h1::before {
 .mailform dd input[type="text"],
 .mailform dd select,
 dd textarea {
-  width: 300px;
+  width: 340px;
   max-width: 100%;
   font-family: inherit;
   padding: 4px;
   font-size: 14px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+  background: #f4f4ff;
+  border-radius: 4px;
+  border: none;
 }
 
 .mailform dd input[type="radio"],

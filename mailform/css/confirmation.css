@@ -79,28 +79,21 @@ input[type="button"][value="戻る"].single {
 }
 
 .submit_content dl {
-  height: auto;
   padding: 12px;
-  background: #f9f9f9;
   margin-bottom: 4px;
   border-radius: 4px;
-  overflow: hidden;
-  border: 1px solid #f4f4f4;
-  display: table;
+  border-bottom: 1px solid #f9f9f9;
 }
 
 .submit_content dt {
-  width: 180px;
-  height: 100%;
+  width: 200px;
   display: table-cell;
   vertical-align: middle;
 }
 
 .submit_content dd {
-  width: 380px;
-  height: 100%;
+  width: 368px;
   padding-left: 8px;
-  border-left: 2px dotted #ccc;
   display: table-cell;
   vertical-align: middle;
 }
