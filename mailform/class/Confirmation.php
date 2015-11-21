@@ -62,9 +62,7 @@ class Confirmation {
       if(strpos($values["params"], "再入力") !== false) {
         if($this->requiredItem["mailaddress"] !== $values["value"]) {
           $this->err[$key] = "メールアドレスが一致しません。";
-          $this->submitContent[$key] = $values["value"];
         }
-        continue;
       }
 
       // 電話番号チェック
@@ -72,8 +70,6 @@ class Confirmation {
         if(!empty($values["value"])) {
           if(!telCheck($values["value"])) {
             $this->err[$key] = "電話番号を正しく入力してください。";
-            $this->submitContent[$key] = $values["value"];
-            continue;
           }
         }
       }
@@ -83,8 +79,6 @@ class Confirmation {
         if(!empty($values["value"])) {
           if(!zipCheck($values["value"])) {
             $this->err[$key] = "郵便番号を正しく入力してください。";
-            $this->submitContent[$key] = $values["value"];
-            continue;
           }
         }
       }
@@ -94,8 +88,6 @@ class Confirmation {
         if(empty($values["value"])) {
           $this->err[$key] = "必須項目です。";
         }
-        $this->submitContent[$key] = $values["value"];
-        continue;
       }
 
       $this->submitContent[$key] = $values["value"];
@@ -103,9 +95,21 @@ class Confirmation {
     }
   }
 
-  public function filesCheck($files) {
+  public function filesCheck($files, $ext_denied, $EXT_ALLOWS, $maxmemory, $max) {
     if(!empty($files)) {
       foreach($files as $key => $value) {
+        
+        if($value["error"] != UPLOAD_ERR_OK && $value['error'] !== 4) {
+          if($value["error"] === 1) {
+            $this->err[$key] = "ファイルの容量が大きすぎます<br>\n";
+            $this->submitFile[$key]["name"] = $value["name"];
+          }else{
+            $this->err[$key] = "原因不明のエラーです<br>\n";
+            $this->submitFile[$key]["name"] = $value["name"];
+          }
+          continue;
+        }
+        
         if(!empty($value["tmp_name"])) {
           $this->fileData["tmp"] = $value["tmp_name"];
           $this->fileData["name"] = $value["name"];
@@ -115,13 +119,16 @@ class Confirmation {
           $this->fileData["ext"] = $this->fileData["array"][$this->fileData["nr"] - 1];
 
           if($ext_denied == 1 && !@in_array($this->fileData["ext"], $EXT_ALLOWS)) {
-            $err[$key]  = "添付できないファイルです<br>\n";
-            $err[$key] .= "添付可能なファイルの種類（拡張子）は[".implode("・", $EXT_ALLOWS)."]です\n";
+            $this->err[$key] = "添付できないファイルです<br>\n";
+            $this->err[$key] .= "添付可能なファイルの種類（拡張子）は[".implode("・", $EXT_ALLOWS)."]です\n";
+            $this->submitFile[$key]["name"] = $this->fileData["name"];
             continue;
           }
-
-          if($maxmemory == 1 && ($this->fileData["size"] / 1000) > $max) {
-            $err[$key]  = "ファイルの容量が大きすぎます<br>\n";
+          
+          $size = filesize($value['tmp_name']);
+          if($maxmemory == 1 && ($size / 1024) > $max) {
+            $this->err[$key] = "ファイルの容量が大きすぎます<br>\n";
+            $this->submitFile[$key]["name"] = $this->fileData["name"];
             continue;
           }
 

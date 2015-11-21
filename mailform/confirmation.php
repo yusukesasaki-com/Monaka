@@ -22,7 +22,7 @@ setToken();
 $confirmation->postCheck($_POST);
 
 // $_FILESのチェック
-$confirmation->filesCheck($_FILES);
+$confirmation->filesCheck($_FILES, $ext_denied, $EXT_ALLOWS, $maxmemory, $max);
 
 // 重大なエラーチェック
 $confirmation->seriousErrorCheck();
@@ -87,7 +87,7 @@ $confirmation->seriousErrorCheck();
       <?php endforeach; ?>
       <?php foreach($confirmation->submitFile as $key => $value): ?>
       <dl>
-        <dt>■<?php echo h($key); ?></dt>
+        <dt><?php echo h($key); ?></dt>
         <dd>
           <p>
             <?php
