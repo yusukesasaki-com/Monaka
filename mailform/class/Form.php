@@ -14,38 +14,39 @@ class Form {
   }
 
   public function inputName($name) {
-    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"名前\">\n";
+    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
   }
 
   public function inputMail($name) {
-    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"メール\">\n";
+    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
   }
 
   public function inputMailCheck($name) {
-    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"再入力\">\n";
+    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
   }
 
   public function inputTel($name, $params = null) {
     $params = $params !== null ? ",".$params : $params;
-    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"電話番号{$params}\">\n";
+    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
   }
 
   public function inputZip($name, $params = null) {
     $params = $params !== null ? ",".$params : $params;
-    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"郵便番号{$params}\">\n";
+    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
   }
 
   public function inputText($name, $params = null) {
-    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params}\">\n";
+    echo "<input type=\"text\" name=\"{$name}[value]\">\n";
   }
 
   public function select($name, $params1 = array(), $params2 = null) {
+    echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params2}\">\n";
     echo "<select name=\"{$name}[value]\">";
     foreach ($params1 as $key => $value) {
       if ($value !== "noValue") {
@@ -55,7 +56,6 @@ class Form {
       }
     }
     echo "</select>";
-    echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params2}\">\n";
   }
 
   public function inputRadio($name, $params1 = array(), $params2 = null) {
