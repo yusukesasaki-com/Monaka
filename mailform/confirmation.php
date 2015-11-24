@@ -108,8 +108,8 @@ $confirmation->seriousErrorCheck();
       <?php endforeach; ?>
 
       <div class="submit_area">
-        <input type="hidden" name="requiredItem[name]" value="<?php echo h($confirmation->requiredItem[" name "]); ?>">
-        <input type="hidden" name="requiredItem[mailaddress]" value="<?php echo h($confirmation->requiredItem[" mailaddress "]); ?>">
+        <input type="hidden" name="requiredItem[name]" value="<?php echo h($confirmation->requiredItem["name"]); ?>">
+        <input type="hidden" name="requiredItem[mailaddress]" value="<?php echo h($confirmation->requiredItem["mailaddress"]); ?>">
         <input type="hidden" name="token" value="<?php echo h($_SESSION['token']); ?>">
         <?php if (empty($confirmation->err) && empty($confirmation->seriousError)) { echo "<input type=\"submit\" value=\"送信\">"; } ?>
         <input type="button" value="戻る" onclick="history.back();">
