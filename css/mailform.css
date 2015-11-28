@@ -68,7 +68,7 @@ dd textarea {
   width: 315px;
   max-width: 100%;
   font-family: inherit;
-  padding: 4px;
+  padding: 4px 9px;
   font-size: 14px;
   background: #f4f4ff;
   border-radius: 4px;
