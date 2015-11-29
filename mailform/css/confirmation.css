@@ -42,64 +42,12 @@ h1::before {
   background: linear-gradient(-45deg, transparent, #ccc 10%, #ccc 90%, transparent);
 }
 
-.mailform dl {
-  padding: 12px;
-  margin-bottom: 4px;
-  border-radius: 4px;
-  border-bottom: 1px solid #f9f9f9;
-}
-
-.mailform dt {
-  width: 200px;
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.mailform dd {
-  width: 368px;
-  padding-left: 8px;
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.mailform dd input[type="text"],
-.mailform dd select,
-dd textarea {
-  width: 315px;
-  max-width: 100%;
-  font-family: inherit;
-  padding: 4px 9px;
-  font-size: 14px;
-  background: #f4f4ff;
-  border-radius: 4px;
-  border: none;
-}
-
-.mailform dd input[type="radio"],
-.mailform dd input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  margin-bottom: 5px;
-}
-
-.mailform dd .nest {
-  padding-left: 45px;
-  margin: 10px 0;
-}
-
-.mailform dd textarea {
-  width: 350px;
-  height: 120px;
-  box-sizing: border-box;
-  resize: vertical;
-}
-
 .submit_area {
   margin-top: 45px;
   text-align: center;
 }
 
-input[type="submit"][value="確認"] {
+input[type="submit"][value="送信"] {
   font-family: inherit;
   padding: 10px 30px;
   font-size: 16px;
@@ -108,4 +56,53 @@ input[type="submit"][value="確認"] {
   border: none;
   background: #5d3fff;
   color: #fff;
+}
+
+input[type="button"][value="戻る"] {
+  font-family: inherit;
+  margin-left: 15px;
+  padding: 10px 30px;
+  font-size: 16px;
+  background: none;
+  border-radius: 8px;
+  border: 1px solid #5d3fff;
+  color: #5d3fff;
+  display: inline-block;
+}
+
+input[type="button"][value="戻る"].single {
+  margin-left: 0;
+}
+
+.confirmation {
+  margin-bottom: 40px;
+}
+
+.submit_content dl {
+  padding: 12px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.submit_content dt {
+  width: 200px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.submit_content dd {
+  width: 368px;
+  padding-left: 8px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.err {
+  color: red;
+}
+
+.completion {
+  margin-bottom: 50px;
+  text-align: center;
 }
