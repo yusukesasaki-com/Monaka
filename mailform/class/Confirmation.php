@@ -44,7 +44,7 @@ class Confirmation {
           $this->err[$key] = "必須項目です。";
         } else {
           // メールアドレスの形式チェック
-          if (!mailCheck($values["value"])) {
+          if (!$this->mailCheck($values["value"])) {
             $this->err[$key] = "メールアドレスの形式が正しくありません。";
           }
           /* filter_varを使用する場合は下記
@@ -70,7 +70,7 @@ class Confirmation {
       // 電話番号チェック
       if (strpos($values["params"], "電話番号") !== false) {
         if (!empty($values["value"])) {
-          if (!telCheck($values["value"])) {
+          if (!$this->telCheck($values["value"])) {
             $this->err[$key] = "電話番号を正しく入力してください。";
           }
         }
@@ -79,7 +79,7 @@ class Confirmation {
       // 郵便番号チェック
       if (strpos($values["params"], "郵便番号") !== false) {
         if (!empty($values["value"])) {
-          if (!zipCheck($values["value"])) {
+          if (!$this->zipCheck($values["value"])) {
             $this->err[$key] = "郵便番号を正しく入力してください。";
           }
         }
@@ -94,6 +94,50 @@ class Confirmation {
 
       $this->submitContent[$key] = $values["value"];
 
+    }
+  }
+  
+  public function mailCheck($email) {
+    if (preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $email)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public function telCheck($tel) {
+    $tel = mb_convert_kana($tel, "n", "UTF-8");
+    if (strpos($tel,"-")===false) { //ハイフンなし
+      if (preg_match("/(^(?<!090|080|070)\d{10}$)|(^(090|080|070)\d{8}$)|(^0120\d{6}$)|(^0080\d{7}$)/", $tel)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else { //ハイフンあり
+      if (preg_match("/(^(?<!090|080|070)(^\d{2,5}?\-\d{1,4}?\-\d{4}$|^[\d\-]{12}$))|(^(090|080|070)(\-\d{4}\-\d{4}|[\\d-]{13})$)|(^0120(\-\d{2,3}\-\d{3,4}|[\d\-]{12})$)|(^0080\-\d{3}\-\d{4})/", $tel)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
+  public function zipCheck($zip) {
+    if (preg_match("/(^\d{3}\-\d{4}$)|(^\d{7}$)/", $zip)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public function setToken() {
+    $_SESSION['token'] = sha1(uniqid(mt_rand(), true));
+  }
+
+  public function checkToken() {
+    if (empty($_POST['token']) || ($_SESSION['token'] != $_POST['token'])) {
+      echo "不正な送信です。";
+      exit;
     }
   }
 
@@ -152,9 +196,9 @@ class Confirmation {
 
   public function seriousErrorCheck() {
     if (!$this->nameCheck || !$this->mailCheck) {
-      $seriousError = "エラーが発生しました。<br>\n";
-      $seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
-      $seriousError .= "管理者【{$adminMail}】にお知らせください。";
+      $this->seriousError = "エラーが発生しました。<br>\n";
+      $this->seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
+      $this->seriousError .= "管理者【{$this->adminMail}】にお知らせください。";
     }
   }
 

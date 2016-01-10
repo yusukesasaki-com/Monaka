@@ -4,50 +4,6 @@ function h($s) {
   return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
 }
 
-function mailCheck($email) {
-  if (preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $email)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function telCheck($tel) {
-  $tel = mb_convert_kana($tel, "n", "UTF-8");
-  if (strpos($tel,"-")===false) { //ハイフンなし
-    if (preg_match("/(^(?<!090|080|070)\d{10}$)|(^(090|080|070)\d{8}$)|(^0120\d{6}$)|(^0080\d{7}$)/", $tel)) {
-      return true;
-    } else {
-      return false;
-    }
-  } else { //ハイフンあり
-    if (preg_match("/(^(?<!090|080|070)(^\d{2,5}?\-\d{1,4}?\-\d{4}$|^[\d\-]{12}$))|(^(090|080|070)(\-\d{4}\-\d{4}|[\\d-]{13})$)|(^0120(\-\d{2,3}\-\d{3,4}|[\d\-]{12})$)|(^0080\-\d{3}\-\d{4})/", $tel)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-}
-
-function zipCheck($zip) {
-  if (preg_match("/(^\d{3}\-\d{4}$)|(^\d{7}$)/", $zip)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-function setToken() {
-  $_SESSION['token'] = sha1(uniqid(mt_rand(), true));
-}
-
-function checkToken() {
-  if (empty($_POST['token']) || ($_SESSION['token'] != $_POST['token'])) {
-    echo "不正な送信です。";
-    exit;
-  }
-}
-
 function replaceText($str) {
   $arr = array(
     "\xE2\x84\xA2" => 'TM',
