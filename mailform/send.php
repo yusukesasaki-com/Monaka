@@ -6,7 +6,7 @@ require_once(__DIR__ . '/class/Send.php');
 
 session_start();
 
-$send = new Send($adminMail, $adminName, $returnMailHeader, $returnMailFooter, $_POST["submitFile"]);
+$send = new Send($adminMail, $adminName, $returnMailHeader, $returnMailFooter, $_POST["submitFile"], $_SERVER);
 
 // ----------CSRF対策開始---------- //
 
