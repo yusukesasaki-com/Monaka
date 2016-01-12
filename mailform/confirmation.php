@@ -10,7 +10,7 @@ $confirmation = new Confirmation($adminMail);
 
 // ----------CSRF対策開始---------- //
 
-setToken();
+$confirmation->setToken();
 
 // ----------CSRF対策終了---------- //
 

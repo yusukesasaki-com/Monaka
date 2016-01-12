@@ -10,7 +10,7 @@ $send = new Send($adminMail, $adminName, $returnMailHeader, $returnMailFooter, $
 
 // ----------CSRF対策開始---------- //
 
-checkToken();
+$send->checkToken();
 
 // ----------CSRF対策終了---------- //
 
