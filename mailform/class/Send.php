@@ -159,6 +159,13 @@ class Send {
     @mail($this->returnMail, $this->returnTitle, $this->returnMessage, $this->returnHeaders);
   }
   
+  public function checkToken() {
+    if (empty($_POST['token']) || ($_SESSION['token'] != $_POST['token'])) {
+      echo "不正な送信です。";
+      exit;
+    }
+  }
+
   public function replaceText($str) {
     $arr = array(
       "\xE2\x84\xA2" => 'TM',
