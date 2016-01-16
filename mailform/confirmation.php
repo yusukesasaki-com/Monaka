@@ -25,7 +25,7 @@ $confirmation->postCheck($_POST);
 $confirmation->filesCheck($_FILES, $ext_denied, $EXT_ALLOWS, $maxmemory, $max);
 
 // 重大なエラーチェック
-$confirmation->seriousErrorCheck();
+$confirmation->seriousErrorCheck($_SERVER["CONTENT_LENGTH"]);
 
 
 // ----------パラメータチェック・エラーチェック終了---------- //

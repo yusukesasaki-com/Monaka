@@ -194,8 +194,17 @@ class Confirmation {
     }
   }
 
-  public function seriousErrorCheck() {
-    if (!$this->nameCheck || !$this->mailCheck) {
+  public function seriousErrorCheck($contentLength) {
+    if (strpos(ini_get("post_max_size"), "M") !== false) {
+      $postMaxSize = ini_get("post_max_size") * 1024 * 1024;
+    } else {
+      $postMaxSize = ini_get("post_max_size") * 1;
+    }
+    if ($contentLength > $postMaxSize) {
+      $this->seriousError = "ファイルサイズの総量が大きすぎる可能性があります。<br>\n";
+      $this->seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
+      $this->seriousError .= "管理者【{$this->adminMail}】にお知らせください。";
+    } elseif (!$this->nameCheck || !$this->mailCheck) {
       $this->seriousError = "エラーが発生しました。<br>\n";
       $this->seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
       $this->seriousError .= "管理者【{$this->adminMail}】にお知らせください。";
