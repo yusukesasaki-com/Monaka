@@ -6,7 +6,7 @@
 
 ## バージョン
 
-v1.0.0
+v1.0.1
     
 ## 使い方
 
@@ -20,7 +20,7 @@ v1.0.0
 PHP 5.3~
 
 ## サンプルページ
-http://web-dev.xyz/oss-sample/mailform-1.0.0/mailform.php
+http://web-dev.xyz/oss-sample/mailform-1.0.1/mailform.php
 
 ## ライセンス
 MIT  
