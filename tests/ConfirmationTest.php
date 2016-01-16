@@ -76,7 +76,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $post[] = array("params" => "", "value" => "");
     $this->obj->postCheck($post);
     $this->assertFalse($this->obj->$checkingVariable);
-    $this->obj->seriousErrorCheck();
+    $this->obj->seriousErrorCheck(100);
     $this->assertEquals($this->obj->seriousError, $seriousError);
   }
   
