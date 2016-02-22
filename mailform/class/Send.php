@@ -59,7 +59,7 @@ class Send {
   public function adminSend() {
     // 送信先の設定
     foreach ($this->adminArray as $value) {
-      $this->sendMail[] = mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." < " . trim($value) . ">";
+      $this->sendMail[] = mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." <" . trim($value) . ">";
     }
 
     // タイトルの設定
