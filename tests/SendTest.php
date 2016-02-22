@@ -12,7 +12,9 @@ class SendTest extends PHPUnit_Framework_TestCase {
   public $server = array();
 
   public function setUp() {
-    $this->adminMail = "example@example.com, example2@example.com";
+    $adminMail = "example@example.com, example2@example.com";
+    $this->adminArray = explode(",", $adminMail)
+    $this->adminMail = trim($this->adminArray[0]);
     $this->adminName = "admin";
     $this->returnMailHeader = <<<EOD
 お問い合わせフォームよりお問い合わせをいただきありがとうございます。
@@ -47,7 +49,7 @@ EOD
       "HTTP_USER_AGENT" => "test user agent"
     );
     $this->obj = new Send(
-      $this->adminMail,
+      $adminMail,
       $this->adminName,
       $this->returnMailHeader,
       $this->returnMailFooter,
@@ -79,7 +81,8 @@ EOD
     $this->obj->adminSend();
 
     // 送信先のチェック
-    $this->assertEquals($this->obj->sendMail, "{$this->adminName} <{$this->adminMail}>");
+    $this->assertEquals($this->obj->sendMail[0], "{$this->adminName} <{$this->adminMail[0]}>");
+    $this->assertEquals($this->obj->sendMail[1], "{$this->adminName} <{$this->adminMail[1]}>");
 
     // タイトルのチェック
     $sendTitle = "㈱ミリキロメートル様よりお問い合わせ";
