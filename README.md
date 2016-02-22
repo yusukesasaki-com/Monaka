@@ -20,7 +20,7 @@ v1.1.1
 PHP 5.3~
 
 ## サンプルページ
-http://web-dev.xyz/oss-sample/mailform-1.0.1/mailform.php
+http://web-dev.xyz/oss-sample/mailform-1.1.1/mailform.php
 
 ## ライセンス
 MIT  
