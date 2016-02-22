@@ -5,6 +5,7 @@ require_once(__DIR__ . "/../mailform/class/Send.php");
 class SendTest extends PHPUnit_Framework_TestCase {
 
   public $adminMail;
+  public $adminArray = array();
   public $adminName;
   public $returnMailHeader;
   public $returnMailFooter;
