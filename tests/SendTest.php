@@ -3,26 +3,29 @@
 require_once(__DIR__ . "/../mailform/class/Send.php");
 
 class SendTest extends PHPUnit_Framework_TestCase {
-  
+
   public $adminMail;
+  public $adminArray = array();
   public $adminName;
   public $returnMailHeader;
   public $returnMailFooter;
   public $submitFile = array();
   public $server = array();
-  
+
   public function setUp() {
-    $this->adminMail = "example@example.com";
+    $adminMail = "example@example.com, example2@example.com";
+    $this->adminArray = explode(",", $adminMail);
+    $this->adminMail = trim($this->adminArray[0]);
     $this->adminName = "admin";
     $this->returnMailHeader = <<<EOD
 お問い合わせフォームよりお問い合わせをいただきありがとうございます。
-	
+
 お問い合わせ内容を確認の上、ご返信先メールアドレスへ回答いたしますので、
 しばらくお待ちくださいますようお願いいたします。
 なお、お問い合わせから48時間経過しましても回答がない場合、
 サポートにてお問い合わせが受信できていない可能性がございます。
 大変お手数ですが、「{$this->adminMail}」まで
-再度お問い合わせくださいますようお願いいたします。 
+再度お問い合わせくださいますようお願いいたします。
 EOD
 ;
     $this->returnMailFooter = <<<EOD
@@ -47,7 +50,7 @@ EOD
       "HTTP_USER_AGENT" => "test user agent"
     );
     $this->obj = new Send(
-      $this->adminMail,
+      $adminMail,
       $this->adminName,
       $this->returnMailHeader,
       $this->returnMailFooter,
@@ -55,7 +58,7 @@ EOD
       $this->server
     );
   }
-  
+
   public function testValidSubstitution() {
     $post = array();
     $requireItem = array();
@@ -66,10 +69,10 @@ EOD
     $this->obj->substitutionSubmitContent($post);
     $this->assertEquals($this->obj->requiredItem["name"], "㈱ミリキロメートル");
     $this->assertEquals($this->obj->submitContent["お問い合わせ内容"], "㈱ミリキロメートル");
-    
+
     return array($this->obj->requiredItem, $this->obj->submitContent);
   }
-  
+
   /**
    * @depends testValidSubstitution
    */
@@ -77,15 +80,16 @@ EOD
     $this->obj->requiredItem = $obj[0];
     $this->obj->submitContent = $obj[1];
     $this->obj->adminSend();
-    
+
     // 送信先のチェック
-    $this->assertEquals($this->obj->sendMail, "{$this->adminName} <{$this->adminMail}>");
-    
+    $this->assertEquals($this->obj->sendMail[0], "{$this->adminName} <" . trim($this->adminArray[0]) . ">");
+    $this->assertEquals($this->obj->sendMail[1], "{$this->adminName} <" . trim($this->adminArray[1]) . ">");
+
     // タイトルのチェック
     $sendTitle = "㈱ミリキロメートル様よりお問い合わせ";
     $sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
     $this->assertEquals($this->obj->sendTitle, $sendTitle);
-    
+
     // 本文のチェック
     $sendMessage = "㈱ミリキロメートル様より、下記内容でお問い合わせが届いています。\n";
     $sendMessage .= "\n";
@@ -122,7 +126,7 @@ EOD
     }
     $sendMessage .= "--{$this->obj->boundary}--\n";
     $this->assertEquals($this->obj->sendMessage, $sendMessage);
-    
+
     // ヘッダーのチェック
     $sendHeaders = "X-Mailer: PHP5\r\n";
     $sendHeaders = "MIME-Version: 1.0\r\n";
@@ -131,7 +135,7 @@ EOD
     $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$this->obj->boundary}\" \r\n";
     $this->assertEquals($this->obj->sendHeaders, $sendHeaders);
   }
-  
+
   /**
    * @depends testValidSubstitution
    */
@@ -139,16 +143,16 @@ EOD
     $this->obj->requiredItem = $obj[0];
     $this->obj->submitContent = $obj[1];
     $this->obj->returnSend();
-    
+
     // 送信先のチェック
     $returnMail = mb_encode_mimeheader("㈱ミリキロメートル", "ISO-2022-JP-MS","UTF-8") ." <example@example.com>";
     $this->assertEquals($this->obj->returnMail, $returnMail);
-    
+
     // タイトルのチェック
     $returnTitle = "【{$this->adminName}】 お問い合わせを受け付けました";
     $returnTitle = mb_encode_mimeheader($returnTitle, "ISO-2022-JP-MS","UTF-8");
     $this->assertEquals($this->obj->returnTitle, $returnTitle);
-    
+
     // メッセージのチェック
     $returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
     $returnMessage .= "【{$this->adminName}】 お問い合わせを受け付けました\n";
@@ -166,12 +170,12 @@ EOD
     $returnMessage .= "\n";
     $returnMessage = mb_convert_encoding($returnMessage, "ISO-2022-JP-MS","UTF-8");
     $this->assertEquals($this->obj->returnMessage, $returnMessage);
-    
+
     //ヘッダーのチェック
     $returnHeaders = "MIME-Version: 1.0\r\n";
     $returnHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\r\n";
     $returnHeaders .= "From: ".mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." <{$this->adminMail}> \r\n";
     $this->assertEquals($this->obj->returnHeaders, $returnHeaders);
   }
-  
+
 }
