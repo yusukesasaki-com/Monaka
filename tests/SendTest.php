@@ -14,7 +14,7 @@ class SendTest extends PHPUnit_Framework_TestCase {
 
   public function setUp() {
     $adminMail = "example@example.com, example2@example.com";
-    $this->adminArray = explode(",", $adminMail)
+    $this->adminArray = explode(",", $adminMail);
     $this->adminMail = trim($this->adminArray[0]);
     $this->adminName = "admin";
     $this->returnMailHeader = <<<EOD
