@@ -82,8 +82,8 @@ EOD
     $this->obj->adminSend();
 
     // 送信先のチェック
-    $this->assertEquals($this->obj->sendMail[0], "{$this->adminName} <{$this->adminMail[0]}>");
-    $this->assertEquals($this->obj->sendMail[1], "{$this->adminName} <{$this->adminMail[1]}>");
+    $this->assertEquals($this->obj->sendMail[0], "{$this->adminName} <{$this->adminArray[0]}>");
+    $this->assertEquals($this->obj->sendMail[1], "{$this->adminName} <{$this->adminArray[1]}>");
 
     // タイトルのチェック
     $sendTitle = "㈱ミリキロメートル様よりお問い合わせ";
