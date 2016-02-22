@@ -3,6 +3,7 @@
 class Send {
 
   public $adminMail;
+  public $adminArray = array();
   public $adminName;
   public $returnMailHeader;
   public $returnMailFooter;
@@ -10,7 +11,7 @@ class Send {
   public $submitContent = array();
   public $submitFile = array();
   public $boundary;
-  public $sendMail;
+  public $sendMail = array();
   public $sendTitle;
   public $sendMessage;
   public $sendHeaders;
@@ -21,7 +22,8 @@ class Send {
   public $server;
 
   public function __construct($adminMail, $adminName, $returnMailHeader, $returnMailFooter, $submitFile, $server) {
-    $this->adminMail = $adminMail;
+    $this->adminArray = explode(",", $adminMail);
+    $this->adminMail = trim($this->adminArray[0]);
     $this->adminName = $adminName;
     $this->returnMailHeader = $returnMailHeader;
     $this->returnMailFooter = $returnMailFooter;
@@ -56,7 +58,9 @@ class Send {
 
   public function adminSend() {
     // 送信先の設定
-    $this->sendMail = mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." <{$this->adminMail}>";
+    foreach ($this->adminArray as $value) {
+      $this->sendMail[] = mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." < " . trim($value) . ">";
+    }
 
     // タイトルの設定
     $this->sendTitle = "{$this->requiredItem["name"]}様よりお問い合わせ";
@@ -120,7 +124,9 @@ class Send {
     }
 
     // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-    @mail($this->sendMail, $this->sendTitle, $this->sendMessage, $this->sendHeaders);
+    foreach ($this->sendMail as $send) {
+      @mail($send, $this->sendTitle, $this->sendMessage, $this->sendHeaders);
+    }
   }
 
   public function returnSend() {
@@ -158,7 +164,7 @@ class Send {
     // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
     @mail($this->returnMail, $this->returnTitle, $this->returnMessage, $this->returnHeaders);
   }
-  
+
   public function checkToken() {
     if (empty($_POST['token']) || ($_SESSION['token'] != $_POST['token'])) {
       echo "不正な送信です。";
@@ -362,5 +368,5 @@ class Send {
     );
     return str_replace(array_keys($arr), array_values($arr), $str);
   }
-  
+
 }

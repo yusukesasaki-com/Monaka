@@ -1,8 +1,9 @@
 <?php
 
 class Confirmation {
-    
+
   public $adminMail;
+  public $adminArray;
   public $requiredItem = array();
   public $submitContent = array();
   public $err = array();
@@ -13,7 +14,8 @@ class Confirmation {
   public $seriousError;
 
   public function __construct($adminMail) {
-    $this->adminMail = $adminMail;
+    $this->adminArray = explode(",", $adminMail);
+    $this->adminMail = trim($this->adminArray[0]);
   }
 
   public function postCheck($post) {
@@ -96,7 +98,7 @@ class Confirmation {
 
     }
   }
-  
+
   public function mailCheck($email) {
     if (preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $email)) {
       return true;
@@ -144,7 +146,7 @@ class Confirmation {
   public function filesCheck($files, $ext_denied, $EXT_ALLOWS, $maxmemory, $max) {
     if (!empty($files)) {
       foreach ($files as $key => $value) {
-        
+
         // phpiniの設定によるUPLOAD_ERRのチェック
         if ($value["error"] != UPLOAD_ERR_OK && $value['error'] !== 4) {
           if ($value["error"] === 1) {
@@ -156,7 +158,7 @@ class Confirmation {
           }
           continue;
         }
-        
+
         if (!empty($value["tmp_name"])) {
           $this->fileData["tmp"] = $value["tmp_name"];
           $this->fileData["name"] = $value["name"];
@@ -164,7 +166,7 @@ class Confirmation {
           $this->fileData["array"] = explode(".", $this->fileData["name"]);
           $this->fileData["nr"] = count($this->fileData["array"]);
           $this->fileData["ext"] = $this->fileData["array"][$this->fileData["nr"] - 1];
-          
+
           // config.phpの拡張子制限チェック
           if ($ext_denied == 1 && !@in_array($this->fileData["ext"], $EXT_ALLOWS)) {
             $this->err[$key] = "添付できないファイルです<br>\n";
@@ -172,7 +174,7 @@ class Confirmation {
             $this->submitFile[$key]["name"] = $this->fileData["name"];
             continue;
           }
-          
+
           // config.phpのアップロード容量制限チェック
           $size = filesize($value['tmp_name']);
           if ($maxmemory == 1 && ($size / 1024) > $max) {
