@@ -6,8 +6,8 @@
 
 ## バージョン
 
-v1.1.1
-    
+v1.1.2
+
 ## 使い方
 
 詳しくは [こちら](http://web-dev.xyz/php-originalmailfrom/) の記事をご覧ください。
@@ -25,4 +25,3 @@ http://web-dev.xyz/oss-sample/mailform-1.1.1/mailform.php
 ## ライセンス
 MIT  
 This software is released under the MIT License, see LICENSE.txt.
-
