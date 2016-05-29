@@ -1,7 +1,7 @@
 <?php
 
 class Form {
-    
+
   public function create() {
     echo "<form action=\"./mailform/confirmation.php\" method=\"post\" enctype=\"multipart/form-data\">\n";
   }
@@ -120,9 +120,9 @@ class Form {
     echo "<input type=\"file\" name=\"{$name}\"><br>";
   }
 
-  public function textarea($name, $params) {
-    echo "<textarea name=\"{$name}[value]\"></textarea>\n";
+  public function textarea($name, $params = null) {
     echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params}\">";
+    echo "<textarea name=\"{$name}[value]\"></textarea>\n";
   }
-  
+
 }
