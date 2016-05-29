@@ -1,7 +1,7 @@
 <?php
 
-require_once(__DIR__ . '/mailform/config.php');
-require_once(__DIR__ . '/mailform/class/Form.php');
+require_once(__DIR__ . '/Monaka/config.php');
+require_once(__DIR__ . '/Monaka/class/Form.php');
 
 $form = new Form();
 
@@ -21,11 +21,11 @@ $form = new Form();
 </head>
 
 <body>
-    
+
 <div class="container">
-    
+
   <h1><span>メールフォーム</span></h1>
-    
+
   <div class="mailform">
     <?php $form->create(); ?>
       <dl>
@@ -134,8 +134,8 @@ $form = new Form();
       </dl>
     <?php $form->end(); ?>
   </div>
-  
+
 </div>
-    
+
 </body>
 </html>

@@ -1,14 +1,14 @@
 <?php
 
-require_once(__DIR__ . "/../mailform/class/Confirmation.php");
+require_once(__DIR__ . "/../Monaka/class/Confirmation.php");
 
 class ConfirmationTest extends PHPUnit_Framework_TestCase {
-  
+
   public $ext_denied;
   public $ext_allows;
   public $maxmemory;
   public $max;
-  
+
   public function setUp() {
     $this->obj = new Confirmation("example@example.com");
     // 拡張子制限（0=しない・1=する）
@@ -24,7 +24,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     // 最大容量（KB）
     $this->max = 100;
   }
-  
+
   /**
    * @dataProvider postValidCheckValue
    */
@@ -34,7 +34,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $this->obj->postCheck($post);
     $this->assertEmpty($this->obj->err);
   }
-  
+
   public function postValidCheckValue() {
     return array(
       array("お名前", "名前", "名前"),
@@ -43,7 +43,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
       array("郵便番号", "郵便番号", "000-0000")
     );
   }
-  
+
   /**
    * @dataProvider postWrongCheckValue
    */
@@ -53,7 +53,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $this->obj->postCheck($post);
     $this->assertEquals($this->obj->err[$title], $errMessage);
   }
-  
+
   public function postWrongCheckValue() {
     return array(
       array("お名前", "名前", "", "必須項目です。"),
@@ -64,7 +64,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
       array("必須項目", "必須項目", "", "必須項目です。")
     );
   }
-  
+
   /**
    * @dataProvider postSeriousWrongCheckValue
    */
@@ -79,28 +79,28 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $this->obj->seriousErrorCheck(100);
     $this->assertEquals($this->obj->seriousError, $seriousError);
   }
-  
+
   public function postSeriousWrongCheckValue() {
     return array(
       array("nameCheck"),
       array("mailCheck"),
     );
   }
-  
+
   public function testMailReEnter() {
     $this->obj->requiredItem["mailaddress"] = "example@example.com";
     $post["メールアドレス再入力"] = array("params" => "再入力", "value" => "example@example.com");
     $this->obj->postCheck($post);
     $this->assertEmpty($this->obj->err);
   }
-  
+
   public function testWrongMailReEnter() {
     $this->obj->requiredItem["mailaddress"] = "example@example.com";
     $post["メールアドレス再入力"] = array("params" => "再入力", "value" => "exampl@example.com");
     $this->obj->postCheck($post);
     $this->assertEquals($this->obj->err["メールアドレス再入力"], "メールアドレスが一致しません。");
   }
-  
+
   public function testValidFile() {
     $files = array();
     $files["添付ファイル"] = array(
@@ -110,12 +110,12 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
       "tmp_name" => __DIR__ . "/testFile/test.jpg",
       "error" => 0
     );
-    
+
     $this->obj->filesCheck($files, $this->ext_denied, $this->ext_allows, $this->maxmemory, $this->max);
     $this->assertEmpty($this->obj->err);
     $this->assertEquals($this->obj->submitFile["添付ファイル"]["name"], "test.jpg");
   }
-  
+
   public function testOverSizeFile() {
     $files = array();
     $files["添付ファイル"] = array(
@@ -125,11 +125,11 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
       "tmp_name" => __DIR__ . "/testFile/test2.jpg",
       "error" => 0
     );
-    
+
     $this->obj->filesCheck($files, $this->ext_denied, $this->ext_allows, $this->maxmemory, $this->max);
     $this->assertEquals($this->obj->err["添付ファイル"], "ファイルの容量が大きすぎます<br>\n");
   }
-  
+
   public function testOtherTypeFile() {
     $files = array();
     $files["添付ファイル"] = array(
@@ -139,7 +139,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
       "tmp_name" => __DIR__ . "/testFile/test.pdf",
       "error" => 0
     );
-    
+
     $this->obj->filesCheck($files, $this->ext_denied, $this->ext_allows, $this->maxmemory, $this->max);
     $errMessage = "添付できないファイルです<br>\n";
     $errMessage .= "添付可能なファイルの種類（拡張子）は[".implode("・", $this->ext_allows)."]です\n";
