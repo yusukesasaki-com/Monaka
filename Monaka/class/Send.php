@@ -30,7 +30,7 @@ class Send {
     $this->submitFile = $submitFile;
     $this->server = array(
       "REMOTE_ADDR" => $server["REMOTE_ADDR"],
-      "REMOTE_HOST" => $server["REMOTE_HOST"],
+      "REMOTE_HOST" => gethostbyaddr($server['REMOTE_ADDR']),
       "HTTP_USER_AGENT" => $server["HTTP_USER_AGENT"]
     );
   }
