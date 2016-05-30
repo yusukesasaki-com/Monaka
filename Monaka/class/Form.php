@@ -2,8 +2,8 @@
 
 class Form {
 
-  public function create() {
-    echo "<form action=\"./mailform/confirmation.php\" method=\"post\" enctype=\"multipart/form-data\">\n";
+  public function create($dir = 'Monaka') {
+    echo "<form action=\"./{$dir}/confirmation.php\" method=\"post\" enctype=\"multipart/form-data\">\n";
   }
 
   public function end() {

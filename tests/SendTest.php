@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . "/../mailform/class/Send.php");
+require_once(__DIR__ . "/../Monaka/class/Send.php");
 
 class SendTest extends PHPUnit_Framework_TestCase {
 
@@ -46,7 +46,7 @@ EOD
     $this->submitFile["添付ファイル2"] = $file;
     $this->server = array(
       "REMOTE_ADDR" => "127.0.0.1",
-      "REMOTE_HOST" => "test host",
+      "REMOTE_HOST" => gethostbyaddr("127.0.0.1"),
       "HTTP_USER_AGENT" => "test user agent"
     );
     $this->obj = new Send(
