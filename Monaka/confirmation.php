@@ -92,7 +92,7 @@ $confirmation->seriousErrorCheck($_SERVER["CONTENT_LENGTH"]);
           <p>
             <?php
               if (empty($confirmation->err[$key])) {
-                if (strpos("jpg,jpeg,git", $value["ext"]) !== false) {
+                if (strpos("jpg,jpeg,gif,png", $value["ext"]) !== false) {
                   $img = base64_encode(file_get_contents($value["tmp"]));
                   echo "<img src=\"data:image/{$value["ext"]};base64,{$img}\" width=\"150\" ><br>\n";
                 }
