@@ -113,7 +113,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
 
     $this->obj->filesCheck($files, $this->ext_denied, $this->ext_allows, $this->maxmemory, $this->max);
     $this->assertEmpty($this->obj->err);
-    $this->assertEquals($this->obj->submitFile["添付ファイル"]["name"], "test.jpg");
+    $this->assertEquals($_SESSION["fileData"]["添付ファイル"]["name"], "test.jpg");
   }
 
   public function testOverSizeFile() {
