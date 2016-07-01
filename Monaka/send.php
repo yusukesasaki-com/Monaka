@@ -6,7 +6,7 @@ require_once(__DIR__ . '/class/Send.php');
 
 session_start();
 
-$send = new Send($adminMail, $adminName, $returnMailHeader, $returnMailFooter, $_POST["submitFile"], $_SERVER);
+$send = new Send($adminMail, $adminName, $returnMailHeader, $returnMailFooter, $_SESSION["submitFile"], $_SERVER);
 
 // ----------CSRF対策開始---------- //
 
@@ -38,6 +38,9 @@ $send->adminSend();
 // リターンメール送信
 $send->returnSend();
 
+// セッション破棄
+$send->sessionReset();
+
 // ----------送信処理完了---------- //
 
 ?>
@@ -55,9 +58,9 @@ $send->returnSend();
   <![endif]-->
 </head>
 <body>
-    
+
 <div class="container">
-    
+
   <h1><span>送信完了</span></h1>
 
   <p class="completion">
@@ -67,8 +70,8 @@ $send->returnSend();
   <div class="submit_area">
     <input class="single" type="button" value="戻る" onclick="window.location='<?php echo $returnUrl; ?>';">
   </div>
-    
+
 </div>
-    
+
 </body>
 </html>
