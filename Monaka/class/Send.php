@@ -172,6 +172,12 @@ class Send {
     }
   }
 
+  public function sessionReset() {
+    $_SESSION["token"] = array();
+    $_SESSION["fileData"] = array();
+    $_SESSION["submitFile"] = array();
+  }
+
   public function replaceText($str) {
     $arr = array(
       "\xE2\x84\xA2" => 'TM',

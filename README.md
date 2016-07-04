@@ -6,7 +6,7 @@
 
 ## バージョン
 
-v1.2.1
+v1.2.2
 
 ## 使い方
 
@@ -20,7 +20,7 @@ v1.2.1
 PHP 5.3~
 
 ## サンプルページ
-http://web-dev.xyz/oss-sample/Monaka-1.2.1/mailform.php
+http://web-dev.xyz/oss-sample/Monaka-1.2.2/mailform.php
 
 ## ライセンス
 MIT  

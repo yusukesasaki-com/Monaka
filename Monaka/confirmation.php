@@ -85,7 +85,8 @@ $confirmation->seriousErrorCheck($_SERVER["CONTENT_LENGTH"]);
         </dd>
       </dl>
       <?php endforeach; ?>
-      <?php foreach ($confirmation->submitFile as $key => $value) : ?>
+      <?php $_SESSION["submitFile"] = array(); ?>
+      <?php foreach ($_SESSION["fileData"] as $key => $value) : ?>
       <dl>
         <dt><?php echo h($key); ?></dt>
         <dd>
@@ -97,7 +98,7 @@ $confirmation->seriousErrorCheck($_SERVER["CONTENT_LENGTH"]);
                   echo "<img src=\"data:image/{$value["ext"]};base64,{$img}\" width=\"150\" ><br>\n";
                 }
                 echo "{$value["name"]}\n";
-                echo "<input type=\"hidden\" name=\"submitFile[{$key}][{$value["name"]}]\" value=\"{$value["file"]}\" >";
+                $_SESSION["submitFile"][$key][$value["name"]] = $value["file"];
               } else {
                 echo "<span class=\"err\">{$confirmation->err[$key]}</span>";
               }
