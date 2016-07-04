@@ -5,7 +5,6 @@ class Confirmation {
   public $adminMail;
   public $adminArray;
   public $requiredItem = array();
-  public $submitContent = array();
   public $err = array();
   public $nameCheck = false;
   public $mailCheck = false;
@@ -25,6 +24,7 @@ class Confirmation {
       // 配列(checkbox)を変数に変換
       if (isset($values["value"]) && is_array($values["value"])) {
         $values["value"] = implode("、", $values["value"]);
+        $_SESSION["$submitContent"] = array();
       }
 
       // 名前チェック
@@ -33,7 +33,7 @@ class Confirmation {
         if (empty($values["value"])) {
           $this->err[$key] = "必須項目です。";
         }
-        $this->submitContent[$key] = $values["value"];
+        $_SESSION["submitContent"][$key] = $values["value"];
         $this->requiredItem["name"] = $values["value"];
         continue;
       }
@@ -49,12 +49,12 @@ class Confirmation {
             $this->err[$key] = "メールアドレスの形式が正しくありません。";
           }
           /* filter_varを使用する場合は下記
-          if (!filter_var($this->submitContent["mailaddress"], FILTER_VALIDATE_EMAIL)) {
+          if (!filter_var($_SESSION["submitContent"]["mailaddress"], FILTER_VALIDATE_EMAIL)) {
             $this->err['mailaddress'] = "メールアドレスの形式が正しくありません";
           }
           */
         }
-        $this->submitContent[$key] = $values["value"];
+        $_SESSION["submitContent"][$key] = $values["value"];
         $this->requiredItem["mailaddress"] = $values["value"];
         continue;
       }
@@ -93,8 +93,20 @@ class Confirmation {
         }
       }
 
-      $this->submitContent[$key] = isset($values["value"]) ? $values["value"] : '';
-
+      if (isset($values["value"]) && !empty($values["value"])) {
+        $value = explode("\n", $values["value"]);
+        foreach ($value as $val) {
+          if (strlen(mb_convert_encoding($val, "SJIS", "UTF-8")) > 980) {
+            $this->err[$key] .= "長文を改行なしで入力されているようです。<br>" . PHP_EOL;
+            $this->err[$key] .= "このまま送信すると文字化けしてしまうため、" . PHP_EOL;
+            $this->err[$key] .= "490文字以内で改行してください。" . PHP_EOL;
+            break;
+          }
+        }
+        $_SESSION["submitContent"][$key] = $values["value"];
+      } else {
+        $_SESSION["submitContent"][$key] = '';
+      }
     }
   }
 

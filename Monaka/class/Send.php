@@ -178,6 +178,7 @@ class Send {
     $_SESSION["token"] = array();
     $_SESSION["fileData"] = array();
     $_SESSION["submitFile"] = array();
+    $_SESSION["submitContent"] = array();
   }
 
   public function replaceText($str) {
