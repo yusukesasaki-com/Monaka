@@ -144,6 +144,7 @@ class Confirmation {
   }
 
   public function filesCheck($files, $ext_denied, $EXT_ALLOWS, $maxmemory, $max) {
+    $_SESSION["fileData"] = array();
     if (!empty($files)) {
       foreach ($files as $key => $value) {
 
@@ -187,10 +188,10 @@ class Confirmation {
           $contents = fread($fp, filesize($this->fileData["tmp"]));
           fclose($fp);
 
-          $this->submitFile[$key]["name"] = $this->fileData["name"];
-          $this->submitFile[$key]["tmp"] = $this->fileData["tmp"];
-          $this->submitFile[$key]["ext"] = $this->fileData["ext"];
-          $this->submitFile[$key]["file"] = chunk_split(base64_encode($contents)); //エンコードして分割
+          $_SESSION["fileData"][$key]["name"] = $this->fileData["name"];
+          $_SESSION["fileData"][$key]["tmp"] = $this->fileData["tmp"];
+          $_SESSION["fileData"][$key]["ext"] = $this->fileData["ext"];
+          $_SESSION["fileData"][$key]["file"] = chunk_split(base64_encode($contents)); //エンコードして分割
         }
       }
     }
