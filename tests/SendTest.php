@@ -7,6 +7,7 @@ class SendTest extends PHPUnit_Framework_TestCase {
   public $adminMail;
   public $adminArray = array();
   public $adminName;
+  public $returnMailTitle;
   public $returnMailHeader;
   public $returnMailFooter;
   public $submitFile = array();
@@ -17,6 +18,7 @@ class SendTest extends PHPUnit_Framework_TestCase {
     $this->adminArray = explode(",", $adminMail);
     $this->adminMail = trim($this->adminArray[0]);
     $this->adminName = "admin";
+    $this->returnMailTitle = "お問い合わせを受け付けました";
     $this->returnMailHeader = <<<EOD
 お問い合わせフォームよりお問い合わせをいただきありがとうございます。
 
@@ -52,6 +54,7 @@ EOD
     $this->obj = new Send(
       $adminMail,
       $this->adminName,
+      $this->returnMailTitle,
       $this->returnMailHeader,
       $this->returnMailFooter,
       $this->submitFile,
@@ -86,12 +89,12 @@ EOD
     $this->assertEquals($this->obj->sendMail[1], "{$this->adminName} <" . trim($this->adminArray[1]) . ">");
 
     // タイトルのチェック
-    $sendTitle = "㈱ミリキロメートル様よりお問い合わせ";
+    $sendTitle = "㈱ミリキロメートル様よりメールが届きました。";
     $sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
     $this->assertEquals($this->obj->sendTitle, $sendTitle);
 
     // 本文のチェック
-    $sendMessage = "㈱ミリキロメートル様より、下記内容でお問い合わせが届いています。\n";
+    $sendMessage = "㈱ミリキロメートル様より、下記内容でメールが届きました。\n";
     $sendMessage .= "\n";
     $sendMessage .= "■お問い合わせ内容\n";
     $sendMessage .= "㈱ミリキロメートル\n\n";

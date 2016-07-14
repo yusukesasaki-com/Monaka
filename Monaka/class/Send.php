@@ -5,6 +5,7 @@ class Send {
   public $adminMail;
   public $adminArray = array();
   public $adminName;
+  public $returnMailTitle;
   public $returnMailHeader;
   public $returnMailFooter;
   public $requiredItem = array();
@@ -21,10 +22,11 @@ class Send {
   public $returnHeaders;
   public $server;
 
-  public function __construct($adminMail, $adminName, $returnMailHeader, $returnMailFooter, $submitFile, $server) {
+  public function __construct($adminMail, $adminName, $returnMailTitle, $returnMailHeader, $returnMailFooter, $submitFile, $server) {
     $this->adminArray = explode(",", $adminMail);
     $this->adminMail = trim($this->adminArray[0]);
     $this->adminName = $adminName;
+    $this->returnMailTitle = $returnMailTitle;
     $this->returnMailHeader = $returnMailHeader;
     $this->returnMailFooter = $returnMailFooter;
     $this->submitFile = $submitFile;
@@ -63,11 +65,11 @@ class Send {
     }
 
     // タイトルの設定
-    $this->sendTitle = "{$this->requiredItem["name"]}様よりお問い合わせ";
+    $this->sendTitle = "{$this->requiredItem["name"]}様よりメールが届きました。";
     $this->sendTitle = mb_encode_mimeheader($this->sendTitle, "ISO-2022-JP-MS","UTF-8");
 
     // メッセージの設定
-    $this->sendMessage = "{$this->requiredItem["name"]}様より、下記内容でお問い合わせが届いています。\n";
+    $this->sendMessage = "{$this->requiredItem["name"]}様より、下記内容でメールが届きました。\n";
     $this->sendMessage .= "\n";
     foreach ($this->submitContent as $key => $value) {
       $this->sendMessage .= "■{$key}\n";
@@ -134,12 +136,12 @@ class Send {
     $this->returnMail = mb_encode_mimeheader($this->requiredItem["name"], "ISO-2022-JP-MS","UTF-8") ." <{$this->requiredItem["mailaddress"]}>";
 
     // タイトルの設定
-    $this->returnTitle = "【{$this->adminName}】 お問い合わせを受け付けました";
+    $this->returnTitle = "【{$this->adminName}】 {$this->returnMailTitle}";
     $this->returnTitle = mb_encode_mimeheader($this->returnTitle, "ISO-2022-JP-MS","UTF-8");
 
     // メッセージの設定
     $this->returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    $this->returnMessage .= "【{$this->adminName}】 お問い合わせを受け付けました\n";
+    $this->returnMessage .= "【{$this->adminName}】 {$this->returnMailTitle}\n";
     $this->returnMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
     $this->returnMessage .= "\n";
     $this->returnMessage .= "\n";

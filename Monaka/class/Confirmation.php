@@ -10,7 +10,6 @@ class Confirmation {
   public $nameCheck = false;
   public $mailCheck = false;
   public $fileData = array();
-  public $submitFile = array();
   public $seriousError;
 
   public function __construct($adminMail) {
@@ -152,10 +151,10 @@ class Confirmation {
         if ($value["error"] != UPLOAD_ERR_OK && $value['error'] !== 4) {
           if ($value["error"] === 1) {
             $this->err[$key] = "ファイルの容量が大きすぎます<br>\n";
-            $this->submitFile[$key]["name"] = $value["name"];
+            $_SESSION["fileData"][$key]["name"] = $value["name"];
           } else {
             $this->err[$key] = "原因不明のエラーです<br>\n";
-            $this->submitFile[$key]["name"] = $value["name"];
+            $_SESSION["fileData"][$key]["name"] = $value["name"];
           }
           continue;
         }
@@ -172,7 +171,7 @@ class Confirmation {
           if ($ext_denied == 1 && !@in_array($this->fileData["ext"], $EXT_ALLOWS)) {
             $this->err[$key] = "添付できないファイルです<br>\n";
             $this->err[$key] .= "添付可能なファイルの種類（拡張子）は[".implode("・", $EXT_ALLOWS)."]です\n";
-            $this->submitFile[$key]["name"] = $this->fileData["name"];
+            $_SESSION["fileData"][$key]["name"] = $this->fileData["name"];
             continue;
           }
 
@@ -180,7 +179,7 @@ class Confirmation {
           $size = filesize($value['tmp_name']);
           if ($maxmemory == 1 && ($size / 1024) > $max) {
             $this->err[$key] = "ファイルの容量が大きすぎます<br>\n";
-            $this->submitFile[$key]["name"] = $this->fileData["name"];
+            $_SESSION["fileData"][$key]["name"] = $this->fileData["name"];
             continue;
           }
 
