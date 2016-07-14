@@ -58,7 +58,14 @@ $confirmation->seriousErrorCheck($_SERVER["CONTENT_LENGTH"]);
     <?php echo $confirmation->seriousError; ?>
   </p>
   <?php else : ?>
-  <p class="confirmation">下記内容で送信してよろしいですか？</p>
+    <?php if (empty($confirmation->err) && empty($confirmation->seriousError)) : ?>
+      <p class="confirmation">下記内容で送信してよろしいですか？</p>
+    <?php else : ?>
+      <p class="confirmation">
+        入力に誤りがあります。エラーの内容をご確認いただき、<br>
+        戻るボタンから修正をお願いいたします。
+      </p>
+    <?php endif; ?>
   <?php endif; ?>
 
   <div class="submit_content">

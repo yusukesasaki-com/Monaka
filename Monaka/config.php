@@ -26,6 +26,8 @@ $completionMessage = <<<EOD
 EOD
 ;
 
+// リターンメールのメールタイトル
+$returnMailTitle = "お問い合わせを受け付けました。";
 
 // リターンメールのヘッダーメッセージ
 $returnMailHeader = <<<EOD
