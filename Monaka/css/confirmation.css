@@ -56,6 +56,7 @@ input[type="submit"][value="送信"] {
   border: none;
   background: #5d3fff;
   color: #fff;
+  cursor: pointer;
 }
 
 input[type="button"][value="戻る"] {
@@ -68,6 +69,12 @@ input[type="button"][value="戻る"] {
   border: 1px solid #5d3fff;
   color: #5d3fff;
   display: inline-block;
+  cursor: pointer;
+}
+
+input[type="submit"][value="送信"]:hover,
+input[type="button"][value="戻る"]:hover {
+  opacity: .8;
 }
 
 input[type="button"][value="戻る"].single {
