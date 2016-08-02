@@ -23,7 +23,7 @@ class Confirmation {
       // $params = explode(",", $values["params"]); /* 今後in_arrayと組み合わせて使うかも?*/
 
       // 配列(checkbox)を変数に変換
-      if (is_array($values["value"])) {
+      if (isset($values["value"]) && is_array($values["value"])) {
         $values["value"] = implode("、", $values["value"]);
       }
 
@@ -93,7 +93,7 @@ class Confirmation {
         }
       }
 
-      $this->submitContent[$key] = $values["value"];
+      $this->submitContent[$key] = isset($values["value"]) ? $values["value"] : '';
 
     }
   }
