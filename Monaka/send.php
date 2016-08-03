@@ -18,7 +18,7 @@ $send->checkToken();
 
 // ----------特殊文字の置換開始---------- //
 
-$send->substitutionSubmitContent($_POST["submitContent"]);
+$send->substitutionSubmitContent($_SESSION["submitContent"]);
 
 $send->substitutionRequiredItem($_POST["requiredItem"]);
 

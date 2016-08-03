@@ -69,9 +69,9 @@ $confirmation->seriousErrorCheck($_SERVER["CONTENT_LENGTH"]);
   <?php endif; ?>
 
   <div class="submit_content">
-    <?php if (!empty($confirmation->submitContent) && empty($confirmation->seriousError)) : ?>
+    <?php if (!empty($_SESSION["submitContent"]) && empty($confirmation->seriousError)) : ?>
     <form action="send.php" method="post" enctype="multipart/form-data">
-      <?php foreach ($confirmation->submitContent as $key => $value) : ?>
+      <?php foreach ($_SESSION["submitContent"] as $key => $value) : ?>
       <dl>
         <dt><?php echo h($key); ?></dt>
         <dd>
@@ -88,7 +88,6 @@ $confirmation->seriousErrorCheck($_SERVER["CONTENT_LENGTH"]);
             }
           ?>
           </p>
-          <input type="hidden" name="submitContent[<?php echo h($key); ?>]" value="<?php echo h($value); ?>">
         </dd>
       </dl>
       <?php endforeach; ?>

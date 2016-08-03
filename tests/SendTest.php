@@ -131,11 +131,11 @@ EOD
     $this->assertEquals($this->obj->sendMessage, $sendMessage);
 
     // ヘッダーのチェック
-    $sendHeaders = "X-Mailer: PHP5\r\n";
-    $sendHeaders = "MIME-Version: 1.0\r\n";
-    $sendHeaders .= "From: ".mb_encode_mimeheader("㈱ミリキロメートル", "ISO-2022-JP-MS","UTF-8") ." <example@example.com> \r\n";
-    $sendHeaders .= "Content-Transfer-Encoding: 7bit\r\n";
-    $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$this->obj->boundary}\" \r\n";
+    $sendHeaders = "X-Mailer: PHP5\n";
+    $sendHeaders = "MIME-Version: 1.0\n";
+    $sendHeaders .= "From: ".mb_encode_mimeheader("㈱ミリキロメートル", "ISO-2022-JP-MS","UTF-8") ." <example@example.com> \n";
+    $sendHeaders .= "Content-Transfer-Encoding: 7bit\n";
+    $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$this->obj->boundary}\" \n";
     $this->assertEquals($this->obj->sendHeaders, $sendHeaders);
   }
 
@@ -175,9 +175,9 @@ EOD
     $this->assertEquals($this->obj->returnMessage, $returnMessage);
 
     //ヘッダーのチェック
-    $returnHeaders = "MIME-Version: 1.0\r\n";
-    $returnHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\r\n";
-    $returnHeaders .= "From: ".mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." <{$this->adminMail}> \r\n";
+    $returnHeaders = "MIME-Version: 1.0\n";
+    $returnHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\n";
+    $returnHeaders .= "From: ".mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." <{$this->adminMail}> \n";
     $this->assertEquals($this->obj->returnHeaders, $returnHeaders);
   }
 
