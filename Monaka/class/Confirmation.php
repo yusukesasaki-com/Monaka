@@ -64,6 +64,7 @@ class Confirmation {
         if ($this->requiredItem["mailaddress"] !== $values["value"]) {
           $this->err[$key] = "メールアドレスが一致しません。";
         } else {
+          $_SESSION["submitContent"][$key] = "";
           continue;
         }
       }
