@@ -132,7 +132,7 @@ $form = new Form();
         <dt>お問い合わせ内容</dt>
         <dd><?php $form->textarea("お問い合わせ内容", "必須"); ?></dd>
       </dl>
-    <?php $form->end(); ?>
+    <?php $form->end('確認する'); ?>
   </div>
 
 </div>

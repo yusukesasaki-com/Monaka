@@ -6,9 +6,9 @@ class Form {
     echo "<form action=\"./{$dir}/confirmation.php\" method=\"post\" enctype=\"multipart/form-data\">\n";
   }
 
-  public function end() {
+  public function end($value = '確認') {
     echo "<div class=\"submit_area\">\n";
-    echo "<input type=\"submit\" value=\"確認\">\n";
+    echo "<input type=\"submit\" value=\"{$value}\" class=\"confirmation_btn\">\n";
     echo "</div>\n";
     echo "</form>\n";
   }
@@ -121,7 +121,7 @@ class Form {
   }
 
   public function textarea($name, $params = null) {
-    echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params}\">";
+    echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params}\">\n";
     echo "<textarea name=\"{$name}[value]\"></textarea>\n";
   }
 

@@ -17,6 +17,11 @@ class Confirmation {
   }
 
   public function postCheck($post) {
+
+    if (isset($_SESSION["submitContent"])) {
+      unset($_SESSION["submitContent"]);
+    }
+
     foreach ($post as $key => $values) {
 
       // $params = explode(",", $values["params"]); /* 今後in_arrayと組み合わせて使うかも?*/
@@ -64,9 +69,6 @@ class Confirmation {
         if ($this->requiredItem["mailaddress"] !== $values["value"]) {
           $this->err[$key] = "メールアドレスが一致しません。";
         } else {
-          if (isset($_SESSION["submitContent"][$key])) {
-            unset($_SESSION["submitContent"][$key]);
-          }
           continue;
         }
       }
