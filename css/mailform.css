@@ -99,7 +99,7 @@ dd textarea {
   text-align: center;
 }
 
-input[type="submit"][value="確認"] {
+.confirmation_btn {
   font-family: inherit;
   padding: 10px 30px;
   font-size: 16px;
@@ -111,6 +111,6 @@ input[type="submit"][value="確認"] {
   cursor: pointer;
 }
 
-input[type="submit"][value="確認"]:hover {
+.confirmation_btn:hover {
   opacity: .8;
 }
