@@ -125,9 +125,13 @@ class Send {
       $this->sendHeaders .= "Content-type: text/plain; charset=\"ISO-2022-JP\" \n";
     }
 
+    $this->sendTitle = str_replace("\r", "", $this->sendTitle);
+    $this->sendMessage = str_replace("\r", "", $this->sendMessage);
+    $this->sendHeaders = str_replace("\r", "", $this->sendHeaders);
+
     // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
     foreach ($this->sendMail as $send) {
-      @mail($send, $this->sendTitle, $this->sendMessage, str_replace("\r", "", $this->sendHeaders));
+      @mail(str_replace("\r", "", $send), $this->sendTitle, $this->sendMessage, $this->sendHeaders);
     }
   }
 
@@ -163,8 +167,13 @@ class Send {
     $this->returnHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\n";
     $this->returnHeaders .= "From: ".mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." <{$this->adminMail}> \n";
 
+    $this->returnMail = str_replace("\r", "", $this->returnMail);
+    $this->returnTitle = str_replace("\r", "", $this->returnTitle);
+    $this->returnMessage = str_replace("\r", "", $this->returnMessage);
+    $this->returnHeaders = str_replace("\r", "", $this->returnHeaders);
+
     // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-    @mail($this->returnMail, $this->returnTitle, $this->returnMessage, str_replace("\r", "", $this->returnHeaders));
+    @mail($this->returnMail, $this->returnTitle, $this->returnMessage, $this->returnHeaders);
   }
 
   public function checkToken() {
