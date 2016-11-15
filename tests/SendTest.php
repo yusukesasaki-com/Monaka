@@ -91,7 +91,7 @@ EOD
     // タイトルのチェック
     $sendTitle = "㈱ミリキロメートル様よりメールが届きました。";
     $sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
-    $this->assertEquals($this->obj->sendTitle, $sendTitle);
+    $this->assertEquals($this->obj->sendTitle, str_replace("\r", "", $sendTitle));
 
     // 本文のチェック
     $sendMessage = "㈱ミリキロメートル様より、下記内容でメールが届きました。\n";
@@ -128,7 +128,7 @@ EOD
       }
     }
     $sendMessage .= "--{$this->obj->boundary}--\n";
-    $this->assertEquals($this->obj->sendMessage, $sendMessage);
+    $this->assertEquals($this->obj->sendMessage, str_replace("\r", "", $sendMessage));
 
     // ヘッダーのチェック
     $sendHeaders = "X-Mailer: PHP5\n";
@@ -136,7 +136,7 @@ EOD
     $sendHeaders .= "From: ".mb_encode_mimeheader("㈱ミリキロメートル", "ISO-2022-JP-MS","UTF-8") ." <example@example.com> \n";
     $sendHeaders .= "Content-Transfer-Encoding: 7bit\n";
     $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$this->obj->boundary}\" \n";
-    $this->assertEquals($this->obj->sendHeaders, $sendHeaders);
+    $this->assertEquals($this->obj->sendHeaders, str_replace("\r", "", $sendHeaders));
   }
 
   /**
@@ -149,12 +149,12 @@ EOD
 
     // 送信先のチェック
     $returnMail = mb_encode_mimeheader("㈱ミリキロメートル", "ISO-2022-JP-MS","UTF-8") ." <example@example.com>";
-    $this->assertEquals($this->obj->returnMail, $returnMail);
+    $this->assertEquals($this->obj->returnMail, str_replace("\r", "", $returnMail));
 
     // タイトルのチェック
     $returnTitle = "【{$this->adminName}】 お問い合わせを受け付けました";
     $returnTitle = mb_encode_mimeheader($returnTitle, "ISO-2022-JP-MS","UTF-8");
-    $this->assertEquals($this->obj->returnTitle, $returnTitle);
+    $this->assertEquals($this->obj->returnTitle, str_replace("\r", "", $returnTitle));
 
     // メッセージのチェック
     $returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
@@ -178,7 +178,7 @@ EOD
     $returnHeaders = "MIME-Version: 1.0\n";
     $returnHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\n";
     $returnHeaders .= "From: ".mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." <{$this->adminMail}> \n";
-    $this->assertEquals($this->obj->returnHeaders, $returnHeaders);
+    $this->assertEquals($this->obj->returnHeaders, str_replace("\r", "", $returnHeaders));
   }
 
 }
