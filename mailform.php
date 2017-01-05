@@ -1,23 +1,15 @@
 <?php
-
-require_once(__DIR__ . '/Monaka/config.php');
-require_once(__DIR__ . '/Monaka/class/Form.php');
-
-$form = new Form();
-
+  require_once(__DIR__ . '/Monaka/config/config.php');
+  $form = new Monaka\Form();
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title>メールフォーム</title>
-  <link rel="stylesheet" href="css/html5reset-1.6.1.css">
-  <link rel="stylesheet" href="css/ini.css">
-  <link rel="stylesheet" href="css/mailform.css">
-  <!--[if lt IE 9]>
-  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-  <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"></script>
-  <![endif]-->
+  <link rel="stylesheet" href="Monaka/css/reset.css">
+  <link rel="stylesheet" href="Monaka/css/common.css">
+  <link rel="stylesheet" href="Monaka/css/mailform.css">
 </head>
 
 <body>

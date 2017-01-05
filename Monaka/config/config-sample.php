@@ -58,11 +58,7 @@ EOD
 // ----------基本設定終了---------- //
 
 
-
-
 // ----------添付ファイル設定開始---------- //
-
-//参照URL：http://www.k-sugi.sakura.ne.jp/php/2300/
 
 // 拡張子制限（0=しない・1=する）
 $ext_denied = 1;
@@ -80,3 +76,11 @@ $maxmemory = 1;
 $max = 3000;
 
 // ----------添付ファイル設定終了---------- //
+
+
+// ----------ここから下は変更不要---------- //
+
+require_once(__DIR__ . "/../lib/functions.php");
+require_once(__DIR__ . "/autoload.php");
+
+session_start();

@@ -1,31 +1,38 @@
 <?php
 
+namespace Monaka;
+
 class Confirmation {
 
   public $adminMail;
   public $adminArray;
   public $requiredItem = array();
   public $err = array();
-  public $nameCheck = false;
-  public $mailCheck = false;
+  private $_nameCheck = false;
+  private $_mailCheck = false;
   public $fileData = array();
   public $seriousError;
 
-  public function __construct($adminMail) {
+  public function run($adminMail, $ext_denied, $EXT_ALLOWS, $maxmemory, $max, $contentLength) {
     $this->adminArray = explode(",", $adminMail);
     $this->adminMail = trim($this->adminArray[0]);
+    $this->_setToken();
+    $this->_postCheck($_POST);
+    $this->_filesCheck($ext_denied, $EXT_ALLOWS, $maxmemory, $max);
+    $this->_seriousErrorCheck($contentLength);
   }
 
-  public function postCheck($post) {
+  private function _setToken() {
+    $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(16));
+  }
 
+  private function _postCheck($post) {
     if (isset($_SESSION["submitContent"])) {
       unset($_SESSION["submitContent"]);
     }
 
     foreach ($post as $key => $values) {
-
       // $params = explode(",", $values["params"]); /* 今後in_arrayと組み合わせて使うかも?*/
-
       // 配列(checkbox)を変数に変換
       if (isset($values["value"]) && is_array($values["value"])) {
         $values["value"] = implode("、", $values["value"]);
@@ -34,7 +41,7 @@ class Confirmation {
 
       // 名前チェック
       if (strpos($values["params"], "名前") !== false) {
-        $this->nameCheck = true;
+        $this->_nameCheck = true;
         if (empty($values["value"])) {
           $this->err[$key] = "必須項目です。";
         }
@@ -45,12 +52,12 @@ class Confirmation {
 
       // メールチェック
       if (strpos($values["params"], "メール") !== false) {
-        $this->mailCheck = true;
+        $this->_mailCheck = true;
         if (empty($values["value"])) {
           $this->err[$key] = "必須項目です。";
         } else {
           // メールアドレスの形式チェック
-          if (!$this->mailCheck($values["value"])) {
+          if (!$this->_mailCheck($values["value"])) {
             $this->err[$key] = "メールアドレスの形式が正しくありません。";
           }
           /* filter_varを使用する場合は下記
@@ -76,7 +83,7 @@ class Confirmation {
       // 電話番号チェック
       if (strpos($values["params"], "電話番号") !== false) {
         if (!empty($values["value"])) {
-          if (!$this->telCheck($values["value"])) {
+          if (!$this->_telCheck($values["value"])) {
             $this->err[$key] = "電話番号を正しく入力してください。";
           }
         }
@@ -85,7 +92,7 @@ class Confirmation {
       // 郵便番号チェック
       if (strpos($values["params"], "郵便番号") !== false) {
         if (!empty($values["value"])) {
-          if (!$this->zipCheck($values["value"])) {
+          if (!$this->_zipCheck($values["value"])) {
             $this->err[$key] = "郵便番号を正しく入力してください。";
           }
         }
@@ -115,7 +122,7 @@ class Confirmation {
     }
   }
 
-  public function mailCheck($email) {
+  private function _mailCheck($email) {
     if (preg_match("/^([a-zA-Z0-9])+([a-zA-Z0-9\._-])*@([a-zA-Z0-9_-])+([a-zA-Z0-9\._-]+)+$/", $email)) {
       return true;
     } else {
@@ -123,7 +130,7 @@ class Confirmation {
     }
   }
 
-  public function telCheck($tel) {
+  private function _telCheck($tel) {
     $tel = mb_convert_kana($tel, "n", "UTF-8");
     if (strpos($tel,"-")===false) { //ハイフンなし
       if (preg_match("/(^(?<!090|080|070)\d{10}$)|(^(090|080|070)\d{8}$)|(^0120\d{6}$)|(^0080\d{7}$)/", $tel)) {
@@ -140,7 +147,7 @@ class Confirmation {
     }
   }
 
-  public function zipCheck($zip) {
+  private function _zipCheck($zip) {
     if (preg_match("/(^\d{3}\-\d{4}$)|(^\d{7}$)/", $zip)) {
       return true;
     } else {
@@ -148,21 +155,10 @@ class Confirmation {
     }
   }
 
-  public function setToken() {
-    $_SESSION['token'] = sha1(uniqid(mt_rand(), true));
-  }
-
-  public function checkToken() {
-    if (empty($_POST['token']) || ($_SESSION['token'] != $_POST['token'])) {
-      echo "不正な送信です。";
-      exit;
-    }
-  }
-
-  public function filesCheck($files, $ext_denied, $EXT_ALLOWS, $maxmemory, $max) {
+  private function _filesCheck($ext_denied, $EXT_ALLOWS, $maxmemory, $max) {
     $_SESSION["fileData"] = array();
-    if (!empty($files)) {
-      foreach ($files as $key => $value) {
+    if (!empty($_FILES)) {
+      foreach ($_FILES as $key => $value) {
 
         // phpiniの設定によるUPLOAD_ERRのチェック
         if ($value["error"] != UPLOAD_ERR_OK && $value['error'] !== 4) {
@@ -213,7 +209,7 @@ class Confirmation {
     }
   }
 
-  public function seriousErrorCheck($contentLength) {
+  private function _seriousErrorCheck($contentLength) {
     if (strpos(ini_get("post_max_size"), "M") !== false) {
       $postMaxSize = ini_get("post_max_size") * 1024 * 1024;
     } else {
@@ -223,7 +219,7 @@ class Confirmation {
       $this->seriousError = "ファイルサイズの総量が大きすぎる可能性があります。<br>\n";
       $this->seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
       $this->seriousError .= "管理者【{$this->adminMail}】にお知らせください。";
-    } elseif (!$this->nameCheck || !$this->mailCheck) {
+    } elseif (!$this->_nameCheck || !$this->_mailCheck) {
       $this->seriousError = "エラーが発生しました。<br>\n";
       $this->seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
       $this->seriousError .= "管理者【{$this->adminMail}】にお知らせください。";

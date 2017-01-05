@@ -1,5 +1,7 @@
 <?php
 
+namespace Monaka;
+
 class Form {
 
   public function create($dir = 'Monaka') {
