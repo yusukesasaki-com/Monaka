@@ -109,7 +109,7 @@ class Confirmation {
         $value = explode("\n", $values["value"]);
         foreach ($value as $val) {
           if (strlen(mb_convert_encoding($val, "SJIS", "UTF-8")) > 980) {
-            $this->err[$key] .= "長文を改行なしで入力されているようです。<br>" . PHP_EOL;
+            $this->err[$key] = "長文を改行なしで入力されているようです。<br>" . PHP_EOL;
             $this->err[$key] .= "このまま送信すると文字化けしてしまうため、" . PHP_EOL;
             $this->err[$key] .= "490文字以内で改行してください。" . PHP_EOL;
             break;
