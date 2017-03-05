@@ -181,7 +181,12 @@ class Confirmation {
           $this->fileData["ext"] = $this->fileData["array"][$this->fileData["nr"] - 1];
 
           // config.phpの拡張子制限チェック
-          if ($ext_denied == 1 && !@in_array($this->fileData["ext"], $EXT_ALLOWS)) {
+          $this->checkExt = array();
+          foreach ($EXT_ALLOWS as $ext) {
+            $this->checkExt[] = strtolower($ext);
+            $this->checkExt[] = strtoupper($ext);
+          }
+          if ($ext_denied == 1 && !@in_array($this->fileData["ext"], $this->checkExt)) {
             $this->err[$key] = "添付できないファイルです<br>\n";
             $this->err[$key] .= "添付可能なファイルの種類（拡張子）は[".implode("・", $EXT_ALLOWS)."]です\n";
             $_SESSION["fileData"][$key]["name"] = $this->fileData["name"];

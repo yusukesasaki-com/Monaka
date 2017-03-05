@@ -69,7 +69,7 @@
             <p>
               <?php
                 if (empty($app->err[$key])) {
-                  if (strpos("jpg,jpeg,gif,png", $value["ext"]) !== false) {
+                  if (strpos("jpg,jpeg,gif,png,JPG,JPEG,GIF,PNG", $value["ext"]) !== false) {
                     $img = base64_encode(file_get_contents($value["tmp"]));
                     echo "<img src=\"data:image/{$value["ext"]};base64,{$img}\" width=\"150\" ><br>\n";
                   }
