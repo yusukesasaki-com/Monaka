@@ -39,6 +39,11 @@ class Confirmation {
         $_SESSION["$submitContent"] = array();
       }
 
+      // 添付ファイル必須化の為にparamsだけPOSTされた場合はcontinue
+      if (!isset($values["value"])) {
+        continue;
+      }
+
       // 名前チェック
       if (strpos($values["params"], "名前") !== false) {
         $this->_nameCheck = true;
@@ -209,6 +214,12 @@ class Confirmation {
           $_SESSION["fileData"][$key]["tmp"] = $this->fileData["tmp"];
           $_SESSION["fileData"][$key]["ext"] = $this->fileData["ext"];
           $_SESSION["fileData"][$key]["file"] = chunk_split(base64_encode($contents)); //エンコードして分割
+        } else {
+          if (strpos($_POST[$key]["params"], "必須") !== false) {
+            $this->err[$key] = "必須項目です。<br>\n";
+            $_SESSION["fileData"][$key]["name"] = "";
+            continue;
+          }
         }
       }
     }

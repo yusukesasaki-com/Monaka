@@ -118,7 +118,8 @@ class Form {
     }
   }
 
-  public function inputFile($name) {
+  public function inputFile($name, $params = null) {
+    echo "<input type=\"hidden\" name=\"{$name}[params]\" value=\"{$params}\">\n";
     echo "<input type=\"file\" name=\"{$name}\"><br>";
   }
 

@@ -115,8 +115,8 @@
       <dl>
         <dt>添付ファイル</dt>
         <dd>
-          <?php $form->inputFile("添付ファイル1"); ?>
-          <?php $form->inputFile("添付ファイル2"); ?>
+          <?php $form->inputFile("添付ファイル1", "必須"); ?>
+          <?php $form->inputFile("添付ファイル2", "必須"); ?>
           <?php $form->inputFile("添付ファイル3"); ?>
         </dd>
       </dl>
