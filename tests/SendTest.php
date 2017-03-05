@@ -34,12 +34,12 @@ EOD
 ありがとうございます。
 EOD
 ;
-    $fp = fopen(__DIR__ . "/testFile/test.jpg", "r");
-    $contents = fread($fp, filesize(__DIR__ . "/testFile/test.jpg"));
+    $fp = fopen(__DIR__ . "/testFile/test.JPG", "r");
+    $contents = fread($fp, filesize(__DIR__ . "/testFile/test.JPG"));
     fclose($fp);
     $file = array(
-      "name" => "test.jpg",
-      "tmp" => __DIR__ . "/testFile/test.jpg",
+      "name" => "test.JPG",
+      "tmp" => __DIR__ . "/testFile/test.JPG",
       "ext" => "jpg",
       "file" => chunk_split(base64_encode($contents))
     );

@@ -144,10 +144,10 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
 
   public function postTestValidFile() {
     $file1["添付ファイル"] = array(
-      "name" => "test.jpg",
+      "name" => "test.JPG",
       "type" => "image/jpeg",
       "size" => 19100,
-      "tmp_name" => __DIR__ . "/testFile/test.jpg",
+      "tmp_name" => __DIR__ . "/testFile/test.JPG",
       "error" => 0
     );
 
