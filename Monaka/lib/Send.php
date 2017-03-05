@@ -153,6 +153,7 @@ class Send {
     $this->returnMessage .= "【{$this->_adminName}】 {$returnMailTitle}\n";
     $this->returnMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
     $this->returnMessage .= "\n";
+    $this->returnMessage .= "{$this->_requiredItem["name"]}様\n";
     $this->returnMessage .= "\n";
     $this->returnMessage .= $returnMailHeader;
     $this->returnMessage .= "\n";
