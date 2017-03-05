@@ -137,6 +137,9 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
    */
   public function testValidFile($keys, $data, $contentLength, $file, $message) {
     $num = count($data);
+    for ($i = 0; $i < $num; $i++) {
+      $_POST[$keys[$i]] = $data[$i];
+    }
     $_FILES = $file;
     $this->obj->run($this->adminMail, $this->ext_denied, $this->EXT_ALLOWS, $this->maxmemory, $this->max, $contentLength);
     $this->assertEquals($this->obj->err, $message);
@@ -170,6 +173,15 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $err2 = "添付できないファイルです<br>\n";
     $err2 .= "添付可能なファイルの種類（拡張子）は[jpg・jpeg・gif]です\n";
 
+    $file4["添付ファイル"] = array(
+      "name" => "",
+      "type" => "",
+      "size" => 0,
+      "tmp_name" => "",
+      "error" => 0
+    );
+    $err3 = "必須項目です。<br>\n";
+
     return array(
       array(
         array("お名前", "メールアドレス"),
@@ -194,6 +206,15 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
           array("value" => "example@example.com", "params" => "メール"),
         ),
         1000, $file3, array("添付ファイル" => $err2)
+      ),
+      array(
+        array("お名前", "メールアドレス", "添付ファイル"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メール"),
+          array("value" => "", "params" => "必須"),
+        ),
+        1000, $file4, array("添付ファイル" => $err3)
       )
     );
   }
