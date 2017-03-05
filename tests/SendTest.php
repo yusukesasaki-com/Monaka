@@ -107,6 +107,7 @@ EOD
     $returnMessage .= "【{$this->adminName}】 お問い合わせを受け付けました\n";
     $returnMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
     $returnMessage .= "\n";
+    $returnMessage .= "㈱ミリキロメートル様\n";
     $returnMessage .= "\n";
     $returnMessage .= $this->returnMailHeader;
     $returnMessage .= "\n";
