@@ -1,148 +1,222 @@
 <?php
 
-require_once(__DIR__ . "/../Monaka/class/Confirmation.php");
+require_once(__DIR__ . "/../Monaka/config/config-sample.php");
 
 class ConfirmationTest extends PHPUnit_Framework_TestCase {
 
+  public $adminMail;
   public $ext_denied;
-  public $ext_allows;
+  public $EXT_ALLOWS;
   public $maxmemory;
   public $max;
 
   public function setUp() {
-    $this->obj = new Confirmation("example@example.com");
-    // 拡張子制限（0=しない・1=する）
+    $this->adminMail = "example@example.com";
     $this->ext_denied = 1;
-    // 許可する拡張子リスト
-    $ext_allow1 = "jpg";
-    $ext_allow2 = "jpeg";
-    $ext_allow3 = "gif";
-    // 配列に格納しておく
-    $this->ext_allows = array($ext_allow1, $ext_allow2, $ext_allow3);
-    // アップロード容量制限（0=しない・1=する）
+    $this->EXT_ALLOWS = array("jpg", "jpeg", "gif");
     $this->maxmemory = 1;
-    // 最大容量（KB）
     $this->max = 100;
+    $this->obj = new Monaka\Confirmation();
   }
 
   /**
    * @dataProvider postValidCheckValue
    */
-  public function testValidPost($title, $params, $value) {
-    $post = array();
-    $post[$title] = array("params" => $params, "value" => $value);
-    $this->obj->postCheck($post);
-    $this->assertEmpty($this->obj->err);
+  public function testRun($keys, $data, $contentLength, $message) {
+    $num = count($data);
+    for ($i = 0; $i < $num; $i++) {
+      $_POST[$keys[$i]] = $data[$i];
+    }
+    $this->obj->run($this->adminMail, $this->ext_denied, $this->EXT_ALLOWS, $this->maxmemory, $this->max, $contentLength);
+    $this->assertEquals($this->obj->err, $message);
   }
 
   public function postValidCheckValue() {
-    return array(
-      array("お名前", "名前", "名前"),
-      array("メールアドレス", "メール", "example@example.com"),
-      array("電話番号", "電話番号", "000-000-0000"),
-      array("郵便番号", "郵便番号", "000-0000")
-    );
-  }
+    $text = "";
+    for ($i = 0; $i < 45; $i++) {
+      $text .= "てきすとてきすとてきすと";
+    }
+    $err = "長文を改行なしで入力されているようです。<br>" . PHP_EOL;
+    $err .= "このまま送信すると文字化けしてしまうため、" . PHP_EOL;
+    $err .= "490文字以内で改行してください。" . PHP_EOL;
 
-  /**
-   * @dataProvider postWrongCheckValue
-   */
-  public function testWrongPost($title, $params, $value, $errMessage) {
-    $post = array();
-    $post[$title] = array("params" => $params, "value" => $value);
-    $this->obj->postCheck($post);
-    $this->assertEquals($this->obj->err[$title], $errMessage);
-  }
-
-  public function postWrongCheckValue() {
     return array(
-      array("お名前", "名前", "", "必須項目です。"),
-      array("メールアドレス", "メール", "", "必須項目です。"),
-      array("メールアドレス", "メール", "example@", "メールアドレスの形式が正しくありません。"),
-      array("電話番号", "電話番号", "000-000-", "電話番号を正しく入力してください。"),
-      array("郵便番号", "郵便番号", "000-", "郵便番号を正しく入力してください。"),
-      array("必須項目", "必須項目", "", "必須項目です。")
+      array(
+        array("お名前", "メールアドレス", "メールアドレス再入力", "電話番号", "郵便番号"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メール"),
+          array("value" => "example@example.com", "params" => "再入力"),
+          array("value" => "000-000-0000", "params" => "電話番号"),
+          array("value" => "000-0000", "params" => "郵便番号"),
+        ),
+        1000, array()
+      ),
+      array(
+        array("お名前", "メールアドレス", "メールアドレス再入力", "電話番号", "郵便番号"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メール"),
+          array("value" => "exampl@example.com", "params" => "再入力"),
+          array("value" => "000-000-000", "params" => "電話番号"),
+          array("value" => "000-000", "params" => "郵便番号"),
+        ),
+        1000,
+        array(
+          "メールアドレス再入力" => "メールアドレスが一致しません。",
+          "郵便番号" => "郵便番号を正しく入力してください。",
+          "電話番号" => "電話番号を正しく入力してください。"
+        )
+      ),
+      array(
+        array("お名前", "メールアドレス", "コメント1", "コメント2"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メール"),
+          array("value" => "", "params" => "必須"),
+          array("value" => $text, "params" => ""),
+        ),
+        1000,
+        array(
+          "コメント1" => "必須項目です。",
+          "コメント2" => $err
+        )
+      )
     );
   }
 
   /**
    * @dataProvider postSeriousWrongCheckValue
    */
-  public function testSeriousWrongPost($checkingVariable) {
-    $post = array();
-    $seriousError = "エラーが発生しました。<br>\n";
-    $seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";
-    $seriousError .= "管理者【{$this->obj->adminMail}】にお知らせください。";
-    $post[] = array("params" => "", "value" => "");
-    $this->obj->postCheck($post);
-    $this->assertFalse($this->obj->$checkingVariable);
-    $this->obj->seriousErrorCheck(100);
-    $this->assertEquals($this->obj->seriousError, $seriousError);
+  public function testSeriousWrongPost($keys, $data, $contentLength, $message) {
+    $num = count($data);
+    for ($i = 0; $i < $num; $i++) {
+      $_POST[$keys[$i]] = $data[$i];
+    }
+    $this->obj->run($this->adminMail, $this->ext_denied, $this->EXT_ALLOWS, $this->maxmemory, $this->max, $contentLength);
+    $this->assertEquals($this->obj->seriousError, $message);
   }
 
   public function postSeriousWrongCheckValue() {
+    $err = "エラーが発生しました。<br>\n";
+    $err .= "再度お試しいただき、解消しない場合は、<br>\n";
+    $err .= "管理者【example@example.com】にお知らせください。";
+
+    $err2 = "ファイルサイズの総量が大きすぎる可能性があります。<br>\n";
+    $err2 .= "再度お試しいただき、解消しない場合は、<br>\n";
+    $err2 .= "管理者【example@example.com】にお知らせください。";
+
     return array(
-      array("nameCheck"),
-      array("mailCheck"),
+      array(
+        array("お名前"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+        ),
+        1000, $err
+      ),
+      array(
+        array("メールアドレス"),
+        array(
+          array("value" => "example@example.com", "params" => "メールアドレス"),
+        ),
+        1000, $err
+      ),
+      array(
+        array("お名前", "メールアドレス"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メールアドレス"),
+        ),
+        10000000, $err2
+      )
     );
   }
 
-  public function testMailReEnter() {
-    $this->obj->requiredItem["mailaddress"] = "example@example.com";
-    $post["メールアドレス再入力"] = array("params" => "再入力", "value" => "example@example.com");
-    $this->obj->postCheck($post);
-    $this->assertEmpty($this->obj->err);
+  /**
+   * @dataProvider postTestValidFile
+   */
+  public function testValidFile($keys, $data, $contentLength, $file, $message) {
+    $num = count($data);
+    for ($i = 0; $i < $num; $i++) {
+      $_POST[$keys[$i]] = $data[$i];
+    }
+    $_FILES = $file;
+    $this->obj->run($this->adminMail, $this->ext_denied, $this->EXT_ALLOWS, $this->maxmemory, $this->max, $contentLength);
+    $this->assertEquals($this->obj->err, $message);
   }
 
-  public function testWrongMailReEnter() {
-    $this->obj->requiredItem["mailaddress"] = "example@example.com";
-    $post["メールアドレス再入力"] = array("params" => "再入力", "value" => "exampl@example.com");
-    $this->obj->postCheck($post);
-    $this->assertEquals($this->obj->err["メールアドレス再入力"], "メールアドレスが一致しません。");
-  }
-
-  public function testValidFile() {
-    $files = array();
-    $files["添付ファイル"] = array(
-      "name" => "test.jpg",
+  public function postTestValidFile() {
+    $file1["添付ファイル"] = array(
+      "name" => "test.JPG",
       "type" => "image/jpeg",
       "size" => 19100,
-      "tmp_name" => __DIR__ . "/testFile/test.jpg",
+      "tmp_name" => __DIR__ . "/testFile/test.JPG",
       "error" => 0
     );
 
-    $this->obj->filesCheck($files, $this->ext_denied, $this->ext_allows, $this->maxmemory, $this->max);
-    $this->assertEmpty($this->obj->err);
-    $this->assertEquals($_SESSION["fileData"]["添付ファイル"]["name"], "test.jpg");
-  }
-
-  public function testOverSizeFile() {
-    $files = array();
-    $files["添付ファイル"] = array(
+    $file2["添付ファイル"] = array(
       "name" => "test2.jpg",
       "type" => "image/jpeg",
       "size" => 247872,
       "tmp_name" => __DIR__ . "/testFile/test2.jpg",
       "error" => 0
     );
+    $err = "ファイルの容量が大きすぎます<br>\n";
 
-    $this->obj->filesCheck($files, $this->ext_denied, $this->ext_allows, $this->maxmemory, $this->max);
-    $this->assertEquals($this->obj->err["添付ファイル"], "ファイルの容量が大きすぎます<br>\n");
-  }
-
-  public function testOtherTypeFile() {
-    $files = array();
-    $files["添付ファイル"] = array(
+    $file3["添付ファイル"] = array(
       "name" => "test.pdf",
       "type" => "application/pdf",
       "size" => 38308,
       "tmp_name" => __DIR__ . "/testFile/test.pdf",
       "error" => 0
     );
+    $err2 = "添付できないファイルです<br>\n";
+    $err2 .= "添付可能なファイルの種類（拡張子）は[jpg・jpeg・gif]です\n";
 
-    $this->obj->filesCheck($files, $this->ext_denied, $this->ext_allows, $this->maxmemory, $this->max);
-    $errMessage = "添付できないファイルです<br>\n";
-    $errMessage .= "添付可能なファイルの種類（拡張子）は[".implode("・", $this->ext_allows)."]です\n";
-    $this->assertEquals($this->obj->err["添付ファイル"], $errMessage);
+    $file4["添付ファイル"] = array(
+      "name" => "",
+      "type" => "",
+      "size" => 0,
+      "tmp_name" => "",
+      "error" => 0
+    );
+    $err3 = "必須項目です。<br>\n";
+
+    return array(
+      array(
+        array("お名前", "メールアドレス"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メール"),
+        ),
+        1000, $file1, array()
+      ),
+      array(
+        array("お名前", "メールアドレス"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メール"),
+        ),
+        1000, $file2, array("添付ファイル" => $err)
+      ),
+      array(
+        array("お名前", "メールアドレス"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メール"),
+        ),
+        1000, $file3, array("添付ファイル" => $err2)
+      ),
+      array(
+        array("お名前", "メールアドレス", "添付ファイル"),
+        array(
+          array("value" => "TEST", "params" => "名前"),
+          array("value" => "example@example.com", "params" => "メール"),
+          array("value" => "", "params" => "必須"),
+        ),
+        1000, $file4, array("添付ファイル" => $err3)
+      )
+    );
   }
+
 }
