@@ -1,56 +1,15 @@
 <?php
-
-require_once(__DIR__ . '/config.php');
-require_once(__DIR__ . '/functions.php');
-require_once(__DIR__ . '/class/Send.php');
-
-session_start();
-
-$send = new Send($adminMail, $adminName, $returnMailTitle, $returnMailHeader, $returnMailFooter, $_SESSION["submitFile"], $_SERVER);
-
-// ----------CSRF対策開始---------- //
-
-$send->checkToken();
-
-// ----------CSRF対策終了---------- //
-
-
-
-// ----------特殊文字の置換開始---------- //
-
-$send->substitutionSubmitContent($_SESSION["submitContent"]);
-
-$send->substitutionRequiredItem($_POST["requiredItem"]);
-
-// ----------特殊文字の置換終了---------- //
-
-
-
-
-// ----------送信処理開始---------- //
-
-// 文字コード設定
-$send->characterSetting();
-
-// $adminMailへの送信
-$send->adminSend();
-
-// リターンメール送信
-$send->returnSend();
-
-// セッション破棄
-$send->sessionReset();
-
-// ----------送信処理完了---------- //
-
+  require_once(__DIR__ . '/config/config.php');
+  $send = new Monaka\Send();
+  $send->run($adminMail, $adminName, $returnMailTitle, $returnMailHeader, $returnMailFooter);
 ?>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <title>メールフォーム</title>
-  <link rel="stylesheet" href="./css/html5reset-1.6.1.css">
-  <link rel="stylesheet" href="./css/ini.css">
+  <link rel="stylesheet" href="./css/reset.css">
+  <link rel="stylesheet" href="./css/common.css">
   <link rel="stylesheet" href="./css/confirmation.css">
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
