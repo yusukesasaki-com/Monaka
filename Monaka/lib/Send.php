@@ -9,26 +9,33 @@ class Send {
   private $_adminName;
   private $_requiredItem = array();
   private $_submitContent = array();
-  private $_boundary;
+  public $boundary;
+  public $sendMessage;
+  public $returnMessage;
 
-  public function run($adminMail, $adminName, $returnMailTitle, $returnMailHeader, $returnMailFooter, $session, $server) {
+  public function run($adminMail, $adminName, $returnMailTitle, $returnMailHeader, $returnMailFooter) {
     $this->_adminArray = explode(",", $adminMail);
     $this->_adminMail = trim($this->_adminArray[0]);
     $this->_adminName = $adminName;
     $this->_checkToken();
-    $this->_substitutionSubmitContent($session["submitContent"]);
+    $this->_substitutionSubmitContent($_SESSION["submitContent"]);
     $this->_substitutionRequiredItem($_POST["requiredItem"]);
     $this->_characterSetting();
-    $this->_adminSend($session["submitFile"], $server);
+    $server = array(
+      "REMOTE_ADDR" => $_SERVER["REMOTE_ADDR"],
+      "REMOTE_HOST" => gethostbyaddr($_SERVER['REMOTE_ADDR']),
+      "HTTP_USER_AGENT" => $_SERVER["HTTP_USER_AGENT"]
+    );
+    $this->_adminSend($_SESSION["submitFile"], $server);
     $this->_returnSend($returnMailTitle, $returnMailHeader, $returnMailFooter);
     $this->_sessionReset();
   }
 
   private function _checkToken() {
     if (
-        !isset($_POST['token']) ||
-        !isset($_SESSION['token']) ||
-        $_SESSION['token'] !== $_POST['token'])
+      !isset($_POST['token']) ||
+      !isset($_SESSION['token']) ||
+      $_SESSION['token'] !== $_POST['token']
     ) {
       echo "不正な送信です。";
       exit;
@@ -53,7 +60,7 @@ class Send {
     mb_internal_encoding("UTF-8");
 
     // バウンダリー文字（パートの境界）
-    $this->_boundary = md5(uniqid(rand()));
+    $this->boundary = md5(uniqid(rand()));
   }
 
   private function _adminSend($submitFile, $server) {
@@ -67,20 +74,20 @@ class Send {
     $sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
 
     // メッセージの設定
-    $sendMessage = "{$this->_requiredItem["name"]}様より、下記内容でメールが届きました。\n";
-    $sendMessage .= "\n";
+    $this->sendMessage = "{$this->_requiredItem["name"]}様より、下記内容でメールが届きました。\n";
+    $this->sendMessage .= "\n";
     foreach ($this->_submitContent as $key => $value) {
-      $sendMessage .= "■{$key}\n";
-      $sendMessage .= "{$value}\n\n";
+      $this->sendMessage .= "■{$key}\n";
+      $this->sendMessage .= "{$value}\n\n";
     }
-    $sendMessage .= "\n\n";
-    $sendMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    $sendMessage .= "[送信日時]".date("Y年m月d日(D) H時i分s秒")."\n";
-    $sendMessage .= "[IPアドレス]{$server["REMOTE_ADDR"]}\n";
-    $sendMessage .= "[ホスト]{$server["REMOTE_HOST"]}\n";
-    $sendMessage .= "[USER_AGENT]{$server["HTTP_USER_AGENT"]}\n";
-    $sendMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    $sendMessage = mb_convert_encoding($sendMessage, "ISO-2022-JP-MS","UTF-8");
+    $this->sendMessage .= "\n\n";
+    $this->sendMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $this->sendMessage .= "[送信日時]".date("Y年m月d日(D) H時i分s秒")."\n";
+    $this->sendMessage .= "[IPアドレス]{$server["REMOTE_ADDR"]}\n";
+    $this->sendMessage .= "[ホスト]{$server["REMOTE_HOST"]}\n";
+    $this->sendMessage .= "[USER_AGENT]{$server["HTTP_USER_AGENT"]}\n";
+    $this->sendMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $this->sendMessage = mb_convert_encoding($this->sendMessage, "ISO-2022-JP-MS","UTF-8");
 
     //ヘッダーの設定
     $sendHeaders = "X-Mailer: PHP5\n";
@@ -90,46 +97,46 @@ class Send {
 
     // 添付ファイルの設定
     if (!empty($submitFile)) {
-      $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$this->_boundary}\" \n";
+      $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$this->boundary}\" \n";
 
-      $tmpMessage = $sendMessage;
+      $tmpMessage = $this->sendMessage;
 
-      $sendMessage = "--{$this->_boundary}\n";
-      $sendMessage .= "Content-Type: text/plain; charset=\"ISO-2022-JP\"\n";
-      $sendMessage .= "Content-Transfer-Encoding: 7bit\n\n";
-      $sendMessage .= $tmpMessage."\n";
+      $this->sendMessage = "--{$this->boundary}\n";
+      $this->sendMessage .= "Content-Type: text/plain; charset=\"ISO-2022-JP\"\n";
+      $this->sendMessage .= "Content-Transfer-Encoding: 7bit\n\n";
+      $this->sendMessage .= $tmpMessage."\n";
 
       foreach ($submitFile as $key => $value) {
         foreach ($value as $key2 => $value2) {
           $name = $key2;
           $f_encoded = $value2;
 
-          $sendMessage .= "\n";
-          $sendMessage .= "--{$this->_boundary}\n";
-          $sendMessage .= "Content-Type: application/octet-stream; ";
-          $sendMessage .= "charset=\"ISO-2022-JP\" ";
-          $sendMessage .= "name=\"".mb_encode_mimeheader($name, "ISO-2022-JP-MS","UTF-8")."\"\n";
-          $sendMessage .= "Content-Transfer-Encoding: base64\n";
-          $sendMessage .= "Content-Disposition: attachment; ";
-          $sendMessage .= "filename=\"".mb_encode_mimeheader($name, "ISO-2022-JP-MS","UTF-8")."\"\n";
-          $sendMessage .= "\n";
-          $sendMessage .= "{$f_encoded}\n";
+          $this->sendMessage .= "\n";
+          $this->sendMessage .= "--{$this->boundary}\n";
+          $this->sendMessage .= "Content-Type: application/octet-stream; ";
+          $this->sendMessage .= "charset=\"ISO-2022-JP\" ";
+          $this->sendMessage .= "name=\"".mb_encode_mimeheader($name, "ISO-2022-JP-MS","UTF-8")."\"\n";
+          $this->sendMessage .= "Content-Transfer-Encoding: base64\n";
+          $this->sendMessage .= "Content-Disposition: attachment; ";
+          $this->sendMessage .= "filename=\"".mb_encode_mimeheader($name, "ISO-2022-JP-MS","UTF-8")."\"\n";
+          $this->sendMessage .= "\n";
+          $this->sendMessage .= "{$f_encoded}\n";
         }
       }
 
-      $sendMessage .= "--{$this->_boundary}--\n";
+      $this->sendMessage .= "--{$this->boundary}--\n";
 
     } else {
       $sendHeaders .= "Content-type: text/plain; charset=\"ISO-2022-JP\" \n";
     }
 
     $sendTitle = str_replace("\r", "", $sendTitle);
-    $sendMessage = str_replace("\r", "", $sendMessage);
+    $this->sendMessage = str_replace("\r", "", $this->sendMessage);
     $sendHeaders = str_replace("\r", "", $sendHeaders);
 
     // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
     foreach ($sendMail as $send) {
-      @mail(str_replace("\r", "", $send), $sendTitle, $sendMessage, $sendHeaders);
+      @mail(str_replace("\r", "", $send), $sendTitle, $this->sendMessage, $sendHeaders);
     }
   }
 
@@ -142,23 +149,23 @@ class Send {
     $returnTitle = mb_encode_mimeheader($returnTitle, "ISO-2022-JP-MS","UTF-8");
 
     // メッセージの設定
-    $returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    $returnMessage .= "【{$this->_adminName}】 {$returnMailTitle}\n";
-    $returnMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    $returnMessage .= "\n";
-    $returnMessage .= "\n";
-    $returnMessage .= $returnMailHeader;
-    $returnMessage .= "\n";
-    $returnMessage .= "----------------------------------------------------------------------\n";
+    $this->returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $this->returnMessage .= "【{$this->_adminName}】 {$returnMailTitle}\n";
+    $this->returnMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $this->returnMessage .= "\n";
+    $this->returnMessage .= "\n";
+    $this->returnMessage .= $returnMailHeader;
+    $this->returnMessage .= "\n";
+    $this->returnMessage .= "----------------------------------------------------------------------\n";
     foreach ($this->_submitContent as $key => $value) {
-      $returnMessage .= "■{$key}\n";
-      $returnMessage .= "{$value}\n\n";
+      $this->returnMessage .= "■{$key}\n";
+      $this->returnMessage .= "{$value}\n\n";
     }
-    $returnMessage .= "----------------------------------------------------------------------\n";
-    $returnMessage .= "\n";
-    $returnMessage .= $returnMailFooter;
-    $returnMessage .= "\n";
-    $returnMessage = mb_convert_encoding($returnMessage, "ISO-2022-JP-MS","UTF-8");
+    $this->returnMessage .= "----------------------------------------------------------------------\n";
+    $this->returnMessage .= "\n";
+    $this->returnMessage .= $returnMailFooter;
+    $this->returnMessage .= "\n";
+    $this->returnMessage = mb_convert_encoding($this->returnMessage, "ISO-2022-JP-MS","UTF-8");
 
     //ヘッダーの設定
     $returnHeaders = "MIME-Version: 1.0\n";
@@ -167,11 +174,11 @@ class Send {
 
     $returnMail = str_replace("\r", "", $returnMail);
     $returnTitle = str_replace("\r", "", $returnTitle);
-    $returnMessage = str_replace("\r", "", $returnMessage);
+    $this->returnMessage = str_replace("\r", "", $this->returnMessage);
     $returnHeaders = str_replace("\r", "", $returnHeaders);
 
     // メールの送信 (宛先, 件名, 本文, 送り主(From:が必須))
-    @mail($returnMail, $returnTitle, $returnMessage, $returnHeaders);
+    @mail($returnMail, $returnTitle, $this->returnMessage, $returnHeaders);
   }
 
   private function _sessionReset() {

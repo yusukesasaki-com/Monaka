@@ -1,7 +1,7 @@
 <?php
   require_once(__DIR__ . '/config/config.php');
   $send = new Monaka\Send();
-  $send->run($adminMail, $adminName, $returnMailTitle, $returnMailHeader, $returnMailFooter, $_SESSION, $_SERVER);
+  $send->run($adminMail, $adminName, $returnMailTitle, $returnMailHeader, $returnMailFooter);
 ?>
 <!DOCTYPE html>
 <html lang="ja">

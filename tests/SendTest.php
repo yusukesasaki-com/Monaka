@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . "/../Monaka/class/Send.php");
+require_once(__DIR__ . "/../Monaka/config/config-sample.php");
 
 class SendTest extends PHPUnit_Framework_TestCase {
 
@@ -10,8 +10,8 @@ class SendTest extends PHPUnit_Framework_TestCase {
   public $returnMailTitle;
   public $returnMailHeader;
   public $returnMailFooter;
-  public $submitFile = array();
   public $server = array();
+  public $session = array();
 
   public function setUp() {
     $adminMail = "example@example.com, example2@example.com";
@@ -43,55 +43,26 @@ EOD
       "ext" => "jpg",
       "file" => chunk_split(base64_encode($contents))
     );
-    $this->submitFile = array();
-    $this->submitFile["添付ファイル1"] = $file;
-    $this->submitFile["添付ファイル2"] = $file;
-    $this->server = array(
+    $_SESSION["submitFile"]["添付ファイル1"] = $file;
+    $_SESSION["submitFile"]["添付ファイル2"] = $file;
+    $this->session["submitFile"]["添付ファイル1"] = $file;
+    $this->session["submitFile"]["添付ファイル2"] = $file;
+    $_SERVER = array(
       "REMOTE_ADDR" => "127.0.0.1",
       "REMOTE_HOST" => gethostbyaddr("127.0.0.1"),
       "HTTP_USER_AGENT" => "test user agent"
     );
-    $this->obj = new Send(
-      $adminMail,
-      $this->adminName,
-      $this->returnMailTitle,
-      $this->returnMailHeader,
-      $this->returnMailFooter,
-      $this->submitFile,
-      $this->server
-    );
+    $this->server = $_SERVER;
+    $_POST["requiredItem"]["name"] = "㈱㍉㌖";
+    $_POST["requiredItem"]["mailaddress"] = "example@example.com";
+    $_SESSION["submitContent"]["お問い合わせ内容"] = "㈱㍉㌖";
+    $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(16));
+    $_POST['token'] = $_SESSION['token'];
+    $this->obj = new Monaka\Send();
   }
 
-  public function testValidSubstitution() {
-    $post = array();
-    $requireItem = array();
-    $requireItem["name"] = "㈱㍉㌖";
-    $requireItem["mailaddress"] = "example@example.com";
-    $post["お問い合わせ内容"] = "㈱㍉㌖";
-    $this->obj->substitutionRequiredItem($requireItem);
-    $this->obj->substitutionSubmitContent($post);
-    $this->assertEquals($this->obj->requiredItem["name"], "㈱ミリキロメートル");
-    $this->assertEquals($this->obj->submitContent["お問い合わせ内容"], "㈱ミリキロメートル");
-
-    return array($this->obj->requiredItem, $this->obj->submitContent);
-  }
-
-  /**
-   * @depends testValidSubstitution
-   */
-  public function testAdminSend(array $obj) {
-    $this->obj->requiredItem = $obj[0];
-    $this->obj->submitContent = $obj[1];
-    $this->obj->adminSend();
-
-    // 送信先のチェック
-    $this->assertEquals($this->obj->sendMail[0], "{$this->adminName} <" . trim($this->adminArray[0]) . ">");
-    $this->assertEquals($this->obj->sendMail[1], "{$this->adminName} <" . trim($this->adminArray[1]) . ">");
-
-    // タイトルのチェック
-    $sendTitle = "㈱ミリキロメートル様よりメールが届きました。";
-    $sendTitle = mb_encode_mimeheader($sendTitle, "ISO-2022-JP-MS","UTF-8");
-    $this->assertEquals($this->obj->sendTitle, str_replace("\r", "", $sendTitle));
+  public function testSend() {
+    $this->obj->run($this->adminMail, $this->adminName, $this->returnMailTitle, $this->returnMailHeader, $this->returnMailFooter);
 
     // 本文のチェック
     $sendMessage = "㈱ミリキロメートル様より、下記内容でメールが届きました。\n";
@@ -111,7 +82,7 @@ EOD
     $sendMessage .= "Content-Type: text/plain; charset=\"ISO-2022-JP\"\n";
     $sendMessage .= "Content-Transfer-Encoding: 7bit\n\n";
     $sendMessage .= $tmpMessage."\n";
-    foreach ($this->submitFile as $key => $value) {
+    foreach ($this->session["submitFile"] as $key => $value) {
       foreach ($value as $key2 => $value2) {
         $name = $key2;
         $f_encoded = $value2;
@@ -128,35 +99,10 @@ EOD
       }
     }
     $sendMessage .= "--{$this->obj->boundary}--\n";
+    $sendMessage = str_replace("\r", "", $sendMessage);
     $this->assertEquals($this->obj->sendMessage, str_replace("\r", "", $sendMessage));
 
-    // ヘッダーのチェック
-    $sendHeaders = "X-Mailer: PHP5\n";
-    $sendHeaders = "MIME-Version: 1.0\n";
-    $sendHeaders .= "From: ".mb_encode_mimeheader("㈱ミリキロメートル", "ISO-2022-JP-MS","UTF-8") ." <example@example.com> \n";
-    $sendHeaders .= "Content-Transfer-Encoding: 7bit\n";
-    $sendHeaders .= "Content-type: multipart/mixed; boundary=\"{$this->obj->boundary}\" \n";
-    $this->assertEquals($this->obj->sendHeaders, str_replace("\r", "", $sendHeaders));
-  }
-
-  /**
-   * @depends testValidSubstitution
-   */
-  public function testReturnSend(array $obj) {
-    $this->obj->requiredItem = $obj[0];
-    $this->obj->submitContent = $obj[1];
-    $this->obj->returnSend();
-
-    // 送信先のチェック
-    $returnMail = mb_encode_mimeheader("㈱ミリキロメートル", "ISO-2022-JP-MS","UTF-8") ." <example@example.com>";
-    $this->assertEquals($this->obj->returnMail, str_replace("\r", "", $returnMail));
-
-    // タイトルのチェック
-    $returnTitle = "【{$this->adminName}】 お問い合わせを受け付けました";
-    $returnTitle = mb_encode_mimeheader($returnTitle, "ISO-2022-JP-MS","UTF-8");
-    $this->assertEquals($this->obj->returnTitle, str_replace("\r", "", $returnTitle));
-
-    // メッセージのチェック
+    // リターンメールのチェック
     $returnMessage = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
     $returnMessage .= "【{$this->adminName}】 お問い合わせを受け付けました\n";
     $returnMessage .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
@@ -173,12 +119,6 @@ EOD
     $returnMessage .= "\n";
     $returnMessage = mb_convert_encoding($returnMessage, "ISO-2022-JP-MS","UTF-8");
     $this->assertEquals($this->obj->returnMessage, $returnMessage);
-
-    //ヘッダーのチェック
-    $returnHeaders = "MIME-Version: 1.0\n";
-    $returnHeaders .= "Content-type: text/plain; charset=ISO-2022-JP\n";
-    $returnHeaders .= "From: ".mb_encode_mimeheader($this->adminName, "ISO-2022-JP-MS","UTF-8") ." <{$this->adminMail}> \n";
-    $this->assertEquals($this->obj->returnHeaders, str_replace("\r", "", $returnHeaders));
   }
 
 }
