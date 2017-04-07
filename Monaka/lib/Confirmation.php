@@ -40,8 +40,14 @@ class Confirmation {
       }
 
       // 添付ファイル必須化の為にparamsだけPOSTされた場合はcontinue
-      if (!isset($values["value"])) {
-        continue;
+      if (!empty($_FILES)) {
+        $flg = false;
+        foreach ($_FILES as $k => $v) {
+          if ($key == $k) {
+            $flg = true;
+          }
+        }
+        if ($flg) continue;
       }
 
       // 名前チェック

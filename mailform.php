@@ -21,25 +21,25 @@
   <div class="mailform">
     <?php $form->create(); ?>
       <dl>
-        <dt>お名前</dt>
+        <dt>お名前(必須)</dt>
         <dd>
           <?php $form->inputName("お名前"); ?>
         </dd>
       </dl>
       <dl>
-        <dt>メールアドレス</dt>
+        <dt>メールアドレス(必須)</dt>
         <dd>
           <?php $form->inputMail("メールアドレス"); ?>
         </dd>
       </dl>
       <dl>
-        <dt>メールアドレス確認</dt>
+        <dt>メールアドレス確認(必須)</dt>
         <dd>
           <?php $form->inputMailCheck("メールアドレス確認"); ?>
         </dd>
       </dl>
       <dl>
-        <dt>電話番号</dt>
+        <dt>電話番号(必須)</dt>
         <dd>
           <?php $form->inputTel("電話番号", "必須"); ?>
         </dd>
@@ -57,7 +57,7 @@
         </dd>
       </dl>
       <dl>
-        <dt>折り返しの連絡方法</dt>
+        <dt>折り返しの連絡方法(必須)</dt>
         <dd>
           <?php
             $params = array(
@@ -89,7 +89,7 @@
         </dd>
       </dl>
       <dl>
-        <dt>当サイトを<br>知ったきっかけ</dt>
+        <dt>当サイトを<br>知ったきっかけ(必須)</dt>
         <dd>
           <?php
             $params = array(
@@ -97,7 +97,7 @@
               "ブログ",
               "その他" => "text",
             );
-            $form->inputCheckboxBR("当サイトを知ったきっかけ", $params);
+            $form->inputCheckboxBR("当サイトを知ったきっかけ", $params, '必須');
           ?>
           <div class="nest">
             <p>＜検索サイト＞</p>
@@ -113,15 +113,15 @@
         </dd>
       </dl>
       <dl>
-        <dt>添付ファイル</dt>
+        <dt>添付ファイル(1つ必須)</dt>
         <dd>
           <?php $form->inputFile("添付ファイル1", "必須"); ?>
-          <?php $form->inputFile("添付ファイル2", "必須"); ?>
+          <?php $form->inputFile("添付ファイル2"); ?>
           <?php $form->inputFile("添付ファイル3"); ?>
         </dd>
       </dl>
       <dl>
-        <dt>お問い合わせ内容</dt>
+        <dt>お問い合わせ内容(必須)</dt>
         <dd><?php $form->textarea("お問い合わせ内容", "必須"); ?></dd>
       </dl>
     <?php $form->end('確認する'); ?>
