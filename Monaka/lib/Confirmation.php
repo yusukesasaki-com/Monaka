@@ -36,7 +36,6 @@ class Confirmation {
       // 配列(checkbox)を変数に変換
       if (isset($values["value"]) && is_array($values["value"])) {
         $values["value"] = implode("、", $values["value"]);
-        $_SESSION["$submitContent"] = array();
       }
 
       // 添付ファイル必須化の為にparamsだけPOSTされた場合はcontinue
@@ -51,7 +50,7 @@ class Confirmation {
       }
 
       // 名前チェック
-      if (strpos($values["params"], "名前") !== false) {
+      if (isset($values["params"]) && strpos($values["params"], "名前") !== false) {
         $this->_nameCheck = true;
         if (empty($values["value"])) {
           $this->err[$key] = "必須項目です。";
@@ -62,7 +61,7 @@ class Confirmation {
       }
 
       // メールチェック
-      if (strpos($values["params"], "メール") !== false) {
+      if (isset($values["params"]) && strpos($values["params"], "メール") !== false) {
         $this->_mailCheck = true;
         if (empty($values["value"])) {
           $this->err[$key] = "必須項目です。";
@@ -83,7 +82,7 @@ class Confirmation {
       }
 
       // メール再入力チェック
-      if (strpos($values["params"], "再入力") !== false) {
+      if (isset($values["params"]) && strpos($values["params"], "再入力") !== false) {
         if ($this->requiredItem["mailaddress"] !== $values["value"]) {
           $this->err[$key] = "メールアドレスが一致しません。";
         } else {
@@ -92,7 +91,7 @@ class Confirmation {
       }
 
       // 電話番号チェック
-      if (strpos($values["params"], "電話番号") !== false) {
+      if (isset($values["params"]) && strpos($values["params"], "電話番号") !== false) {
         if (!empty($values["value"])) {
           if (!$this->_telCheck($values["value"])) {
             $this->err[$key] = "電話番号を正しく入力してください。";
@@ -101,7 +100,7 @@ class Confirmation {
       }
 
       // 郵便番号チェック
-      if (strpos($values["params"], "郵便番号") !== false) {
+      if (isset($values["params"]) && strpos($values["params"], "郵便番号") !== false) {
         if (!empty($values["value"])) {
           if (!$this->_zipCheck($values["value"])) {
             $this->err[$key] = "郵便番号を正しく入力してください。";
@@ -110,7 +109,7 @@ class Confirmation {
       }
 
       // 必須チェック
-      if (strpos($values["params"], "必須") !== false) {
+      if (isset($values["params"]) && strpos($values["params"], "必須") !== false) {
         if (empty($values["value"])) {
           $this->err[$key] = "必須項目です。";
         }
@@ -221,7 +220,7 @@ class Confirmation {
           $_SESSION["fileData"][$key]["ext"] = $this->fileData["ext"];
           $_SESSION["fileData"][$key]["file"] = chunk_split(base64_encode($contents)); //エンコードして分割
         } else {
-          if (strpos($_POST[$key]["params"], "必須") !== false) {
+          if (isset($_POST[$key]["params"]) && strpos($_POST[$key]["params"], "必須") !== false) {
             $this->err[$key] = "必須項目です。<br>\n";
             $_SESSION["fileData"][$key]["name"] = "";
             continue;
