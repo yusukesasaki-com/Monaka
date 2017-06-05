@@ -51,7 +51,7 @@
                 if (strpos($value, "\n") !== false) {
                   echo nl2br(h($value));
                 } else {
-                  echo empty($value) ? "&nbsp;\n" : h($value);
+                  echo empty($value) && (string)$value !== "0" ? "&nbsp;\n" : h($value);
                 }
               } else {
                 echo "<span class=\"err\">{$app->err[$key]}</span>";
