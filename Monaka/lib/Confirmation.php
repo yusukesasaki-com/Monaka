@@ -110,12 +110,12 @@ class Confirmation {
 
       // 必須チェック
       if (isset($values["params"]) && strpos($values["params"], "必須") !== false) {
-        if (empty($values["value"])) {
+        if (empty($values["value"]) && (string)$values["value"] !== "0") {
           $this->err[$key] = "必須項目です。";
         }
       }
 
-      if (isset($values["value"]) && !empty($values["value"])) {
+      if (isset($values["value"])) {
         $value = explode("\n", $values["value"]);
         foreach ($value as $val) {
           if (strlen(mb_convert_encoding($val, "SJIS", "UTF-8")) > 980) {
