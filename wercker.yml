@@ -13,3 +13,40 @@ build:
         name: PHPUnit integration tests
         code: |
           phpunit tests/
+
+deploy:
+    steps:
+
+      - add-to-known_hosts:
+          hostname: ${HOST}
+
+      - mktemp:
+          envvar: PRIVATEKEY_PATH
+
+      # werckerで設定したsshの秘密鍵の環境変数を基に秘密鍵を生成
+      - create-file:
+          name: Create private key
+          filename: $PRIVATEKEY_PATH
+          content: $DEPROY_KEY_PRIVATE
+          overwrite: true
+
+      # デプロイ前に不要なファイルを削除
+      - script:
+          name: Remove no need assets
+          code: |
+           rm -rf .git
+           rm -rf tests
+           rm -rf CNAME
+           rm -rf .gitignore
+           rm -rf hexo-rpp-negativewords.txt
+           rm -rf wercker.yml
+
+      # 「/pipeline/source/」ディレクトリにソースがあるのでそれをtar + sshでサーバーに転送
+      - script:
+          name: Transfer data
+          code: |
+            PORT=${PORT}
+            USER=${USER}
+            HOST=${HOST}
+            DEPLOY_PATH=${DEPLOY_PATH}
+            tar cvz /pipeline/source/* | ssh -i $PRIVATEKEY_PATH -p $PORT -o StrictHostKeyChecking=no -o UserKnownHostsFile=no $USER@$HOST tar zxv -C $DEPLOY_PATH
