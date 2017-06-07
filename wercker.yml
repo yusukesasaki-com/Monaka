@@ -13,3 +13,11 @@ build:
         name: PHPUnit integration tests
         code: |
           phpunit tests/
+deploy:
+    steps:
+      - install-packages:
+        packages: lftp
+      - script:
+        name: upload files via FTP
+        code: |
+          lftp -u ${FTP_USERNAME},${FTP_PASSWORD} -e "set ssl:verify-certificate no;mirror -Rev -X wercker.yml /. ${FTP_DIR}/." ${FTP_SERVER_URL}
