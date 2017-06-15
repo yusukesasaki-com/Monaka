@@ -1,6 +1,6 @@
 [![wercker status](https://app.wercker.com/status/4e8ac7c938f95eb4663b7e39d7454503/m/master "wercker status")](https://app.wercker.com/project/bykey/4e8ac7c938f95eb4663b7e39d7454503)
 
-# MonakaMailForm
+# Monaka
 
 カスタマイズ性の高いメールフォームを目指して作成しました。  
 
