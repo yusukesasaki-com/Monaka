@@ -1,6 +1,9 @@
 <?php
   require_once(__DIR__ . '/Monaka/config/config.php');
   $form = new Monaka\Form();
+  $fieldsConfigPath = file_exists(__DIR__ . '/Monaka/config/fields.json')
+    ? __DIR__ . '/Monaka/config/fields.json'
+    : __DIR__ . '/Monaka/config/fields-sample.json';
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -20,112 +23,16 @@
 
   <div class="mailform">
     <?php $form->create(); ?>
-      <dl>
-        <dt>お名前(必須)</dt>
-        <dd>
-          <?php $form->inputName("お名前"); ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>メールアドレス(必須)</dt>
-        <dd>
-          <?php $form->inputMail("メールアドレス"); ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>メールアドレス確認(必須)</dt>
-        <dd>
-          <?php $form->inputMailCheck("メールアドレス確認"); ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>電話番号(必須)</dt>
-        <dd>
-          <?php $form->inputTel("電話番号", "必須"); ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>郵便番号</dt>
-        <dd>
-          <?php $form->inputZip("郵便番号"); ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>住所</dt>
-        <dd>
-          <?php $form->inputText("住所"); ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>折り返しの連絡方法(必須)</dt>
-        <dd>
-          <?php
-            $params = array(
-              "選択してください" => "noValue",
-              "メール",
-              "電話",
-            );
-            $form->select("折り返しの連絡方法", $params, "必須");
-          ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>年齢</dt>
-        <dd>
-          <?php $form->inputText("年齢"); ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>性別</dt>
-        <dd>
-          <?php
-            $params = array(
-              "男",
-              "女",
-              "その他" => "text",
-            );
-            $form->inputRadioBR("性別", $params);
-          ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>当サイトを<br>知ったきっかけ(必須)</dt>
-        <dd>
-          <?php
-            $params = array(
-              "検索",
-              "ブログ",
-              "その他" => "text",
-            );
-            $form->inputCheckboxBR("当サイトを知ったきっかけ", $params, '必須');
-          ?>
-          <div class="nest">
-            <p>＜検索サイト＞</p>
-            <?php
-              $params = array(
-                "Yahoo",
-                "Google",
-                "その他" => "text",
-              );
-              $form->inputCheckboxBR("検索サイト", $params);
-            ?>
-          </div>
-        </dd>
-      </dl>
-      <dl>
-        <dt>添付ファイル(1つ必須)</dt>
-        <dd>
-          <?php $form->inputFile("添付ファイル1", "必須"); ?>
-          <?php $form->inputFile("添付ファイル2"); ?>
-          <?php $form->inputFile("添付ファイル3"); ?>
-        </dd>
-      </dl>
-      <dl>
-        <dt>お問い合わせ内容(必須)</dt>
-        <dd><?php $form->textarea("お問い合わせ内容", "必須"); ?></dd>
-      </dl>
+      <?php $form->renderFromConfig($fieldsConfigPath); ?>
     <?php $form->end('確認する'); ?>
   </div>
+  <!--
+    フォーム項目は Monaka/config/fields-sample.json (未設置時) または
+    Monaka/config/fields.json (設置後) を編集することでPHPコードを触らずに
+    追加・削除・並び替えができます。
+    $form->inputName() などの個別メソッドを直接呼び出す従来の書き方も
+    引き続き利用できます(このコメント上部を参照)。
+  -->
 
 </div>
 
