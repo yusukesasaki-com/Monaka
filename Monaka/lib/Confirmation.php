@@ -12,6 +12,21 @@ class Confirmation {
   private $_mailCheck = false;
   public $fileData = array();
   public $seriousError;
+  private $checkExt = array();
+  private $_extMimeMap = array(
+    "jpg" => array("image/jpeg"),
+    "jpeg" => array("image/jpeg"),
+    "gif" => array("image/gif"),
+    "png" => array("image/png"),
+    "pdf" => array("application/pdf"),
+    "txt" => array("text/plain"),
+    "csv" => array("text/plain", "text/csv", "application/csv"),
+    "zip" => array("application/zip", "application/x-zip-compressed"),
+    "doc" => array("application/msword"),
+    "docx" => array("application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/zip"),
+    "xls" => array("application/vnd.ms-excel"),
+    "xlsx" => array("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/zip"),
+  );
 
   public function run($adminMail, $ext_denied, $EXT_ALLOWS, $maxmemory, $max, $contentLength) {
     $this->adminArray = explode(",", $adminMail);
@@ -54,6 +69,9 @@ class Confirmation {
         $this->_nameCheck = true;
         if (empty($values["value"])) {
           $this->err[$key] = "必須項目です。";
+        } elseif (preg_match("/[\r\n]/", $values["value"])) {
+          // メールヘッダーインジェクション対策(送信者名はメールのFromヘッダーに使われるため改行を禁止する)
+          $this->err[$key] = "改行を含む入力は許可されていません。";
         }
         $_SESSION["submitContent"][$key] = $values["value"];
         $this->requiredItem["name"] = $values["value"];
@@ -203,6 +221,20 @@ class Confirmation {
             continue;
           }
 
+          // 拡張子偽装対策(ファイルの実際の中身と拡張子が一致するかチェック)
+          $extLower = strtolower($this->fileData["ext"]);
+          if ($ext_denied == 1 && isset($this->_extMimeMap[$extLower])) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $realMime = finfo_file($finfo, $value["tmp_name"]);
+            finfo_close($finfo);
+            if (!in_array($realMime, $this->_extMimeMap[$extLower], true)) {
+              $this->err[$key] = "添付できないファイルです<br>\n";
+              $this->err[$key] .= "ファイルの内容が拡張子と一致しません\n";
+              $_SESSION["fileData"][$key]["name"] = $this->fileData["name"];
+              continue;
+            }
+          }
+
           // config.phpのアップロード容量制限チェック
           $size = filesize($value['tmp_name']);
           if ($maxmemory == 1 && ($size / 1024) > $max) {
@@ -230,12 +262,24 @@ class Confirmation {
     }
   }
 
-  private function _seriousErrorCheck($contentLength) {
-    if (strpos(ini_get("post_max_size"), "M") !== false) {
-      $postMaxSize = ini_get("post_max_size") * 1024 * 1024;
-    } else {
-      $postMaxSize = ini_get("post_max_size") * 1;
+  private function _iniSizeToBytes($value) {
+    $value = trim((string) $value);
+    $unit = strtoupper(substr($value, -1));
+    $number = (int) $value;
+    switch ($unit) {
+      case 'G':
+        return $number * 1024 * 1024 * 1024;
+      case 'M':
+        return $number * 1024 * 1024;
+      case 'K':
+        return $number * 1024;
+      default:
+        return $number;
     }
+  }
+
+  private function _seriousErrorCheck($contentLength) {
+    $postMaxSize = $this->_iniSizeToBytes(ini_get("post_max_size"));
     if ($contentLength > $postMaxSize) {
       $this->seriousError = "ファイルサイズの総量が大きすぎる可能性があります。<br>\n";
       $this->seriousError .= "再度お試しいただき、解消しない場合は、<br>\n";

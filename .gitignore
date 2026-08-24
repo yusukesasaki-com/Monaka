@@ -1,4 +1,6 @@
 .DS_Store
 .ftpsync_settings
-/\.
+/vendor/
+/.phpunit.result.cache
 /Monaka/config/config.php
+/Monaka/config/fields.json

@@ -1,0 +1,51 @@
+[
+  {"type": "name", "label": "お名前", "required": true},
+  {"type": "mail", "label": "メールアドレス", "required": true},
+  {"type": "mailCheck", "label": "メールアドレス確認", "required": true},
+  {"type": "tel", "label": "電話番号", "required": true},
+  {"type": "zip", "label": "郵便番号"},
+  {"type": "text", "label": "住所"},
+  {
+    "type": "select",
+    "label": "折り返しの連絡方法",
+    "required": true,
+    "options": [
+      {"label": "選択してください", "placeholder": true},
+      {"label": "メール"},
+      {"label": "電話"}
+    ]
+  },
+  {"type": "text", "label": "年齢"},
+  {
+    "type": "radioBR",
+    "label": "性別",
+    "options": [
+      {"label": "男"},
+      {"label": "女"},
+      {"label": "その他", "freeText": true}
+    ]
+  },
+  {
+    "type": "checkboxBR",
+    "label": "当サイトを知ったきっかけ",
+    "required": true,
+    "options": [
+      {"label": "検索"},
+      {"label": "ブログ"},
+      {"label": "その他", "freeText": true}
+    ]
+  },
+  {
+    "type": "checkboxBR",
+    "label": "検索サイト",
+    "options": [
+      {"label": "Yahoo"},
+      {"label": "Google"},
+      {"label": "その他", "freeText": true}
+    ]
+  },
+  {"type": "file", "label": "添付ファイル1", "required": true},
+  {"type": "file", "label": "添付ファイル2"},
+  {"type": "file", "label": "添付ファイル3"},
+  {"type": "textarea", "label": "お問い合わせ内容", "required": true}
+]

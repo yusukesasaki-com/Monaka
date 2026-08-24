@@ -128,4 +128,108 @@ class Form {
     echo "<textarea name=\"{$name}[value]\"></textarea>\n";
   }
 
+  /**
+   * JSON設定ファイル(例: Monaka/config/fields-sample.json)からフォーム項目を自動描画する。
+   * PHPコードを触らずに項目の追加・削除・並び替えができるようにするための入口。
+   */
+  public function renderFromConfig($jsonPath) {
+    $json = file_get_contents($jsonPath);
+    if ($json === false) {
+      throw new \RuntimeException("フォーム定義ファイルを読み込めません: {$jsonPath}");
+    }
+    $fields = json_decode($json, true);
+    if (!is_array($fields)) {
+      throw new \RuntimeException("フォーム定義ファイルの形式が正しくありません: {$jsonPath}");
+    }
+    foreach ($fields as $field) {
+      $this->_renderField($field);
+    }
+  }
+
+  private function _renderField($field) {
+    $type = $field['type'] ?? 'text';
+    $label = $field['label'] ?? '';
+    $required = !empty($field['required']);
+    $name = $field['name'] ?? $label;
+    $requiredParam = $required ? '必須' : null;
+    $labelText = $label . ($required ? '(必須)' : '');
+
+    echo "<dl>\n";
+    echo "<dt>" . h($labelText) . "</dt>\n";
+    echo "<dd>\n";
+
+    switch ($type) {
+      case 'name':
+        $this->inputName($name);
+        break;
+      case 'mail':
+        $this->inputMail($name);
+        break;
+      case 'mailCheck':
+        $this->inputMailCheck($name);
+        break;
+      case 'tel':
+        $this->inputTel($name, $requiredParam);
+        break;
+      case 'zip':
+        $this->inputZip($name, $requiredParam);
+        break;
+      case 'text':
+        $this->inputText($name, $requiredParam);
+        break;
+      case 'textarea':
+        $this->textarea($name, $requiredParam);
+        break;
+      case 'file':
+        $this->inputFile($name, $requiredParam);
+        break;
+      case 'select':
+        $this->select($name, $this->_optionsToSelectParams($field['options'] ?? array()), $requiredParam);
+        break;
+      case 'radio':
+        $this->inputRadio($name, $this->_optionsToChoiceParams($field['options'] ?? array()), $requiredParam);
+        break;
+      case 'radioBR':
+        $this->inputRadioBR($name, $this->_optionsToChoiceParams($field['options'] ?? array()), $requiredParam);
+        break;
+      case 'checkbox':
+        $this->inputCheckbox($name, $this->_optionsToChoiceParams($field['options'] ?? array()), $requiredParam);
+        break;
+      case 'checkboxBR':
+        $this->inputCheckboxBR($name, $this->_optionsToChoiceParams($field['options'] ?? array()), $requiredParam);
+        break;
+      default:
+        throw new \RuntimeException("未対応のフォーム項目タイプです: {$type}");
+    }
+
+    echo "</dd>\n";
+    echo "</dl>\n";
+  }
+
+  private function _optionsToSelectParams($options) {
+    $params = array();
+    foreach ($options as $option) {
+      $label = $option['label'] ?? '';
+      if (!empty($option['placeholder'])) {
+        $params[$label] = 'noValue';
+      } else {
+        $params[] = $label;
+      }
+    }
+    return $params;
+  }
+
+  private function _optionsToChoiceParams($options) {
+    $params = array();
+    foreach ($options as $option) {
+      $label = $option['label'] ?? '';
+      if (!empty($option['freeText'])) {
+        $params[$label] = 'text';
+      } else {
+        $params[] = $label;
+      }
+    }
+    return $params;
+  }
+
 }

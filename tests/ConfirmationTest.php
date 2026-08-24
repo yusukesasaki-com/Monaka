@@ -1,16 +1,24 @@
 <?php
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+
 require_once(__DIR__ . "/../Monaka/config/config-sample.php");
 
-class ConfirmationTest extends PHPUnit_Framework_TestCase {
+class ConfirmationTest extends TestCase {
 
   public $adminMail;
   public $ext_denied;
   public $EXT_ALLOWS;
   public $maxmemory;
   public $max;
+  public $obj;
 
-  public function setUp() {
+  public function setUp(): void {
+    // PHPUnit 11 no longer auto-restores superglobals between tests, so reset explicitly.
+    $_POST = array();
+    $_FILES = array();
+    $_SESSION = array();
     $this->adminMail = "example@example.com";
     $this->ext_denied = 1;
     $this->EXT_ALLOWS = array("jpg", "jpeg", "gif");
@@ -19,9 +27,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $this->obj = new Monaka\Confirmation();
   }
 
-  /**
-   * @dataProvider postValidCheckValue
-   */
+  #[DataProvider('postValidCheckValue')]
   public function testRun($keys, $data, $contentLength, $message) {
     $num = count($data);
     for ($i = 0; $i < $num; $i++) {
@@ -31,7 +37,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($this->obj->err, $message);
   }
 
-  public function postValidCheckValue() {
+  public static function postValidCheckValue() {
     $text = "";
     for ($i = 0; $i < 45; $i++) {
       $text .= "てきすとてきすとてきすと";
@@ -85,9 +91,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     );
   }
 
-  /**
-   * @dataProvider postSeriousWrongCheckValue
-   */
+  #[DataProvider('postSeriousWrongCheckValue')]
   public function testSeriousWrongPost($keys, $data, $contentLength, $message) {
     $num = count($data);
     for ($i = 0; $i < $num; $i++) {
@@ -97,7 +101,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($this->obj->seriousError, $message);
   }
 
-  public function postSeriousWrongCheckValue() {
+  public static function postSeriousWrongCheckValue() {
     $err = "エラーが発生しました。<br>\n";
     $err .= "再度お試しいただき、解消しない場合は、<br>\n";
     $err .= "管理者【example@example.com】にお知らせください。";
@@ -132,9 +136,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     );
   }
 
-  /**
-   * @dataProvider postTestValidFile
-   */
+  #[DataProvider('postTestValidFile')]
   public function testValidFile($keys, $data, $contentLength, $file, $message) {
     $num = count($data);
     for ($i = 0; $i < $num; $i++) {
@@ -145,7 +147,7 @@ class ConfirmationTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($this->obj->err, $message);
   }
 
-  public function postTestValidFile() {
+  public static function postTestValidFile() {
     $file1["添付ファイル"] = array(
       "name" => "test.JPG",
       "type" => "image/jpeg",
