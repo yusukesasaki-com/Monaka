@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, openssl, json, fileinfo
+          coverage: none
+
+      - name: Install production dependencies
+        run: composer install --no-dev --optimize-autoloader --prefer-dist --no-progress
+
+      - name: Build distribution zip
+        run: |
+          mkdir -p dist/monaka
+          rsync -a \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='tests' \
+            --exclude='dist' \
+            --exclude='.gitignore' \
+            --exclude='phpunit.xml' \
+            --exclude='composer.json' \
+            --exclude='composer.lock' \
+            ./ dist/monaka/
+          cd dist
+          zip -r "monaka-${GITHUB_REF_NAME}.zip" monaka
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/monaka-${{ github.ref_name }}.zip
+          generate_release_notes: true
