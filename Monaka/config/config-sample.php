@@ -81,6 +81,6 @@ $max = 3000;
 // ----------ここから下は変更不要---------- //
 
 require_once(__DIR__ . "/../lib/functions.php");
-require_once(__DIR__ . "/autoload.php");
+require_once(__DIR__ . "/../../vendor/autoload.php");
 
 session_start();

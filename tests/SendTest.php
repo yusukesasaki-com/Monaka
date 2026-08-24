@@ -1,8 +1,10 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 require_once(__DIR__ . "/../Monaka/config/config-sample.php");
 
-class SendTest extends PHPUnit_Framework_TestCase {
+class SendTest extends TestCase {
 
   public $adminMail;
   public $adminArray = array();
@@ -12,8 +14,13 @@ class SendTest extends PHPUnit_Framework_TestCase {
   public $returnMailFooter;
   public $server = array();
   public $session = array();
+  public $obj;
 
-  public function setUp() {
+  public function setUp(): void {
+    // PHPUnit 11 no longer auto-restores superglobals between tests, so reset explicitly.
+    $_POST = array();
+    $_FILES = array();
+    $_SESSION = array();
     $adminMail = "example@example.com, example2@example.com";
     $this->adminArray = explode(",", $adminMail);
     $this->adminMail = trim($this->adminArray[0]);

@@ -18,8 +18,8 @@ class Send {
     $this->_adminMail = trim($this->_adminArray[0]);
     $this->_adminName = $adminName;
     $this->_checkToken();
-    $this->_substitutionSubmitContent($_SESSION["submitContent"]);
-    $this->_substitutionRequiredItem($_POST["requiredItem"]);
+    $this->_substitutionSubmitContent($_SESSION["submitContent"] ?? array());
+    $this->_substitutionRequiredItem($_POST["requiredItem"] ?? array());
     $this->_characterSetting();
     $server = array(
       "REMOTE_ADDR" => $_SERVER["REMOTE_ADDR"],
