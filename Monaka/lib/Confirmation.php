@@ -208,13 +208,21 @@ class Confirmation {
           $this->fileData["nr"] = count($this->fileData["array"]);
           $this->fileData["ext"] = $this->fileData["array"][$this->fileData["nr"] - 1];
 
+          // ファイル名に改行が含まれる場合は拒否(メール添付名としてのヘッダー分割対策)
+          if (preg_match("/[\r\n]/", $this->fileData["name"])) {
+            $this->err[$key] = "添付できないファイルです<br>\n";
+            $this->err[$key] .= "ファイル名に改行を含めることはできません\n";
+            $_SESSION["fileData"][$key]["name"] = $this->fileData["name"];
+            continue;
+          }
+
           // config.phpの拡張子制限チェック
           $this->checkExt = array();
           foreach ($EXT_ALLOWS as $ext) {
             $this->checkExt[] = strtolower($ext);
             $this->checkExt[] = strtoupper($ext);
           }
-          if ($ext_denied == 1 && !@in_array($this->fileData["ext"], $this->checkExt)) {
+          if ($ext_denied == 1 && !in_array($this->fileData["ext"], $this->checkExt)) {
             $this->err[$key] = "添付できないファイルです<br>\n";
             $this->err[$key] .= "添付可能なファイルの種類（拡張子）は[".implode("・", $EXT_ALLOWS)."]です\n";
             $_SESSION["fileData"][$key]["name"] = $this->fileData["name"];
@@ -248,9 +256,8 @@ class Confirmation {
           fclose($fp);
 
           $_SESSION["fileData"][$key]["name"] = $this->fileData["name"];
-          $_SESSION["fileData"][$key]["tmp"] = $this->fileData["tmp"];
           $_SESSION["fileData"][$key]["ext"] = $this->fileData["ext"];
-          $_SESSION["fileData"][$key]["file"] = chunk_split(base64_encode($contents)); //エンコードして分割
+          $_SESSION["fileData"][$key]["file"] = $contents;
         } else {
           if (isset($_POST[$key]["params"]) && strpos($_POST[$key]["params"], "必須") !== false) {
             $this->err[$key] = "必須項目です。<br>\n";

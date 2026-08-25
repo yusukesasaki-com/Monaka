@@ -81,9 +81,9 @@ class Send {
 
     $attachments = array();
     foreach ($submitFile as $files) {
-      foreach ($files as $fileName => $encoded) {
+      foreach ($files as $fileName => $content) {
         $attachments[] = array(
-          "content" => base64_decode($encoded),
+          "content" => $content,
           "filename" => $fileName,
         );
       }

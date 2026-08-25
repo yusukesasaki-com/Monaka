@@ -70,13 +70,7 @@ EOD
 EOD
 ;
     $this->fileContents = file_get_contents(__DIR__ . "/testFile/test.JPG");
-    $file = array(
-      "name" => "test.JPG",
-      "tmp" => __DIR__ . "/testFile/test.JPG",
-      "ext" => "jpg",
-      "file" => chunk_split(base64_encode($this->fileContents))
-    );
-    $_SESSION["submitFile"]["添付ファイル1"] = array("test.JPG" => $file["file"]);
+    $_SESSION["submitFile"]["添付ファイル1"] = array("test.JPG" => $this->fileContents);
     $_SERVER = array(
       "REMOTE_ADDR" => "127.0.0.1",
       "REMOTE_HOST" => gethostbyaddr("127.0.0.1"),

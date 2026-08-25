@@ -66,10 +66,10 @@
               <?php
                 if (empty($app->err[$key])) {
                   if (strpos("jpg,jpeg,gif,png,JPG,JPEG,GIF,PNG", $value["ext"]) !== false) {
-                    $img = base64_encode(file_get_contents($value["tmp"]));
+                    $img = base64_encode($value["file"]);
                     echo "<img src=\"data:image/{$value["ext"]};base64,{$img}\" width=\"150\" ><br>\n";
                   }
-                  echo "{$value["name"]}\n";
+                  echo h($value["name"]) . "\n";
                   $_SESSION["submitFile"][$key][$value["name"]] = $value["file"];
                 } else {
                   echo "<span class=\"err\">{$app->err[$key]}</span>";
